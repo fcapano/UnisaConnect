@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+<!--     <it.fdev.utils.CustomButtonWithImg -->
+<!--         android:layout_width="0dp" -->
+<!--         android:layout_marginRight="5dp" /> -->
+
+    <view
+        class="it.fdev.unisaconnect.MapCanvas"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <!-- <it.fdev.utils.CustomButtonWithImg -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginRight="5dp" -->
+    <!-- custom:img="@drawable/link" -->
+    <!-- custom:text="@string/pagina_web" /> -->
+
+</RelativeLayout>

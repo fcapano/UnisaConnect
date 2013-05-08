@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/it.fdev.unisaconnect"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp" >
+
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/web_page_btn"
+                android:layout_width="0dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                custom:img="@drawable/link"
+                custom:text="@string/pagina_web" />
+
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/libretto_btn"
+                android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                custom:img="@drawable/libretto"
+                custom:text="@string/libretto" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp" >
+
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/appelli_btn"
+                android:layout_width="0dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                custom:img="@drawable/calendar_full"
+                custom:text="@string/appelli" />
+
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/autocertificazioni_btn"
+                android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                custom:img="@drawable/calendar_full"
+                custom:text="@string/autocertificazioni" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:visibility="gone" >
+
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/pagamenti_btn"
+                android:layout_width="0dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                custom:img="@drawable/money"
+                custom:text="@string/pagamenti" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

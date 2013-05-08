@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menu_items">
+        <item>@string/login_wifi</item>
+        <item>@string/menu_mensa</item>
+        <item>@string/webmail</item>
+        <item>@string/servizi_esse3</item>
+        <item>@string/info_staff</item>
+        <item>@string/contattaci</item>
+        <item>time</item>
+        <item>map</item>
+    </string-array>
+    
+    <string-array name="menu_icons">
+        <item>@drawable/wireless</item>
+        <item>@drawable/fork_knife</item>
+        <item>@drawable/mail</item>
+        <item>@drawable/esse3</item>
+        <item>@drawable/notebook</item>
+        <item>@drawable/comments</item>
+        <item>@drawable/timetable</item>
+        <item>@drawable/transparent</item>
+    </string-array>
+    
+    <string-array name="timetable_lesson_colors">
+        <item>@color/lesson_color_1</item>
+        <item>@color/lesson_color_2</item>
+        <item>@color/lesson_color_3</item>
+        <item>@color/lesson_color_4</item>
+        <item>@color/lesson_color_5</item>
+        <item>@color/lesson_color_6</item>
+        <item>@color/lesson_color_7</item>
+        <item>@color/lesson_color_8</item>
+        <item>@color/lesson_color_9</item>
+    </string-array>
+        
+    <string-array name="tipo_account_array">
+        <item>Studenti</item>
+        <item>Personale</item>
+    </string-array>
+    
+     <string-array name="giorni_settimana_array">
+        <item>Lunedì</item>
+        <item>Martedì</item>
+        <item>Mercoledì</item>
+        <item>Giovedì</item>
+        <item>Venerdì</item>
+    </string-array>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_add_button"
+        android:icon="@drawable/add"
+        android:showAsAction="always|withText"
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_edit_button"
+        android:icon="@drawable/edit"
+        android:showAsAction="always|withText"
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_accept_button"
+        android:icon="@drawable/accept"
+        android:showAsAction="always|withText"
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_refresh_button"
+        android:icon="@drawable/refresh"
+        android:showAsAction="always|withText"
+        android:title="@string/aggiorna"
+        android:visible="false"/>
+
+</menu>

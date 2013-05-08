@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="unisa_orange">#FF9900</color>
+    <color name="unisa_orange_light">#FFBD59</color>
+    
+    <color name="dark_gray">#333333</color>
+    <color name="light_gray">#757575</color>
+    <color name="lighter_gray">#B5B5B5</color>
+    
+    <color name="ics_background_start">#ff020202</color>
+   	<color name="ics_background_end">#ff272D33</color>
+   	
+   	<color name="holo_blue">#33B5E5</color>
+   	<color name="transparent_background">#88000000</color>
+   	<color name="activity_background">#1C1C1C</color>
+   	<color name="menu_background">#333333</color>
+   	<color name="activity_background_lighter">#E6E6E6</color>
+   	<color name="activity_background_darker">#171717</color>
+   	<color name="activity_background_darker_lighter">#2B2B2B</color>
+   	
+   	<color name="testing_red">#FF0000</color>
+   	
+   	
+	<!-- Timetable Colors -->
+	<color name="timetable_background">#444444</color>
+	<color name="timetable_header_background">#2B2B2B</color>
+	<color name="timetable_separator">#363636</color>
+	<!-- End of Timetable Colors -->
+	
+	<!-- Timetable Lessons Colors -->
+	<color name="lesson_color_1">#E01B6A</color>
+	<color name="lesson_color_2">#970CB0</color>
+	<color name="lesson_color_3">#3415D1</color>
+	<color name="lesson_color_4">#17E5E8</color>
+	<color name="lesson_color_5">#17E859</color>
+	<color name="lesson_color_6">#E0AC1D</color>
+	<color name="lesson_color_7">#FFBB6E</color>
+	<color name="lesson_color_8">#F21616</color>
+	<color name="lesson_color_9">#16F28F</color>
+	<!-- End of Timetable Lessons Colors -->
+</resources>

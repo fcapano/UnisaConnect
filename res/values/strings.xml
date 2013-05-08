@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- SlidingMenu -->
+    <string name="app_name">UnisaConnect</string>
+    <string name="dev_email">fdev.developers@gmail.com</string>
+    <string name="login_wifi">Login \'Studenti\'</string>
+    <string name="menu_mensa">Menu mensa</string>
+    <string name="webmail">Webmail</string>
+    <string name="esse3">Esse3</string>
+    <string name="info_staff">Rubrica docenti</string>
+    <string name="recensione">Lascia una recensione</string>
+    <string name="contattaci">Problemi? Idee?</string>
+    <string name="preferenze">Preferenze</string>
+    <!-- end of SlidingMenu -->
+
+
+    <!-- Esse3 Services -->
+    <string name="servizi_esse3">Servizi ESSE</string>
+    <string name="pagina_web">Pagina Web</string>
+    <string name="libretto">Libretto</string>
+    <string name="pagamenti">Pagamenti</string>
+    <string name="appelli">Appelli</string>
+    <string name="autocertificazioni">Autocertificazioni</string>
+    <!-- end of Esse3 Services -->
+
+
+    <!-- Wifi Preferenze -->
+    <string name="username">Nome utente</string>
+    <string name="unisa_mail">\@studenti.unisa.it</string>
+    <string name="password">Password</string>
+    <string name="login_automatica">Effettua la login automaticamente quando connessi alla rete \'Studenti\'</string>
+    <string name="save_and_login">Salva/Login</string>
+    <string name="save">Salva</string>
+    <!-- end of Wifi Preferenze -->
+
+    <string name="email_chooser_titolo">Invia la mail con</string>
+    <string name="controlla_connessione">Controlla la\nconnessione\nad internet</string>
+    <string name="dati_errati">Username e/o password non corretti</string>
+    <string name="dati_errati_o_problema_gingerbread">Autenticazione fallita.\nE\' possibile che i dati di accesso non siano corretti, o che l\'accesso non sia possibile perchè si sta usando una versione Android troppo vecchia</string>
+    <string name="inserire_dati_webmail">Inserire i dati di login per accedere alla WebMail Unisa</string>
+    <string name="dati_non_validi">Dati non validi</string>
+    <string name="dati_salvati">Dati salvati</string>
+    <string name="logging_in">Login in corso</string>
+    <string name="login_ok">Login completata</string>
+    <string name="caricamento">Caricamento&#8230;</string>
+    <string name="aggiorna">Aggiorna</string>
+    <string name="problema_di_connessione_generico">Si è verificato un errore nell\'eseguire la richiesta</string>
+    <string name="cerca_staff_name">Cerca docente</string>
+    <string name="ok">OK</string>
+
+    <!-- Dettagli staff -->
+    <string name="informazioni">Informazioni</string>
+    <string name="ufficio">Ufficio</string>
+    <string name="email">Email</string>
+    <string name="website">Sito Web</string>
+    <string name="telefono">Telefono</string>
+    <string name="fax">Fax</string>
+    <string name="testo_copiato">Copiato negli appunti</string>
+    <!-- end of Dettagli staff -->
+
+
+    <!-- Timetable Strings -->
+    <string name="monday">lun</string>
+    <string name="thusday">mar</string>
+    <string name="wensday">mer</string>
+    <string name="thursday">gio</string>
+    <string name="friday">ven</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="_10">10</string>
+    <string name="_11">11</string>
+    <string name="_12">12</string>
+    <string name="_13">13</string>
+    <string name="_14">14</string>
+    <string name="_15">15</string>
+    <string name="_16">16</string>
+    <string name="_17">17</string>
+    <string name="_18">18</string>
+    <string name="_19">19</string>
+    <string name="nome_corso">Nome corso</string>
+    <string name="aula_corso">Aula</string>
+    <!-- End of Timetable Strings -->
+
+
+    <!-- Libretto Strings -->
+    <string name="libretto_vuoto">Non sono presenti esami nel libretto</string>
+    <string name="media_ponderata">Media Ponderata:</string>
+    <string name="su_30"> / 30</string>
+    <string name="esame">Esame</string>
+    <string name="cfu">CFU</string>
+    <string name="voto">Voto</string>
+    <!-- end of Libretto Strings -->
+
+
+    <!-- Esse3Scraper Strings -->
+    <string name="connesione_esse3">Connessione in corso&#8230;</string>
+    <string name="autenticazione_esse3">Autenticazione ESSE3&#8230;</string>
+    <string name="sincronizzazione_esse3">Sincronizzazione&#8230;</string>
+    <!-- end of Esse3Scraper Strings -->
+
+
+    <!-- Appelli Strings -->
+    <string name="appelli_vuoto">Non sono presenti appelli prenotati o disponibili</string>
+    <string name="appelli_disponibili">APPELLI DISPONIBILI</string>
+    <string name="appelli_prenotati">APPELLI PRENOTATI</string>
+    <string name="iscritti">Iscritti: </string>
+    <string name="sincronizzazione_esse3">Sincronizzazione&#8230;</string>
+    <!-- end of Esse3Scraper Strings -->
+
+
+    <!-- Mensa Strings -->
+    <string name="mensa_menu_non_disponibile">Il menu non è al momento disponibile</string>
+    <string name="mensa_primi">Primi</string>
+    <string name="mensa_secondi">Secondi</string>
+    <string name="mensa_contorni">Contorni</string>
+    <string name="mensa_frutta">Frutta</string>
+    <string name="mensa_centino">Cestino</string>
+    <string name="mensa_altro">Altro</string>
+    <!-- end of Mensa Strings -->
+
+</resources>
