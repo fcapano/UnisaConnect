@@ -30,7 +30,7 @@ public class Esse3ServicesFragment extends MySimpleFragment {
 		webBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new Esse3Fragment());
+				activity.switchContent(new Esse3WebFragment());
 			}
 		});
 		
@@ -51,7 +51,7 @@ public class Esse3ServicesFragment extends MySimpleFragment {
 		pagamentiBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new Esse3Fragment());
+				activity.switchContent(new Esse3WebFragment());
 			}
 		});
 	}

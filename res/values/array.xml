@@ -9,6 +9,7 @@
         <item>@string/contattaci</item>
         <item>time</item>
         <item>map</item>
+        <item>meteo</item>
     </string-array>
     
     <string-array name="menu_icons">
@@ -20,6 +21,7 @@
         <item>@drawable/comments</item>
         <item>@drawable/timetable</item>
         <item>@drawable/transparent</item>
+        <item>@drawable/weather_22_mod</item>
     </string-array>
     
     <string-array name="timetable_lesson_colors">

@@ -31,6 +31,22 @@ public class CustomButtonWithImg extends RelativeLayout {
 		imgView.setImageDrawable(img);
 		textView.setText(text.toUpperCase(Locale.ITALY));
 	}
+	
+	public CustomButtonWithImg(Context context, int iconID, int textID) {
+		super(context, null);
+		
+		Drawable img = context.getResources().getDrawable(iconID);
+		String text = context.getResources().getString(textID);
+		
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater.inflate(R.layout.custom_button, this, true);
+
+		ImageView imgView = (ImageView) findViewById(R.id.btn_icon);
+		TextView textView = (TextView) findViewById(R.id.btn_text);
+
+		imgView.setImageDrawable(img);
+		textView.setText(text.toUpperCase(Locale.ITALY));
+	}
 
 	public CustomButtonWithImg(Context context) {
 		this(context, null);

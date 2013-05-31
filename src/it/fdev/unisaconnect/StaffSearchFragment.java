@@ -64,7 +64,7 @@ public class StaffSearchFragment extends MyListFragment {
 		editTextStaffName = (EditText) activity.findViewById(R.id.staff_name);
 		editTextStaffName.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				actionRefresh();
+				initList();
 			}
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
@@ -75,7 +75,7 @@ public class StaffSearchFragment extends MyListFragment {
 					imgClearName.setVisibility(View.INVISIBLE);
 			}
 		});
-		actionRefresh();
+		initList();
 	}
 
 	@Override
@@ -88,10 +88,15 @@ public class StaffSearchFragment extends MyListFragment {
 	
 	@Override
 	public void setVisibleActions() {
+		activity.setActionRefreshVisible(true);
 	}
 
 	@Override
 	public void actionRefresh() {
+		adapter.notifyDataSetChanged();
+	}
+	
+	public void initList() {
 		if (!isAdded()) {
 			return;
 		}

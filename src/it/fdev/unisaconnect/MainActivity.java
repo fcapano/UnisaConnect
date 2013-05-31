@@ -1,7 +1,12 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MyFragment;
 import it.fdev.utils.Utils;
+
+import java.util.ArrayList;
+
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -27,16 +32,60 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
 public class MainActivity extends SlidingFragmentActivity implements OnCloseListener, OnOpenListener {
 
 	public static final String TAG = Utils.TAG;
+	public static boolean isDebugMode = false;
+	
+	// Fragments which can be started at application startup (do not require special configuration to start)
+//	public static enum bootableFragments {
+//		WIFI_PREF, MENSA, WEBMAIL, ESSE3_SERVICES, STAFF_SEARCH, TIMETABLE, MAP, WEATHER
+//	}
+//	public static HashMap<bootableFragments, Class<? extends MyFragment>> fragmentsIDs = new HashMap<MainActivity.bootableFragments, Class<? extends MyFragment>>();
+//	static {
+//		fragmentsIDs.put(bootableFragments.WIFI_PREF, WifiPreferencesFragment.class);
+//		fragmentsIDs.put(bootableFragments.MENSA, MensaFragment.class);
+//		fragmentsIDs.put(bootableFragments.WEBMAIL, WebmailFragment.class);
+//		fragmentsIDs.put(bootableFragments.ESSE3_SERVICES, Esse3ServicesFragment.class);
+//		fragmentsIDs.put(bootableFragments.STAFF_SEARCH, StaffSearchFragment.class);
+//		fragmentsIDs.put(bootableFragments.TIMETABLE, TimetableFragment.class);
+//		fragmentsIDs.put(bootableFragments.MAP, MapFragment.class);
+//		fragmentsIDs.put(bootableFragments.WEATHER, WeatherFragment.class);
+//	}
+	public static ArrayList<Class<? extends MyFragment>> bootableFragments = new ArrayList<Class<? extends MyFragment>>();
+	static {
+		bootableFragments.add(WifiPreferencesFragment.class);
+		bootableFragments.add(MensaFragment.class);
+		bootableFragments.add(WebmailFragment.class);
+		bootableFragments.add(Esse3ServicesFragment.class);
+		bootableFragments.add(StaffSearchFragment.class);
+		bootableFragments.add(TimetableFragment.class);
+		bootableFragments.add(MapFragment.class);
+		bootableFragments.add(WeatherFragment.class);
+	}
+	
 	private boolean menuAlreadyToggled = false; // After the first time in onPostCreate the menu shouldn't be toggled automatically
-
-	protected SlidingMenuFragment menuFragment;
+	private boolean showMenuOnStartup = false;
+	private SlidingMenuFragment menuFragment;
 	private Menu sherlockMenu;
 	private SlidingMenu sm;
+	private SharedPrefDataManager sharedPref;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		isDebugMode = (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE));
+		if (isDebugMode) {
+			Log.d(Utils.TAG, "The applications is running as debuggable!");
+		}
+		
+		sharedPref = SharedPrefDataManager.getDataManager(this);
+		Class<? extends MyFragment> fragmentClassToBoot = sharedPref.getBootFragmentClass();
+		MyFragment fragmentToBoot;
+		try {
+			fragmentToBoot = fragmentClassToBoot.newInstance();
+		} catch (Exception e) {
+			fragmentToBoot = new WifiPreferencesFragment();
+		} 
+		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		// set the Above View
@@ -44,15 +93,15 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 
 		// Initialize Crittercism
 		Crittercism.init(getApplicationContext(), "5135ccc2558d6a05f7000024");
-		Crittercism.setOptOutStatus(true);
+		Crittercism.setOptOutStatus(isDebugMode);
 
 		// customize the SlidingMenu
 		sm = getSlidingMenu();
 		sm.setMode(SlidingMenu.LEFT);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		sm.setBehindWidthRes(R.dimen.slidingmenu_width);
-		sm.setShadowDrawable(R.drawable.shadow);
-		sm.setShadowWidthRes(R.dimen.shadow_width);
+//		sm.setShadowDrawable(R.drawable.shadow);
+//		sm.setShadowWidthRes(R.dimen.shadow_width);
 		sm.setOnCloseListener(this);
 		sm.setOnOpenListener(this);
 
@@ -62,8 +111,9 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 		ImageLoader.getInstance().init(config);
 
 		// Initialize views
+		hideActions();
 		menuFragment = new SlidingMenuFragment();
-		Fragment startFragment = new MapFragment(); //new WifiPreferencesFragment();
+		Fragment startFragment = (Fragment) fragmentToBoot;//new WeatherFragment();// new WifiPreferencesFragment();
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
 		getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, menuFragment).replace(R.id.content_frame, startFragment, startFragment.getClass().toString()).commit();
@@ -152,6 +202,12 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 			fragmentTransaction.replace(R.id.content_frame, newFragment, newFragmentClass);
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
+			
+			if (bootableFragments.contains(newFragment.getClass())) {
+				Log.d(Utils.TAG, "class is contained");
+				sharedPref.setBootFragmentClass((Class<? extends MyFragment>) newFragment.getClass());
+				sharedPref.saveData();
+			}
 		}
 		sm.showContent();
 
@@ -202,9 +258,8 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if (!menuAlreadyToggled) {
-//					toggle();
-//					sm.showMenu();
+				if (!menuAlreadyToggled && showMenuOnStartup) {
+					sm.showMenu();
 					menuAlreadyToggled = true;
 				}
 			}

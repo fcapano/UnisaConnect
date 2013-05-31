@@ -38,7 +38,7 @@ public class SlidingMenuFragment extends MyListFragment {
 		for (int i = 0; i < VALID_ELEMENTS_NUM; i++) {
 			listItem.add(new ListItem(menuText[i], imgs.getResourceId(i, -1), R.color.menu_background));
 		}
-		if (SharedPrefDataManager.getDataManager(getActivity()).isTestingingEnabled()) {
+		if (SharedPrefDataManager.getDataManager(activity).isTestingingEnabled()) {
 			for (int i = VALID_ELEMENTS_NUM; i < menuText.length; i++) {
 				listItem.add(new ListItem(menuText[i], imgs.getResourceId(i, -1), true, R.color.menu_background));
 			}
@@ -58,10 +58,44 @@ public class SlidingMenuFragment extends MyListFragment {
 
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
-		Fragment newContent = Utils.positionToAction((MainActivity) getActivity(), position);
+		Fragment newContent = positionToAction((MainActivity) getActivity(), position);
 		if (newContent != null) {
 			activity.switchContent(newContent);
 		}
+	}
+	
+	public static Fragment positionToAction(MainActivity activity, int position) {
+		Fragment newContent = null;
+		switch (position) {
+		case 0:
+			newContent = new WifiPreferencesFragment();
+			break;
+		case 1:
+			newContent = new MensaFragment();
+			break;
+		case 2:
+			newContent = new WebmailFragment();
+			break;
+		case 3:
+			newContent = new Esse3ServicesFragment();
+			break;
+		case 4:
+			newContent = new StaffSearchFragment();
+			break;
+		case 5:
+			Utils.sendSupportMail(activity, "Riguardo \"Unisa Connect\"...", "");
+			break;
+		case 6:
+			newContent = new TimetableFragment();
+			break;
+		case 7:
+			newContent = new MapFragment();
+			break;
+		case 8:
+			newContent = new WeatherFragment();
+			break;
+		}
+		return newContent;
 	}
 	
 	@Override

@@ -1,15 +1,8 @@
 package it.fdev.utils;
 
 import it.fdev.unisaconnect.ErrorInternetFragment;
-import it.fdev.unisaconnect.Esse3ServicesFragment;
 import it.fdev.unisaconnect.MainActivity;
-import it.fdev.unisaconnect.MapFragment;
-import it.fdev.unisaconnect.MensaFragment;
 import it.fdev.unisaconnect.R;
-import it.fdev.unisaconnect.StaffSearchFragment;
-import it.fdev.unisaconnect.TimetableFragment;
-import it.fdev.unisaconnect.WebmailFragment;
-import it.fdev.unisaconnect.WifiPreferencesFragment;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -37,37 +30,6 @@ public class Utils {
 //	private static Bitmap mBitmap;
 //	private static Canvas mCanvas;
 //	private static Rect mBounds;
-
-	public static Fragment positionToAction(MainActivity activity, int position) {
-		Fragment newContent = null;
-		switch (position) {
-		case 0:
-			newContent = new WifiPreferencesFragment();
-			break;
-		case 1:
-			newContent = new MensaFragment();
-			break;
-		case 2:
-			newContent = new WebmailFragment();
-			break;
-		case 3:
-			newContent = new Esse3ServicesFragment();
-			break;
-		case 4:
-			newContent = new StaffSearchFragment();
-			break;
-		case 5:
-			Utils.sendSupportMail(activity, "Riguardo \"Unisa Connect\"...", "");
-			break;
-		case 6:
-			newContent = new TimetableFragment();
-			break;
-		case 7:
-			newContent = new MapFragment();
-			break;
-		}
-		return newContent;
-	}
 
 	public static void goToInternetError(MainActivity activity, Fragment goBackFragment) {
 		try {

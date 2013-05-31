@@ -21,6 +21,6 @@
         android:icon="@drawable/refresh"
         android:showAsAction="always|withText"
         android:title="@string/aggiorna"
-        android:visible="false"/>
+        android:visible="true"/>
 
 </menu>

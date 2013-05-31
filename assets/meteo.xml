@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UnisaMeteo>
+<actualCondition><actualWeather>
+<lastUpdate millisec="1368782820000">17/05/13 11:27</lastUpdate>
+<station>
+<id>ISALERNO9</id>
+<name>Rettorato</name>
+<geo>
+<latitude>40.769047</latitude>
+<longitude>14.791999</longitude>
+</geo>
+<webcamUrl>http://www.unisa.it/uploads/stazionemeteo/piazza_mega.jpg</webcamUrl>
+</station>
+<temp>18°C</temp>
+<maxTemp>18.4°C</maxTemp>
+<minTemp>16.2°C</minTemp>
+<humidity>74%</humidity>
+<rainToday>2.6 mm</rainToday>
+<pressure>1009.2 millibar</pressure>
+<windDir>SO</windDir>
+<windSpeed>9.63 Km/h</windSpeed>
+</actualWeather>
+<actualWeather>
+<lastUpdate millisec="1368782700000">17/05/13 11:25</lastUpdate>
+<station>
+<id>ISALERNO10</id>
+<name>Stecca 9</name>
+<geo>
+<latitude>40.77538</latitude>
+<longitude>14.78812</longitude>
+</geo>
+<webcamUrl>http://www.unisa.it/uploads/stazionemeteo/stecca9_mega.jpg</webcamUrl>
+</station>
+<temp>17.7°C</temp>
+<maxTemp>18.2°C</maxTemp>
+<minTemp>15.8°C</minTemp>
+<humidity>79%</humidity>
+<rainToday>2.4 mm</rainToday>
+<pressure>996.1 millibar</pressure>
+<windDir>OSO</windDir>
+<windSpeed>9.63 Km/h</windSpeed>
+</actualWeather>
+<actualWeather>
+<lastUpdate millisec="1368782940000">17/05/13 11:29</lastUpdate>
+<station>
+<id>ISALERNO11</id>
+<name>Campus di Baronissi</name>
+<geo>
+<latitude>40.746243</latitude>
+<longitude>14.770447</longitude>
+</geo>
+<webcamUrl>http://www.unisa.it/uploads/stazionemeteo/baronissi_mega.jpg</webcamUrl>
+</station>
+<temp>17.8°C</temp>
+<maxTemp>18.6°C</maxTemp>
+<minTemp>16.2°C</minTemp>
+<humidity>87%</humidity>
+<rainToday>4.0 mm</rainToday>
+<pressure>1009.1 millibar</pressure>
+<windDir>SSE</windDir>
+<windSpeed>12.96 Km/h</windSpeed>
+</actualWeather>
+</actualCondition>
+<forecast>
+<lastUpdate millisec="1368752400000">17/05/13 03:00 CEST</lastUpdate>
+<dailyForecast>
+<validThrough millisec="1368824400000">venerdì 17 maggio 2013</validThrough>
+<description>Possibilità di pioggia</description>
+<iconUrl>http://icons-ak.wxug.com/i/c/k/chancerain.gif</iconUrl>
+<maxTemp>22°C</maxTemp>
+<minTemp>12°C</minTemp>
+<avgHumidity>74%</avgHumidity>
+<avgWindDir>SO</avgWindDir>
+<avgWindSpeed>18 Km/h</avgWindSpeed>
+<probOfPrec>40%</probOfPrec>
+</dailyForecast>
+<dailyForecast>
+<validThrough millisec="1368910800000">sabato 18 maggio 2013</validThrough>
+<description>Sereno</description>
+<iconUrl>http://icons-ak.wxug.com/i/c/k/clear.gif</iconUrl>
+<maxTemp>27°C</maxTemp>
+<minTemp>16°C</minTemp>
+<avgHumidity>60%</avgHumidity>
+<avgWindDir>Sud</avgWindDir>
+<avgWindSpeed>10 Km/h</avgWindSpeed>
+<probOfPrec>0%</probOfPrec>
+</dailyForecast>
+<dailyForecast>
+<validThrough millisec="1368997200000">domenica 19 maggio 2013</validThrough>
+<description>Possibilità di pioggia</description>
+<iconUrl>http://icons-ak.wxug.com/i/c/k/chancerain.gif</iconUrl>
+<maxTemp>22°C</maxTemp>
+<minTemp>11°C</minTemp>
+<avgHumidity>70%</avgHumidity>
+<avgWindDir>OSO</avgWindDir>
+<avgWindSpeed>16 Km/h</avgWindSpeed>
+<probOfPrec>40%</probOfPrec>
+</dailyForecast>
+<dailyForecast>
+<validThrough millisec="1369083600000">lunedì 20 maggio 2013</validThrough>
+<description>Sereno</description>
+<iconUrl>http://icons-ak.wxug.com/i/c/k/clear.gif</iconUrl>
+<maxTemp>23°C</maxTemp>
+<minTemp>11°C</minTemp>
+<avgHumidity>64%</avgHumidity>
+<avgWindDir>OSO</avgWindDir>
+<avgWindSpeed>11 Km/h</avgWindSpeed>
+<probOfPrec>0%</probOfPrec>
+</dailyForecast>
+</forecast>
+</UnisaMeteo>

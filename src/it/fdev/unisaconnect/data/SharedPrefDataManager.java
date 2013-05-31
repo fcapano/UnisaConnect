@@ -4,6 +4,7 @@ import it.fdev.encryptionUtils.CryptoMan;
 import it.fdev.encryptionUtils.CryptoMan_2;
 import it.fdev.encryptionUtils.SimpleCrypto;
 import it.fdev.unisaconnect.MainActivity;
+import it.fdev.utils.MyFragment;
 import it.fdev.utils.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,26 +20,43 @@ import android.util.Log;
 public class SharedPrefDataManager {
 	
 	public static final String PREFERENCES_KEY 	= "PREFERENCES";
-	public static final String NO_ENCODING 		= "NOENC";
-	public static final String PREF_KEY 		= "enc_key";
+	
+	// Settings Pref
+	public static final String PREF_BOOTABLE_FRAGMENT = "bootableFragment";
+	
+	// Login Pref
 	public static final String PREF_USER 		= "user";
 	public static final String PREF_PASS 		= "pass";
 	public static final String PREF_ACCTYPE 	= "tipoAccountIndex";
 	public static final String PREF_AUTOLOGIN 	= "loginAutomatica";
+	
+	// Weather data
+	public static final String PREF_WEATHER_LAST_UPDATE_MILLIS = "weatherLastUpdateMillis";
+	
 	public static final String PREF_IS_NEW_ENCRYPTION = "isNewEncryption";
 	public static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
 	public static final String PREF_TESTING_ENABLED = "testingEnabled";
 	
+	// Crypto data
+	public static final String NO_ENCODING 		= "NOENC";
+	public static final String PREF_KEY 		= "enc_key";
 	public static final int CRYPTO_VERSION = 2;	// 2=0.5
 	
 	private static SharedPrefDataManager dm = null;
 	private SharedPreferences settings = null;
+	
+	// Settings
+	private Class<? extends MyFragment> bootFragmentClass;
+	// Login
 	private String user, pass;
 	private boolean loginAutomatica;
 	private int tipoAccountIndex;
-	private boolean testingEnabled;
+	// Weather
+	private long  weatherLastUpdateMillis  = (long) 0;
 	
+	private boolean testingEnabled = MainActivity.isDebugMode;
 	private final static String[] SSID = new String[] {"Studenti","Personale"};
+	
 	
 	public static SharedPrefDataManager getDataManager(Context context) {
 		if(dm == null) {
@@ -125,7 +143,10 @@ public class SharedPrefDataManager {
 			pass = CryptoMan_2.decrypt(passCod);
 			tipoAccountIndex = settings.getInt(PREF_ACCTYPE, 0);
 			loginAutomatica = settings.getBoolean(PREF_AUTOLOGIN, true);
-			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, false);
+			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isDebugMode);
+			weatherLastUpdateMillis = settings.getLong(PREF_WEATHER_LAST_UPDATE_MILLIS, 0);
+//			bootFragment = MainActivity.bootableFragments.values()[settings.getInt(PREF_BOOTABLE_FRAGMENT, 0)];
+			bootFragmentClass = MainActivity.bootableFragments.get(settings.getInt(PREF_BOOTABLE_FRAGMENT, 0));
 			return true;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -149,6 +170,9 @@ public class SharedPrefDataManager {
 			editor.putBoolean(PREF_AUTOLOGIN, loginAutomatica);
 			editor.putInt(PREF_ACCTYPE, tipoAccountIndex);
 			editor.putBoolean(PREF_TESTING_ENABLED, testingEnabled);
+			editor.putLong(PREF_WEATHER_LAST_UPDATE_MILLIS, weatherLastUpdateMillis);
+			editor.putInt(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.bootableFragments.indexOf(bootFragmentClass), 0));
+			
 			editor.commit();
 			return true;
 			
@@ -161,7 +185,7 @@ public class SharedPrefDataManager {
 	}
 	
 	//Controlla che siano stati precedentemente salvati i dati di login
-	public boolean dataExists() {
+	public boolean loginDataExists() {
 		return (settings.contains(PREF_USER) && user!=null &&
 				settings.contains(PREF_PASS) && pass!=null &&
 				settings.contains(PREF_ACCTYPE) && tipoAccountIndex>=0 && tipoAccountIndex<SSID.length &&
@@ -217,6 +241,22 @@ public class SharedPrefDataManager {
 	
 	public boolean isTestingingEnabled() {
 		return this.testingEnabled;
+	}
+	
+	public void setWeatherLastUpdateMillis(Long weatherLastUpdate) {
+		this.weatherLastUpdateMillis = weatherLastUpdate;
+	}
+	
+	public Long getWeatherLastUpdateMillis() {
+		return weatherLastUpdateMillis;
+	}
+
+	public Class<? extends MyFragment> getBootFragmentClass() {
+		return bootFragmentClass;
+	}
+
+	public void setBootFragmentClass(Class<? extends MyFragment> bootFragmentClass) {
+		this.bootFragmentClass = bootFragmentClass;
 	}
 
 }

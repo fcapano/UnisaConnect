@@ -51,6 +51,8 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 				}
 				publishProgress(loadStates.FINISHED);
 				return 0;
+			} else {
+				Log.d(Utils.TAG, "Corsi non trovati!");
 			}
 			return -1;
 		} catch (HttpStatusException e) {

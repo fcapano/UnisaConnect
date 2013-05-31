@@ -47,7 +47,7 @@ public class AppelliFragment extends MySimpleFragment {
 
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
 		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(activity);
-		if (!dataManager.dataExists()) { // Non sono memorizzati i dati utente
+		if (!dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			Utils.createAlert(activity, getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
 			return;
 		}

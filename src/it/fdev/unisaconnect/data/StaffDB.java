@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class StaffDB {
 	private SQLiteDatabase dbStaff;
-	private static final String DB_STAFF_DATE = "2013.05.05-14.47.48";
+	private static final String DB_STAFF_DATE = "2013.05.09-20.40.54";
 	private static final String DB_STAFF_NAME = "uc_staff-" + DB_STAFF_DATE + ".db";
 	
 	public StaffDB(Context context) throws IOException {
@@ -40,7 +40,7 @@ public class StaffDB {
 	public StaffMember getStaffMember(String id) {
 		String staffTableName = "staff";
 		String[] cols = new String[]{"matricola", "fullname", "img_url", "role", 
-				"department", "map_info", "email", "website"};
+				"department", "map_info", "email", "website", "ricevimento"};
 		String where = "matricola=?";
 		String[] args = new String[]{id};
 		String orderBy = "fullname";
@@ -61,11 +61,12 @@ public class StaffDB {
 		String mapInfo 		= results.getString(5);
 		String email 		= results.getString(6);
 		String website 		= results.getString(7);
+		String ricevimento 	= results.getString(8);
 		ArrayList<String> phoneList =  getPhone(matricola);
 		ArrayList<String> faxList	= getFax(matricola);
 		
 		StaffMember member = new StaffMember(matricola, fullname, imgUrl, role, 
-				department, mapInfo, phoneList, faxList, email, website);
+				department, mapInfo, phoneList, faxList, email, website, ricevimento);
 		results.close();
 		return member;
 	}

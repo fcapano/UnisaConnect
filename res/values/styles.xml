@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
     <style name="MyTheme" parent="@style/Theme.Sherlock">
-<!--         <item name="android:textColor">#FFFFFF</item> -->
-		<item name="spinnerItemStyle">@style/SpinnerItemStyle</item>
-	    <item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>
+
+        <!-- <item name="android:textColor">#FFFFFF</item> -->
+        <item name="spinnerItemStyle">@style/SpinnerItemStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>
     </style>
+
     <style name="SpinnerItemStyle" parent="Widget.Sherlock.TextView.SpinnerItem">
-		<item name="android:textAppearance">@style/TextAppearance.MySpinnerItem</item>
-	</style>
-    <style name="TextAppearance.MySpinnerItem"    parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
-		<item name="android:textColor">#FFFFFF</item>
-	</style>
-	<style name="MyTextEdit"    parent="MyTheme">
-		<item name="android:textColor">@android:color/white</item>
-		<item name="android:textCursorDrawable">@null</item>
-		<item name="android:padding">7dp</item>
-		<item name="android:inputType">textNoSuggestions|textVisiblePassword</item>
-		<item name="android:background">@color/activity_background_darker_lighter</item>
-		<item name="android:padding">7dp</item>
-	</style>
+        <item name="android:textAppearance">@style/TextAppearance.MySpinnerItem</item>
+    </style>
+
+    <style name="TextAppearance.MySpinnerItem" parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="MyTextEdit" parent="MyTheme">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textCursorDrawable" tools:targetApi="honeycomb_mr1">@null</item>
+        <item name="android:padding">7dp</item>
+        <item name="android:inputType">textNoSuggestions|textVisiblePassword</item>
+        <item name="android:background">@color/activity_background_darker_lighter</item>
+        <item name="android:padding">7dp</item>
+    </style>
+
 </resources>

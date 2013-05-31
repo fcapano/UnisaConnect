@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 public class ListAdapter extends ArrayAdapter<ListItem> {
 
@@ -26,7 +29,6 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 	private DrawableManager drawableManager;
 
 	private static class ViewHolder {
-//		private View refView;
 		private ImageView imageView;
 		private TextView textView;
 	}
@@ -51,7 +53,6 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 				viewHolder = new ViewHolder();
 				viewHolder.imageView = (ImageView) view.findViewById(R.id.row_icon);
 				viewHolder.textView = (TextView) view.findViewById(R.id.row_title);
-//				viewHolder.refView = view;
 				view.setTag(viewHolder);
 			}
 		} else {
@@ -63,27 +64,43 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 			ListItem item = itemsList.get(position);
 			if (item != null) {
 				viewHolder.textView.setText(item.text);
+				
 				if(item.backgroundColor != -1) {
 					view.setBackgroundResource(item.backgroundColor);
 				}
+				
 				if (item.testing)
 					viewHolder.textView.setTextColor(parent.getResources().getColor(R.color.testing_red));
 				else
 					viewHolder.textView.setTextColor(parent.getResources().getColor(android.R.color.white));
 
-				if (item.iconURL == null && item.iconRes == R.drawable.transparent) {
-					viewHolder.imageView.setVisibility(View.INVISIBLE);
-				} else {
-					viewHolder.imageView.setImageResource(R.drawable.transparent);
-					viewHolder.imageView.setVisibility(View.VISIBLE);
-					if (item.iconURL != null) {
-						if (item.useCache)
-							imageLoader.displayImage(item.iconURL, viewHolder.imageView);
-						else
-							drawableManager.fetchDrawableOnThread(item.iconURL, viewHolder.imageView);
+				viewHolder.imageView.setImageResource(R.drawable.transparent);
+				viewHolder.imageView.setVisibility(View.VISIBLE);
+				if (item.iconURL != null) {
+					if (item.useCache) {
+						imageLoader.displayImage(item.iconURL, viewHolder.imageView, new ImageLoadingListener() {
+							@Override
+							public void onLoadingStarted(String arg0, View arg1) {
+							}
+							@Override
+							public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+								arg1.setVisibility(View.INVISIBLE);
+							}
+							@Override
+							public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
+							}
+							@Override
+							public void onLoadingCancelled(String arg0, View arg1) {
+//								arg1.setVisibility(View.INVISIBLE);
+							}
+						});
 					} else {
-						viewHolder.imageView.setImageResource(item.iconRes);
+						drawableManager.fetchDrawableOnThread(item.iconURL, viewHolder.imageView);
 					}
+				} else if(item.iconRes != R.drawable.transparent && item.iconRes != -1) {
+					viewHolder.imageView.setImageResource(item.iconRes);
+				} else {
+					viewHolder.imageView.setVisibility(View.INVISIBLE);
 				}
 			}
 		}
@@ -104,7 +121,7 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 
 	public static class ListItem {
 		public String text = null;
-		public int iconRes;
+		public int iconRes = R.drawable.transparent;
 		public String iconURL = null;
 		public boolean useCache = false;
 		public boolean testing = false;
@@ -140,12 +157,12 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 			this(tag, iconURL, useCache, false);
 		}
 		
-		public ListItem(String tag, String iconURL, boolean useCache, int backgroundColor) {
-			this(tag, iconURL, useCache, false, backgroundColor);
-		}
-		
 		public ListItem(String tag, String iconURL, boolean useCache, boolean testing) {
 			this(tag, iconURL, useCache, testing, -1);
+		}
+		
+		public ListItem(String tag, String iconURL, boolean useCache, int backgroundColor) {
+			this(tag, iconURL, useCache, false, backgroundColor);
 		}
 
 		public ListItem(String tag, String iconURL, boolean useCache, boolean testing, int backgroundColor) {

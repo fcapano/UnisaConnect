@@ -4,7 +4,6 @@ import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.MensaFragment;
 import it.fdev.utils.Utils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jsoup.Connection.Response;
@@ -36,10 +35,10 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 
 	@Override
 	protected Integer doInBackground(MainActivity... activities) {
-		activity = activities[0];
-		publishProgress(loadStates.START);
 		try {
-			Response response = Jsoup.connect(MENSA_URL).timeout(10000).execute();
+			activity = activities[0];
+			publishProgress(loadStates.START);
+			Response response = Jsoup.connect(MENSA_URL).timeout(30000).execute();
 			Document document = response.parse();
 			String status = document.getElementsByTag("info").get(0).attr("status");
 			if (!status.equals("1")) {
@@ -55,7 +54,8 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 			ArrayList<PiattoMensa> takeAwayBasket = getCourses(document.select("menu > takeAwayBasket").get(0));
 			menu = new MenuMensa(menuUrl, firstCourses, secondCourses, sideCourses, fruitCourse, takeAwayBasket);
 			publishProgress(loadStates.FINISHED);
-		} catch (IOException e) {
+		} catch (Exception e) {
+			menu = null;
 			publishProgress(loadStates.UNKNOWN_PROBLEM);
 			e.printStackTrace();
 			return -1;

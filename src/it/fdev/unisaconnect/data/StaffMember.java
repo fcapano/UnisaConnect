@@ -15,12 +15,13 @@ public class StaffMember {
 	private ArrayList<String> faxList;
 	private String email;
 	private String website;
+	private String ricevimento;
 
-	private final static String RESIZED_PATH = "http://idw.altervista.org/img_prof/2013.05.05-14.47.48/RES/";
-	private final static String ORIGINAL_PATH = "http://idw.altervista.org/img_prof/2013.05.05-14.47.48/ORIG/";
+	private final static String RESIZED_PATH = "http://idw.altervista.org/img_prof/2013.05.09-20.40.54/RES/";
+	private final static String ORIGINAL_PATH = "http://idw.altervista.org/img_prof/2013.05.09-20.40.54/ORIG/";
 
 	public StaffMember(String matricola, String fullname, String imgUrl, String role, String department, 
-			String mapInfo, ArrayList<String> phoneList, ArrayList<String> faxList, String email, String website) {
+			String mapInfo, ArrayList<String> phoneList, ArrayList<String> faxList, String email, String website, String ricevimento) {
 		this.matricola = matricola;
 		this.fullname = fullname;
 		// this.imgUrl = imgUrl;
@@ -28,18 +29,20 @@ public class StaffMember {
 		this.smallImgUrl = getSmallImgUrl(matricola, imgUrl);
 		this.role = role;
 		this.department = department;
-		if (mapInfo != null)
-			this.mapInfo = mapInfo.replace("Ubicazione:", "").trim();
-		else
-			this.mapInfo = null;
+		this.mapInfo = mapInfo;
 		this.phoneList = phoneList;
 		this.faxList = faxList;
 		this.email = email;
 		this.website = website;
+		this.ricevimento = ricevimento;
 	}
 
 	public String getWebsite() {
 		return website;
+	}
+	
+	public String getRicevimento() {
+		return ricevimento;
 	}
 
 	public String getDepartment() {
@@ -83,14 +86,18 @@ public class StaffMember {
 	}
 
 	public static String getOrigImgUrl(String matricola, String fullImgUrl) {
-		if (fullImgUrl.contains("foto_default"))
-			return "";
+//		if (fullImgUrl.contains("foto_default"))
+		if (fullImgUrl == null) {
+			return null;
+		}
 		return ORIGINAL_PATH + matricola + ".png";
 	}
 
 	public static String getSmallImgUrl(String matricola, String fullImgUrl) {
-		if (fullImgUrl.contains("foto_default"))
-			return "";
+//		if (fullImgUrl.contains("foto_default"))
+		if (fullImgUrl == null) {
+			return null;
+		}
 		return RESIZED_PATH + matricola + ".png";
 	}
 

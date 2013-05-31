@@ -51,7 +51,7 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 
 		publishProgress(loadStates.START);
 
-		if (!dataManager.dataExists()) {
+		if (!dataManager.loginDataExists()) {
 			publishProgress(loadStates.NO_DATA);
 			return -1;
 		}
@@ -61,7 +61,6 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 		CookieManager cookieManager = new CookieManager();
 		CookieHandler.setDefault(cookieManager);
 
-		// Log.d(Utils.TAG, "\n\n\n|-------   START TSK   -------|");
 		try {
 			Document result;
 			try { // Come risposta alla prima richiesta si ha un 401, perchè non vengono inviati cookie
@@ -92,12 +91,12 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 			}
 			nextUrl = scraperStepLogin(result);
 			if (nextUrl == null) {
-				Log.d(Utils.TAG, "I'm lost 1");
+				Log.d(Utils.TAG, "I'm lost 3");
 				publishProgress(loadStates.NO_INTERNET);
 				return -1;
 			}
 			if (!nextUrl.isEmpty()) {
-				Log.d(Utils.TAG, "I'm lost 3");
+				Log.d(Utils.TAG, "I'm lost 4");
 				publishProgress(loadStates.NO_INTERNET);
 				return -1;
 			}
@@ -188,7 +187,7 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 	}
 
 	protected Document scraperGetUrl(String url) throws IOException, InterruptedException, HttpStatusException {
-		Response res = Jsoup.connect(url).header("Authorization", "Basic " + base64login).method(Method.GET).timeout(10000).execute();
+		Response res = Jsoup.connect(url).header("Authorization", "Basic " + base64login).method(Method.GET).timeout(30000).execute();
 		Document document = res.parse();
 		Thread.sleep(500);
 		return document;

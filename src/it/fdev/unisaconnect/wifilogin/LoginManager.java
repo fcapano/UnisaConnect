@@ -116,7 +116,7 @@ public class LoginManager extends IntentService {
 	 */
 	protected static int login(Context context) {
 		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(context);
-		if (!dataManager.dataExists()) // Non sono memorizzati i dati utente
+		if (!dataManager.loginDataExists()) // Non sono memorizzati i dati utente
 			return 3;
 		
 		try {

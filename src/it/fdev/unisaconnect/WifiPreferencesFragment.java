@@ -143,7 +143,7 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 		if (!isAdded()) {
 			return;
 		}
-		if(!dataManager.dataExists()) {
+		if(!dataManager.loginDataExists()) {
 			editTextUser.setText("");
 			editTextPass.setText("");
 			checkboxLoginAutomatica.setChecked(true);

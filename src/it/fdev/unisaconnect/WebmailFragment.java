@@ -7,8 +7,11 @@ import it.fdev.utils.Utils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import com.slidingmenu.lib.SlidingMenu;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,10 +26,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class WebmailFragment extends MySimpleFragment {
 	
+	private ProgressBar progressBar;
 	private WebView webView;
 	private Fragment thisFragment;
 	
@@ -45,11 +50,16 @@ public class WebmailFragment extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
+		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
 		webView = (WebView) view.findViewById(R.id.webview);
+		webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
+		webView.setFocusable(true);				// http://stackoverflow.com/questions/12325720/nullpointerexception-in-webview-java-android-webkit-webviewprivatehandler-hand
+		webView.requestFocus();					//
+		
 		thisFragment = this;
 		
 		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(activity);
-		if (!dataManager.dataExists()) { // Non sono memorizzati i dati utente
+		if (!dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			Utils.createAlert(activity, getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
 			return;
 		}
@@ -86,13 +96,14 @@ public class WebmailFragment extends MySimpleFragment {
 	        @Override
 	        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 	        	Utils.goToInternetError(activity, thisFragment);
-	        }
-	        @Override
-	        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-	        	if(url == null || url.length() == 0)
-	                return false;
-	        	
-	        	if (javascriptInterfaceBroken) {
+			}
+
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				if (url == null || url.length() == 0)
+					return false;
+
+				if (javascriptInterfaceBroken) {
 					if (url.contains("UnisaConnect")) {
 						// Parse out the function and its parameter from the
 						String[] spl = url.split("\\|\\|\\^\\$\\|\\|");
@@ -101,23 +112,23 @@ public class WebmailFragment extends MySimpleFragment {
 						// Now, invoke the local function with reflection
 						try {
 							ArrayList<String> params = new ArrayList<String>();
-							for (int i=2; i<spl.length; i++) {
+							for (int i = 2; i < spl.length; i++) {
 								params.add(spl[i]);
 								Log.d(Utils.TAG, "Param: " + spl[i]);
 							}
 							Method sMethod = null;
-							if(params.size() == 0) {
+							if (params.size() == 0) {
 								sMethod = JavascriptBridge.class.getMethod(function);
 							} else {
 								sMethod = JavascriptBridge.class.getMethod(function, new Class[] { String.class });
 							}
-							if(params.size() == 0) {
+							if (params.size() == 0) {
 								sMethod.invoke(jsBridge);
-							} else if(params.size() == 1) {
+							} else if (params.size() == 1) {
 								sMethod.invoke(jsBridge, params.get(0));
-							} else if(params.size() == 2) {
+							} else if (params.size() == 2) {
 								sMethod.invoke(jsBridge, params.get(0), params.get(1));
-							} else if(params.size() == 3) {
+							} else if (params.size() == 3) {
 								sMethod.invoke(jsBridge, params.get(0), params.get(1), params.get(2));
 							}
 						} catch (Exception e) {
@@ -126,53 +137,60 @@ public class WebmailFragment extends MySimpleFragment {
 					}
 					return true;
 				}
-	        	
-	        	if(! (url.startsWith("https://") || url.startsWith("http://")) )
-	        		return false;
-	        	int doubleslash = url.indexOf("//");
-	            if(doubleslash == -1)
-	                doubleslash = 0;
-	            else
-	                doubleslash += 2;
-	            int end = url.indexOf('/', doubleslash);
-	            end = end >= 0 ? end : url.length();
-	            String domain = url.substring(doubleslash, end);
-	            if(domain.contains("webmail") && domain.contains("unisa.it")) {
-	            	view.loadUrl(url);
-	            	return true;
-	            } else {
-	            	Uri uri = Uri.parse(url);
-	            	Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-	            	startActivity(intent);
-	            	return true;
-	            }
-	        }
-	        
-	     // Quando il caricamento si completa rimuovi il dialog
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			super.onPageFinished(view, url);
-			// If running on 2.3, send javascript to the WebView to handle
-			// the functions we used to use in the Javascript-to-Java bridge.
-			if (javascriptInterfaceBroken) {
-				String handleGingerbreadStupidity = "javascript:function wrongDataDialog() 	{ window.location='http://UnisaConnect"+bDelim+"wrongDataDialog'; }; " + 
-													"javascript:function dismissDialog()	{ window.location='http://UnisaConnect"+bDelim+"dismissDialog'; }; " + 
-													"javascript:function goBack()			{ window.location='http://UnisaConnect"+bDelim+"goBack'; }; " + 
-													"javascript: function UC() { 	this.wrongDataDialog=wrongDataDialog;" +
-													"								this.dismissDialog=dismissDialog;" +
-													"								this.goBack=goBack;" +
-													"}; " +
-													"javascript: var UnisaConnectInterface = new UC(); ";
-				view.loadUrl(handleGingerbreadStupidity);
+
+				if (!(url.startsWith("https://") || url.startsWith("http://")))
+					return false;
+				int doubleslash = url.indexOf("//");
+				if (doubleslash == -1)
+					doubleslash = 0;
+				else
+					doubleslash += 2;
+				int end = url.indexOf('/', doubleslash);
+				end = end >= 0 ? end : url.length();
+				String domain = url.substring(doubleslash, end);
+				if (domain.contains("webmail") && domain.contains("unisa.it")) {
+					view.loadUrl(url);
+					return true;
+				} else {
+					Uri uri = Uri.parse(url);
+					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(intent);
+					return true;
+				}
 			}
-		}
+
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				progressBar.setProgress(0);
+				progressBar.setVisibility(View.VISIBLE);
+			}
+	     
+			// Quando il caricamento si completa rimuovi il dialog
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				// If running on 2.3, send javascript to the WebView to handle
+				// the functions we used to use in the Javascript-to-Java bridge.
+				if (javascriptInterfaceBroken) {
+					String handleGingerbreadStupidity = "javascript:function wrongDataDialog() 	{ window.location='http://UnisaConnect"+bDelim+"wrongDataDialog'; }; " + 
+														"javascript:function dismissDialog()	{ window.location='http://UnisaConnect"+bDelim+"dismissDialog'; }; " + 
+														"javascript:function goBack()			{ window.location='http://UnisaConnect"+bDelim+"goBack'; }; " + 
+														"javascript: function UC() { 	this.wrongDataDialog=wrongDataDialog;" +
+														"								this.dismissDialog=dismissDialog;" +
+														"								this.goBack=goBack;" +
+														"}; " +
+														"javascript: var UnisaConnectInterface = new UC(); ";
+					view.loadUrl(handleGingerbreadStupidity);
+				}
+			}
 	    });
 		webView.loadUrl(URL_STRING);
 		webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
                 	SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(activity);
-        			if (dataManager.dataExists()) { // Non sono memorizzati i dati utente
+        			if (dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 	        			String user = dataManager.getUser();
 	        			user += dataManager.getTipoAccountIndex() == 0 ? "@studenti.unisa.it" : "";
 	        			String pass = dataManager.getPass();
@@ -209,6 +227,7 @@ public class WebmailFragment extends MySimpleFragment {
 			if (!isAdded()) {
 				return;
 			}
+			progressBar.setVisibility(View.GONE);
 			Utils.dismissDialog();
         }
 		@JavascriptInterface
@@ -216,6 +235,7 @@ public class WebmailFragment extends MySimpleFragment {
 			if (!isAdded()) {
 				return;
 			}
+			progressBar.setVisibility(View.GONE);
 			try {
 				Utils.createAlert(activity, getString(R.string.dati_errati), null, false);
 				dismissDialog();
@@ -244,7 +264,11 @@ public class WebmailFragment extends MySimpleFragment {
 	
 	@Override
 	public void actionRefresh() {
-		if (!isAdded()) {
+		if (!isAdded() || webView == null) {
+			return;
+		}
+		if (!Utils.hasConnection(activity)) {
+			Utils.goToInternetError(activity, thisFragment);
 			return;
 		}
 		webView.reload();
@@ -253,6 +277,7 @@ public class WebmailFragment extends MySimpleFragment {
 	@Override
 	public void onPause() {
 		try {
+			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
 			webView.stopLoading();
 		} catch (Exception e) {
 		}
@@ -260,8 +285,19 @@ public class WebmailFragment extends MySimpleFragment {
 	}
 	
 	@Override
-	public void onStop() {
+	public void onResume() {
 		try {
+			webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
+		} catch (Exception e) {
+		}
+		super.onResume();
+	}
+
+	@Override
+	public void onStop() {
+		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		try {
+			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
 			webView.stopLoading();
 			webView.destroy();
 		} catch (Exception e) {

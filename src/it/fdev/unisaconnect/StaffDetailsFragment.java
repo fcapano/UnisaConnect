@@ -39,9 +39,9 @@ public class StaffDetailsFragment extends MySimpleFragment {
 	private View mainView;
 	
 	private ImageView picture;
-	private TextView infoTitle, mapTitle, emailTitle, websiteTitle, phoneTitle, faxTitle;
-	private View infoSep, mapSep, emailSep, websiteSep, phoneSep, faxSep;
-	private TextView fullnameText, roleText, deptText, mapText, emailText, websiteText;
+	private TextView infoTitle, mapTitle, emailTitle, ricevimentoTitle, websiteTitle, phoneTitle, faxTitle;
+	private View infoSep, mapSep, emailSep, ricevimentoSep, websiteSep, phoneSep, faxSep;
+	private TextView fullnameText, roleText, deptText, mapText, emailText, ricevimentoText, websiteText;
 	private TextView phone1Text, phone2Text, phone3Text, phone4Text;
 	private TextView fax1Text, fax2Text, fax3Text, fax4Text;
 	
@@ -69,6 +69,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		infoTitle = (TextView) mainView.findViewById(R.id.infoTitle);
 		mapTitle = (TextView) mainView.findViewById(R.id.mapTitle);
 		emailTitle = (TextView) mainView.findViewById(R.id.emailTitle);
+		ricevimentoTitle = (TextView) mainView.findViewById(R.id.ricevimentoTitle);
 		websiteTitle = (TextView) mainView.findViewById(R.id.websiteTitle);
 		phoneTitle = (TextView) mainView.findViewById(R.id.phoneTitle);
 		faxTitle = (TextView) mainView.findViewById(R.id.faxTitle);
@@ -76,6 +77,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		infoSep = (View) mainView.findViewById(R.id.infoSep);
 		mapSep = (View) mainView.findViewById(R.id.mapSep);
 		emailSep = (View) mainView.findViewById(R.id.emailSep);
+		ricevimentoSep = (View) mainView.findViewById(R.id.ricevimentoSep);
 		websiteSep = (View) mainView.findViewById(R.id.websiteSep);
 		phoneSep = (View) mainView.findViewById(R.id.phoneSep);
 		faxSep = (View) mainView.findViewById(R.id.faxSep);
@@ -87,6 +89,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		deptText = (TextView) mainView.findViewById(R.id.departmentText);
 		mapText = (TextView) mainView.findViewById(R.id.mapText);
 		emailText = (TextView) mainView.findViewById(R.id.emailText);
+		ricevimentoText = (TextView) mainView.findViewById(R.id.ricevimentoText);
 		websiteText = (TextView) mainView.findViewById(R.id.websiteText);
 		
 		phone1Text = (TextView) mainView.findViewById(R.id.phone1Text);
@@ -119,6 +122,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		attachLongpressCopy(R.string.informazioni, deptText);
 		attachLongpressCopy(R.string.informazioni, mapText);
 		attachLongpressCopy(R.string.email, emailText);
+		attachLongpressCopy(R.string.ricevimento, ricevimentoText);
 		attachLongpressCopy(R.string.website, websiteText);
 		attachLongpressCopy(R.string.telefono, phone1Text);
 		attachLongpressCopy(R.string.telefono, phone2Text);
@@ -138,6 +142,8 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		emailText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (staffMemberDetails == null)				
+					return;
 				Utils.sendMail(activity, new String[] {staffMemberDetails.getEmail()}, "", "");
 			}
 		});
@@ -145,6 +151,8 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		websiteText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (staffMemberDetails == null)				
+					return;
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(staffMemberDetails.getWebsite()));
 				startActivity(i);
@@ -154,24 +162,32 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		phone1Text.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (staffMemberDetails == null)				
+					return;
 				Utils.startDial(activity, staffMemberDetails.getPhoneList().get(0));
 			}
 		});
 		phone2Text.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (staffMemberDetails == null)				
+					return;
 				Utils.startDial(activity, staffMemberDetails.getPhoneList().get(1));
 			}
 		});
 		phone3Text.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (staffMemberDetails == null)				
+					return;
 				Utils.startDial(activity, staffMemberDetails.getPhoneList().get(2));
 			}
 		});
 		phone4Text.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (staffMemberDetails == null)				
+					return;
 				Utils.startDial(activity, staffMemberDetails.getPhoneList().get(3));
 			}
 		});
@@ -183,6 +199,8 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		v.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+				if (staffMemberDetails == null)				
+					return true;
             	copyText(getString(title),v);
                 return true;
             }
@@ -228,12 +246,13 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		String department = staffMemberDetails.getDepartment();
 		String map = staffMemberDetails.getMapInfo();
 		String email = staffMemberDetails.getEmail();
+		String ricevimento = staffMemberDetails.getRicevimento();
 		String website = staffMemberDetails.getWebsite();
 		ArrayList<String> phones = staffMemberDetails.getPhoneList();
 		ArrayList<String> faxes = staffMemberDetails.getFaxList();
 		
 		
-		if(staffMemberDetails.getSmallImgUrl().equals("")) {
+		if(staffMemberDetails.getSmallImgUrl() == null || staffMemberDetails.getSmallImgUrl().isEmpty()) {
 			picture.setVisibility(View.GONE);
 			fullnameText.setBackgroundColor(resources.getColor(android.R.color.transparent));
 		} else {
@@ -243,7 +262,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 				public void onLoadingCancelled(String arg0, View arg1) {
 				}
 				@Override
-				public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
+				public void onLoadingComplete(String arg0, View view, Bitmap arg2) {
 					drawableManager.fetchDrawableOnThread(staffMemberDetails.getImgUrl(), picture);
 				}
 				@Override
@@ -257,22 +276,22 @@ public class StaffDetailsFragment extends MySimpleFragment {
 		
 		fullnameText.setText(fullname);
 		
-		if( (role==null || role.equals("")) && (department==null || department.equals("")) ) {
+		if( (role==null || role.isEmpty()) && (department==null || department.isEmpty()) ) {
 			infoTitle.setVisibility(View.GONE);
 			infoSep.setVisibility(View.GONE);
 		}
-		if(role==null || role.equals("")) {
+		if(role==null || role.isEmpty()) {
 			roleText.setVisibility(View.GONE);
 		} else {
 			roleText.setText(role);
 		}
-		if(department==null || department.equals("")) {
+		if(department==null || department.isEmpty()) {
 			deptText.setVisibility(View.GONE);
 		} else {
 			deptText.setText(department);
 		}
 		
-		if(map==null || map.equals("")) {
+		if(map==null || map.isEmpty()) {
 			mapTitle.setVisibility(View.GONE);
 			mapSep.setVisibility(View.GONE);
 			mapText.setVisibility(View.GONE);
@@ -280,7 +299,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 			mapText.setText(map);
 		}
 		
-		if(email==null || email.equals("")) {
+		if(email==null || email.isEmpty()) {
 			emailTitle.setVisibility(View.GONE);
 			emailSep.setVisibility(View.GONE);
 			emailText.setVisibility(View.GONE);
@@ -288,7 +307,15 @@ public class StaffDetailsFragment extends MySimpleFragment {
 			emailText.setText(email);
 		}
 		
-		if(website==null || website.equals("")) {
+		if(ricevimento==null || ricevimento.isEmpty()) {
+			ricevimentoTitle.setVisibility(View.GONE);
+			ricevimentoSep.setVisibility(View.GONE);
+			ricevimentoText.setVisibility(View.GONE);
+		} else {
+			ricevimentoText.setText(ricevimento);
+		}
+		
+		if(website==null || website.isEmpty()) {
 			websiteTitle.setVisibility(View.GONE);
 			websiteSep.setVisibility(View.GONE);
 			websiteText.setVisibility(View.GONE);

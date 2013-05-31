@@ -20,6 +20,9 @@ public class MensaFragment extends MySimpleFragment {
 	private MenuMensaScraper mensaScraper;
 	private boolean alreadyStarted = false;
 	private MenuMensa menu;
+	
+	private View menuContainerView;
+	private View menuNDView;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View mainView = (View) inflater.inflate(R.layout.menu_mensa, container, false);
@@ -29,6 +32,8 @@ public class MensaFragment extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		menuContainerView = activity.findViewById(R.id.menu_list_container);
+		menuNDView = activity.findViewById(R.id.menu_non_disponibile);
 		getMenu(false);
 	}
 
@@ -65,8 +70,13 @@ public class MensaFragment extends MySimpleFragment {
 	}
 
 	public void mostraMenu(MenuMensa menu) {
-		View menuContainerView = activity.findViewById(R.id.menu_list_container);
-		View menuNDView = activity.findViewById(R.id.menu_non_disponibile);
+		if (!isAdded()) {
+			return;			
+		}
+		if (menuContainerView == null || menuNDView == null) { // Dai report di crash sembra succedere a volte, non ho idea del perchè
+			activity.showMenu();							   // Quindi mostro lo slidingmenu per apparare
+			return;
+		}
 		if (menu == null && this.menu == null) {
 			menuContainerView.setVisibility(View.GONE);
 			menuNDView.setVisibility(View.VISIBLE);
@@ -78,6 +88,7 @@ public class MensaFragment extends MySimpleFragment {
 		if (menu != null) {
 			this.menu = menu;
 		}
+		
 		LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout menuListView = (LinearLayout) activity.findViewById(R.id.menu_list);
 		menuListView.removeAllViews();

@@ -1,5 +1,7 @@
 package it.fdev.unisaconnect;
 
+import com.slidingmenu.lib.SlidingMenu;
+
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 import android.os.Bundle;
@@ -15,9 +17,11 @@ import android.view.ViewGroup;
 public class ErrorInternetFragment extends MySimpleFragment {
 	
 	private Fragment backFragment = null;
+	private int initialTouchMode;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		initialTouchMode = activity.getSlidingMenu().getTouchModeAbove();
 		return inflater.inflate(R.layout.error_internet_missing, container, false);
 	}
 	
@@ -32,7 +36,6 @@ public class ErrorInternetFragment extends MySimpleFragment {
 			return;
 		}
 		if(Utils.hasConnection(activity)) {
-//			activity.goToLastFrame();
 			activity.getSupportFragmentManager().popBackStack();
 			if(backFragment != null) {
 				activity.switchContent(backFragment);
@@ -42,5 +45,17 @@ public class ErrorInternetFragment extends MySimpleFragment {
 
 	public void setBackFragment(Fragment fragment) {
 		backFragment = fragment;
+	}
+	
+	@Override
+	public void onResume() {
+		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		super.onResume();
+	}
+	
+	@Override
+	public void onPause() {
+		activity.getSlidingMenu().setTouchModeAbove(initialTouchMode);
+		super.onPause();
 	}
 }

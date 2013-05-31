@@ -130,6 +130,30 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" />
+            
+            <TextView
+                android:id="@+id/ricevimentoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ricevimento"
+                android:textColor="@color/holo_blue"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/ricevimentoSep"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/list_divider_blue" />
+
+            <TextView
+                android:id="@+id/ricevimentoText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp" />
 
             <TextView
                 android:id="@+id/websiteTitle"
