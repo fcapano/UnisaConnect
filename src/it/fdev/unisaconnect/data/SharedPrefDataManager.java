@@ -1,10 +1,9 @@
 package it.fdev.unisaconnect.data;
 
-import it.fdev.encryptionUtils.CryptoMan;
 import it.fdev.encryptionUtils.CryptoMan_2;
-import it.fdev.encryptionUtils.SimpleCrypto;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.utils.MyFragment;
+import it.fdev.utils.ObjectSerializer;
 import it.fdev.utils.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,8 +29,11 @@ public class SharedPrefDataManager {
 	public static final String PREF_ACCTYPE 	= "tipoAccountIndex";
 	public static final String PREF_AUTOLOGIN 	= "loginAutomatica";
 	
+	// Mensa data
+	public static final String PREF_MENU_MENSA = "menu";
+	
 	// Weather data
-	public static final String PREF_WEATHER_LAST_UPDATE_MILLIS = "weatherLastUpdateMillis";
+	public static final String PREF_WEATHER = "weather";
 	
 	public static final String PREF_IS_NEW_ENCRYPTION = "isNewEncryption";
 	public static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
@@ -40,7 +42,7 @@ public class SharedPrefDataManager {
 	// Crypto data
 	public static final String NO_ENCODING 		= "NOENC";
 	public static final String PREF_KEY 		= "enc_key";
-	public static final int CRYPTO_VERSION = 2;	// 2=0.5
+	public static final int CRYPTO_VERSION = 3;	// 2=0.5 3=0.6.2
 	
 	private static SharedPrefDataManager dm = null;
 	private SharedPreferences settings = null;
@@ -51,8 +53,10 @@ public class SharedPrefDataManager {
 	private String user, pass;
 	private boolean loginAutomatica;
 	private int tipoAccountIndex;
+	// Mensa
+	private MenuMensa menuMensa;
 	// Weather
-	private long  weatherLastUpdateMillis  = (long) 0;
+	private WeatherData weather;
 	
 	private boolean testingEnabled = MainActivity.isDebugMode;
 	private final static String[] SSID = new String[] {"Studenti","Personale"};
@@ -67,85 +71,23 @@ public class SharedPrefDataManager {
 	
 	private SharedPrefDataManager(Context context) {
 		settings = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-		updateBackwardsCompatibility();
 		settings.edit().putInt(PREF_ENCRYPTION_VERSION, CRYPTO_VERSION).commit();
 		loadData();
-	}
-	
-	public void updateBackwardsCompatibility() {
-		
-		if(settings.getInt(PREF_ENCRYPTION_VERSION, -1) == CRYPTO_VERSION)
-			return;
-		
-		boolean dataExists = settings.contains(PREF_USER);
-		boolean isVersion1 = !settings.contains(PREF_KEY);		//if false -> isversion2
-		if(!dataExists)
-			return;
-		else {
-			if (isVersion1) {
-				Log.d(Utils.TAG, "Migrating V1 data");
-				try {
-					user = settings.getString(PREF_USER, null);
-					pass = settings.getString(PREF_PASS, null);
-					if(user==null || pass==null) {
-						removeData();
-						return;
-					}
-					String SEED = "Q8nupuPhAPHuqEyubr5J";
-					user = SimpleCrypto.decrypt(SEED, user);
-					pass = SimpleCrypto.decrypt(SEED, pass);
-					String userCod = CryptoMan_2.encrypt(user);
-					String passCod = CryptoMan_2.encrypt(pass);
-					Editor editor = settings.edit();
-					editor.putString(PREF_USER, userCod);
-					editor.putString(PREF_PASS, passCod);
-					editor.commit();
-				} catch (Exception e) {
-					e.printStackTrace();
-					removeData();
-					return;
-				}
-			} else { //isversion2
-				Log.d(Utils.TAG, "Migrating V2 data");
-				try {
-					user = settings.getString(PREF_USER, null);
-					pass = settings.getString(PREF_PASS, null);
-					if(user==null || pass==null) {
-						removeData();
-						return;
-					}
-					String raw_key = settings.getString(PREF_KEY, NO_ENCODING);
-					if(!raw_key.equals(NO_ENCODING)) {
-						user = CryptoMan.decrypt(user, settings);
-						pass = CryptoMan.decrypt(pass, settings);
-					}
-					String userCod = CryptoMan_2.encrypt(user);
-					String passCod = CryptoMan_2.encrypt(pass);
-					Editor editor = settings.edit();
-					editor.putString(PREF_USER, userCod);
-					editor.putString(PREF_PASS, passCod);
-					editor.commit();
-				} catch(Exception e) {
-					e.printStackTrace();
-					removeData();
-				}
-			}
-		}
 	}
 	
 	public boolean loadData() {
 		try {
 			String userCod = settings.getString(PREF_USER, null);
 			String passCod = settings.getString(PREF_PASS, null);
-			if(userCod==null || passCod==null)
-				return false;
-			user = CryptoMan_2.decrypt(userCod);
-			pass = CryptoMan_2.decrypt(passCod);
-			tipoAccountIndex = settings.getInt(PREF_ACCTYPE, 0);
-			loginAutomatica = settings.getBoolean(PREF_AUTOLOGIN, true);
+			if (userCod != null && passCod != null) {
+				user = CryptoMan_2.decrypt(userCod);
+				pass = CryptoMan_2.decrypt(passCod);
+				tipoAccountIndex = settings.getInt(PREF_ACCTYPE, 0);
+				loginAutomatica = settings.getBoolean(PREF_AUTOLOGIN, true);
+			}
 			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isDebugMode);
-			weatherLastUpdateMillis = settings.getLong(PREF_WEATHER_LAST_UPDATE_MILLIS, 0);
-//			bootFragment = MainActivity.bootableFragments.values()[settings.getInt(PREF_BOOTABLE_FRAGMENT, 0)];
+			menuMensa = (MenuMensa) ObjectSerializer.deserialize(settings.getString(PREF_MENU_MENSA, null));
+			weather = (WeatherData) ObjectSerializer.deserialize(settings.getString(PREF_WEATHER, null));
 			bootFragmentClass = MainActivity.bootableFragments.get(settings.getInt(PREF_BOOTABLE_FRAGMENT, 0));
 			return true;
 		} catch(Exception e) {
@@ -157,25 +99,22 @@ public class SharedPrefDataManager {
 	}
 	
 	public boolean saveData() {
-		if(user==null || pass==null)
-			return false;
-		
 		try {
-			String userCod = CryptoMan_2.encrypt(user);
-			String passCod = CryptoMan_2.encrypt(pass);
-			
 			Editor editor = settings.edit();
-			editor.putString(PREF_USER, userCod);
-			editor.putString(PREF_PASS, passCod);
+			if (user != null && pass != null) {
+				String userCod = CryptoMan_2.encrypt(user);
+				String passCod = CryptoMan_2.encrypt(pass);
+				editor.putString(PREF_USER, userCod);
+				editor.putString(PREF_PASS, passCod);
+			}
 			editor.putBoolean(PREF_AUTOLOGIN, loginAutomatica);
 			editor.putInt(PREF_ACCTYPE, tipoAccountIndex);
 			editor.putBoolean(PREF_TESTING_ENABLED, testingEnabled);
-			editor.putLong(PREF_WEATHER_LAST_UPDATE_MILLIS, weatherLastUpdateMillis);
+			editor.putString(PREF_MENU_MENSA, ObjectSerializer.serialize(menuMensa));
+			editor.putString(PREF_WEATHER, ObjectSerializer.serialize(weather));
 			editor.putInt(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.bootableFragments.indexOf(bootFragmentClass), 0));
-			
 			editor.commit();
 			return true;
-			
 		} catch(Exception e) {
 			Log.e(MainActivity.TAG, "Eccezione codificando i dati...resetto tutto");
 			e.printStackTrace();
@@ -243,12 +182,20 @@ public class SharedPrefDataManager {
 		return this.testingEnabled;
 	}
 	
-	public void setWeatherLastUpdateMillis(Long weatherLastUpdate) {
-		this.weatherLastUpdateMillis = weatherLastUpdate;
+	public void setMenuMensa(MenuMensa menuMensa) {
+		this.menuMensa = menuMensa;
 	}
 	
-	public Long getWeatherLastUpdateMillis() {
-		return weatherLastUpdateMillis;
+	public MenuMensa getMenuMensa() {
+		return menuMensa;
+	}
+	
+	public void setWeather(WeatherData weather) {
+		this.weather= weather;
+	}
+	
+	public WeatherData getWeather() {
+		return weather;
 	}
 
 	public Class<? extends MyFragment> getBootFragmentClass() {

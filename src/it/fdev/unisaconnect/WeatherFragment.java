@@ -1,15 +1,18 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.scrapers.WeatherScraper;
+import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.unisaconnect.data.WeatherData;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -25,10 +28,13 @@ import com.slidingmenu.lib.SlidingMenu;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class WeatherFragment extends MySimpleFragment {
+	
+	private final int MIN_UPDATE_MINUTES_INTERVAL = 10;
 
 	private boolean alreadyStarted = false;
 	private WeatherScraper meteoScraper;
 	private WeatherData meteo;
+	private SharedPrefDataManager pref;
 
 	private RelativeLayout weatherActualContainerView;
 	private GridView weatherForecastGridview;
@@ -36,13 +42,15 @@ public class WeatherFragment extends MySimpleFragment {
 	private ViewPager pager;
 	private TitlePageIndicator indicator;
 
-	private TextView lastUpdateTimeView;
+	private TextView lastUpdateTime;
 	private ImageView iconView;
 	private TextView tempView;
 	private TextView descriptionView;
 	private TextView humidityView;
 	private TextView windView;
 	private TextView windDirView;
+	
+	private CurrentWeatherAdapter currentWeatherAdapter;
 
 
 	@Override
@@ -57,7 +65,7 @@ public class WeatherFragment extends MySimpleFragment {
 		pager = (ViewPager) view.findViewById(R.id.meteo_pager);
 		indicator = (TitlePageIndicator) view.findViewById(R.id.meteo_indicator);
 
-		lastUpdateTimeView = (TextView) view.findViewById(R.id.last_update_time);
+		lastUpdateTime = (TextView) view.findViewById(R.id.last_update_time);
 		iconView = (ImageView) view.findViewById(R.id.weather_icon);
 		tempView = (TextView) view.findViewById(R.id.weather_temp);
 		descriptionView = (TextView) view.findViewById(R.id.weather_description);
@@ -67,43 +75,17 @@ public class WeatherFragment extends MySimpleFragment {
 
 		weatherActualContainerView = (RelativeLayout) view.findViewById(R.id.weather_actual_container);
 		weatherForecastGridview = (GridView) view.findViewById(R.id.weather_forecast_gridview);
-
-		getMeteo(false);
+		
+		pref = SharedPrefDataManager.getDataManager(activity);
+		meteo = pref.getWeather();
+		if (meteo != null) {
+			Log.d(Utils.TAG, "Meteo salvato!");
+		} else {
+			Log.d(Utils.TAG, "Meteo non salvato!");
+		}
+		getWeather(false);
 	}
-
-	class CurrentWeatherAdapter extends FragmentPagerAdapter {
-		private WeatherActualConditionFragment[] fragmentsList;
-
-		public CurrentWeatherAdapter(FragmentManager fm) {
-			super(fm);
-			fragmentsList = new WeatherActualConditionFragment[getCount()];
-		}
-
-		@Override
-		public WeatherActualConditionFragment getItem(int position) {
-			WeatherActualConditionFragment cFragment;
-			if (fragmentsList[position] == null) {
-				cFragment = new WeatherActualConditionFragment();
-				cFragment.setCondition(meteo.getActualCondition(position));
-				cFragment.setViews(lastUpdateTimeView, iconView, tempView, descriptionView, humidityView, windView, windDirView);
-				fragmentsList[position] = cFragment;
-			} else {
-				cFragment = fragmentsList[position];
-			}
-			return cFragment;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return meteo.getActualCondition(position).getStationName().toUpperCase(Locale.ITALY);
-		}
-
-		@Override
-		public int getCount() {
-			return meteo.getActualConditionList().size();
-		}
-	}
-
+	
 	@Override
 	public void setVisibleActions() {
 		activity.setActionRefreshVisible(true);
@@ -111,12 +93,11 @@ public class WeatherFragment extends MySimpleFragment {
 
 	@Override
 	public void actionRefresh() {
-		getMeteo(true);
+		getWeather(true);
 	}
 
 	@Override
 	public void onResume() {
-//		mostraMeteo(null);
 		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		super.onResume();
 	}
@@ -124,32 +105,45 @@ public class WeatherFragment extends MySimpleFragment {
 	@Override
 	public void onPause() {
 		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		
 		super.onPause();
 	}
 
-	public void getMeteo(boolean force) {
+	public void getWeather(boolean force) {
 		if (!isAdded()) {
 			return;
+		}
+		if (!force && meteo != null) {
+			long lastUpdateTime = meteo.getFetchTime().getTime();
+			long minutesPassedLastUpdate = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - lastUpdateTime);
+			Log.d(Utils.TAG, "Sono passati " + minutesPassedLastUpdate + " minuti");
+			if (minutesPassedLastUpdate <= MIN_UPDATE_MINUTES_INTERVAL) {
+				showWeather(null);
+				return;
+			} else {
+				pref.setWeather(null);
+				pref.saveData();
+			}
 		}
 		if (!Utils.hasConnection(activity)) {
 			Utils.goToInternetError(activity, this);
 			return;
-		}
+		}		
 		if (force || !alreadyStarted) {
 			alreadyStarted = true;
 			if (meteoScraper != null && meteoScraper.isRunning) {
 				return;
 			}
 			Utils.createDialog(activity, getString(R.string.caricamento), false);
-			meteoScraper = new WeatherScraper(force);
+			meteoScraper = new WeatherScraper();
 			meteoScraper.setCallerMeteoFragment(this);
 			meteoScraper.execute(activity);
-		} else {
-			mostraMeteo(meteo);
+			return;
 		}
+		showWeather(null);
 	}
 
-	public void mostraMeteo(WeatherData weatherData) {
+	public void showWeather(WeatherData weatherData) {
 		if (!isAdded()) {
 			return;			
 		}
@@ -170,13 +164,14 @@ public class WeatherFragment extends MySimpleFragment {
 			this.meteo = weatherData;
 		}
 		
-		final CurrentWeatherAdapter currentAdapter = new CurrentWeatherAdapter(activity.getSupportFragmentManager());
-		pager.setAdapter(currentAdapter);
+		currentWeatherAdapter = new CurrentWeatherAdapter(activity.getSupportFragmentManager());
+		pager.setAdapter(currentWeatherAdapter);
 		indicator.setViewPager(pager);
+		indicator.setCurrentItem(1);
 		indicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
-				currentAdapter.getItem(arg0).showCondition();
+				currentWeatherAdapter.getItem(arg0).showCondition();
 			}
 
 			@Override
@@ -187,8 +182,55 @@ public class WeatherFragment extends MySimpleFragment {
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
-		indicator.setCurrentItem(1);
+		currentWeatherAdapter.getItem(1).showCondition();
+		
 		weatherForecastGridview.setAdapter(new WeatherForecastAdapter(activity, this.meteo.getDailyForecastList()));
+		
+		if (weatherData != null) {
+			// Il metodo è stato chiamato con il meteo aggiornato da salvare
+			Log.d(Utils.TAG, "saving weather data");
+			pref.setWeather(this.meteo);
+			pref.saveData();
+		}
+	}
+	
+	class CurrentWeatherAdapter extends FragmentStatePagerAdapter {
+		private WeatherActualConditionFragment[] fragmentsList;
+
+		public CurrentWeatherAdapter(FragmentManager fm) {
+			super(fm);
+			fragmentsList = new WeatherActualConditionFragment[getCount()];
+		}
+
+		@Override
+		public WeatherActualConditionFragment getItem(int position) {
+			WeatherActualConditionFragment cFragment;
+			if (fragmentsList[position] == null) {
+				cFragment = new WeatherActualConditionFragment();
+				cFragment.setCondition(meteo.getActualCondition(position));
+				cFragment.setViews(lastUpdateTime, iconView, tempView, descriptionView, humidityView, windView, windDirView);
+				fragmentsList[position] = cFragment;
+			} else {
+				cFragment = fragmentsList[position];
+			}
+			return cFragment;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return meteo.getActualCondition(position).getStationName().toUpperCase(Locale.ITALY);
+		}
+
+		@Override
+		public int getCount() {
+			return meteo.getActualConditionList().size();
+		}
+		
+		@Override
+		public Parcelable saveState() {
+			// Workaround for forcing fragments to be recreated after activity is resumed
+			return null;
+		}
 	}
 
 }

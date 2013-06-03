@@ -2,6 +2,7 @@ package it.fdev.unisaconnect.data;
 
 import it.fdev.unisaconnect.R;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -13,14 +14,10 @@ import java.util.Map;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
-public class WeatherData {
-	private final String OPTIMIZED_WEBCAM_IMG_URL = "http://unisameteo.appspot.com/serve?id=";
-	
-	private Context context;
-	private Date fetchTime;
-	private ArrayList<ActualCondition> actualConditionList;
-	private ArrayList<DailyForecast> dailyForecastList;
+public class WeatherData implements Serializable {
+	private static final long serialVersionUID = -5469551486116200662L;
 
+	private final String OPTIMIZED_WEBCAM_IMG_URL = "http://unisameteo.appspot.com/serve?id=";
 	private final String YOW_PATH = "Yow/";
 	private static Map<String, String> yowIconsAssociations = new HashMap<String, String>();
 	static {
@@ -69,6 +66,11 @@ public class WeatherData {
 		yowIconsAssociations.put("nt_cloudy", "1.png");
 		yowIconsAssociations.put("nt_partlycloudy", "2.png");
 	}
+	
+	private Context context;
+	private Date fetchTime;
+	private ArrayList<ActualCondition> actualConditionList;
+	private ArrayList<DailyForecast> dailyForecastList;
 
 	public WeatherData(Context context) {
 		this.context = context;
@@ -115,10 +117,12 @@ public class WeatherData {
 		return dailyForecastList.get(i);
 	}
 
-	public class ActualCondition {
+	public class ActualCondition implements Serializable {
+		private static final long serialVersionUID = 8492846115841636039L;
 		private String lastUpdate;
 		private String lastUpdateMilliseconds;
 		private String description;
+		private String iconUrl;
 		private Drawable iconDrawable;
 		private String temp;
 		private String maxTemp;
@@ -140,6 +144,7 @@ public class WeatherData {
 			this.lastUpdate = lastUpdate;
 			this.lastUpdateMilliseconds = lastUpdateMilliseconds;
 			this.description = description;
+			this.iconUrl = iconUrl;
 			this.iconDrawable = WeatherData.this.getIconDrawable(iconUrl);
 			this.temp = temp.replace("C", "").trim();
 			this.maxTemp = maxTemp;
@@ -173,6 +178,7 @@ public class WeatherData {
 		}
 
 		public Drawable getIconDrawable() {
+//			return WeatherData.this.getIconDrawable(iconUrl);
 			return iconDrawable;
 		}
 
@@ -229,10 +235,12 @@ public class WeatherData {
 		}
 	}
 
-	public class DailyForecast {
+	public class DailyForecast implements Serializable {
+		private static final long serialVersionUID = -5934884410005634828L;
 		private String validThrough;
 		private String lastUpdateMilliseconds;
 		private String description;
+		private String iconUrl;
 		private Drawable iconDrawable;
 		private String maxTemp;
 		private String minTemp;
@@ -247,6 +255,7 @@ public class WeatherData {
 			this.validThrough = shortDay;
 			this.lastUpdateMilliseconds = lastUpdateMilliseconds;
 			this.description = description;
+			this.iconUrl = iconUrl;
 			this.iconDrawable = WeatherData.this.getIconDrawable(iconUrl);
 			this.maxTemp = maxTemp;
 			this.minTemp = minTemp;
@@ -269,6 +278,7 @@ public class WeatherData {
 		}
 
 		public Drawable getIconDrawable() {
+//			return WeatherData.this.getIconDrawable(iconUrl);
 			return iconDrawable;
 		}
 

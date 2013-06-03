@@ -13,7 +13,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/transparent"
         tools:ignore="ContentDescription" />
 
     <ImageView
@@ -24,7 +23,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitXY"
-        android:src="@drawable/transparent"
+        android:src="@drawable/transparent_black_50"
         tools:ignore="ContentDescription" />
 
 </RelativeLayout>

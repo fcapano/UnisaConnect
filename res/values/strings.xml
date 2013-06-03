@@ -2,13 +2,14 @@
 <resources>
 
     <!-- SlidingMenu -->
-    <string name="app_name">UnisaConnect</string>
+    <string name="app_name">Unisa Connect</string>
     <string name="dev_email">fdev.developers@gmail.com</string>
     <string name="login_wifi">Login \'Studenti\'</string>
     <string name="menu_mensa">Menu mensa</string>
     <string name="webmail">Webmail</string>
-    <string name="esse3">Esse3</string>
+    <string name="servizi_esse3">Servizi ESSE3</string>
     <string name="info_staff">Rubrica docenti</string>
+    <string name="meteo">Meteo</string>
     <string name="recensione">Lascia una recensione</string>
     <string name="contattaci">Problemi? Idee?</string>
     <string name="preferenze">Preferenze</string>
@@ -16,7 +17,7 @@
 
 
     <!-- Esse3 Services -->
-    <string name="servizi_esse3">Servizi ESSE</string>
+    <string name="esse3">Esse3</string>
     <string name="pagina_web">Pagina Web</string>
     <string name="libretto">Libretto</string>
     <string name="pagamenti">Pagamenti</string>

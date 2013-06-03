@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 public class SlidingMenuFragment extends MyListFragment {
 
-	private static final int VALID_ELEMENTS_NUM = 6;	// When testing is disabled only these elements are shown
+	private static final int VALID_ELEMENTS_NUM = 7;	// When testing is disabled only these elements are shown
 														// To enable testing in the wifipreferences as username enter
 													 	// the string in Utils.TOGGLE_TESTING_STRING
 
@@ -83,16 +83,16 @@ public class SlidingMenuFragment extends MyListFragment {
 			newContent = new StaffSearchFragment();
 			break;
 		case 5:
-			Utils.sendSupportMail(activity, "Riguardo \"Unisa Connect\"...", "");
+			newContent = new WeatherFragment();
 			break;
 		case 6:
-			newContent = new TimetableFragment();
+			Utils.sendSupportMail(activity, "Riguardo \"Unisa Connect\"...", "");
 			break;
 		case 7:
-			newContent = new MapFragment();
+			newContent = new TimetableFragment();
 			break;
 		case 8:
-			newContent = new WeatherFragment();
+			newContent = new MapFragment();
 			break;
 		}
 		return newContent;

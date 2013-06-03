@@ -6,15 +6,18 @@ import it.fdev.utils.CustomMapMarker;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.qozix.mapview.MapView;
 import com.qozix.mapview.hotspots.Poly;
@@ -124,6 +127,20 @@ public class MapFragment extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		mapView.addZoomLevel(RESIZED_IMG_WIDTH, RESIZED_IMG_HEIGHT, "map/uni_map_" + RESIZED_IMG_WIDTH + "_" + RESIZED_IMG_HEIGHT + "/tile_%row%_%col%.png", "map/uni_map_lr.png");
+		
+		try {
+			ImageView marker = new ImageView( activity );
+			marker.setImageDrawable( Drawable.createFromStream(activity.getAssets().open("map/try.png"), null) );
+			double x = ((1065) * RESIZED_IMG_WIDTH) / ORIGINAL_IMG_WIDTH;
+			double y = ((1616) * RESIZED_IMG_HEIGHT) / ORIGINAL_IMG_HEIGHT;
+//			mapView.addMarker( marker, x, y, 0f, 0f );
+			mapView.addMarkerAtZoom(marker, x, y, 5);
+//			mapView.addView(marker, (int)x, (int)y);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		mapView.moveToAndCenter( RESIZED_IMG_WIDTH/2, RESIZED_IMG_HEIGHT/2, true );
 		
 		for(final HotspotItem item : hotspotList) {

@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.crittercism.app.Crittercism;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -62,7 +63,7 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 	}
 	
 	private boolean menuAlreadyToggled = false; // After the first time in onPostCreate the menu shouldn't be toggled automatically
-	private boolean showMenuOnStartup = false;
+	private boolean showMenuOnStartup = true;	// Show the sliding menu on startup
 	private SlidingMenuFragment menuFragment;
 	private Menu sherlockMenu;
 	private SlidingMenu sm;
@@ -72,28 +73,40 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		isDebugMode = (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE));
-		if (isDebugMode) {
-			Log.d(Utils.TAG, "The applications is running as debuggable!");
+		try {
+			isDebugMode = (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE));
+			if (isDebugMode) {
+				Log.d(Utils.TAG, "The applications is running as debuggable!");
+			}
+		} catch (Exception e) {
+			isDebugMode = false;
 		}
 		
+		// Initialize Crittercism
+		Crittercism.init(getApplicationContext(), "5135ccc2558d6a05f7000024");
+		Crittercism.setOptOutStatus(isDebugMode);
+
+		// Initialize Google Analytics
+		EasyTracker.getInstance().setContext(this);
+		EasyTracker.getInstance().activityStart(this);
+		
 		sharedPref = SharedPrefDataManager.getDataManager(this);
-		Class<? extends MyFragment> fragmentClassToBoot = sharedPref.getBootFragmentClass();
-		MyFragment fragmentToBoot;
-		try {
-			fragmentToBoot = fragmentClassToBoot.newInstance();
-		} catch (Exception e) {
-			fragmentToBoot = new WifiPreferencesFragment();
-		} 
+		
+		// Start the last used fragment
+//		Class<? extends MyFragment> fragmentClassToBoot = sharedPref.getBootFragmentClass();
+//		MyFragment fragmentToBoot;
+//		try {
+//			fragmentToBoot = fragmentClassToBoot.newInstance();
+//		} catch (Exception e) {
+//			fragmentToBoot = new WifiPreferencesFragment();
+//		}
+		
+		MyFragment fragmentToBoot = new WifiPreferencesFragment();
 		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		// set the Above View
 		setContentView(R.layout.content_frame);
-
-		// Initialize Crittercism
-		Crittercism.init(getApplicationContext(), "5135ccc2558d6a05f7000024");
-		Crittercism.setOptOutStatus(isDebugMode);
 
 		// customize the SlidingMenu
 		sm = getSlidingMenu();
@@ -113,11 +126,17 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 		// Initialize views
 		hideActions();
 		menuFragment = new SlidingMenuFragment();
-		Fragment startFragment = (Fragment) fragmentToBoot;//new WeatherFragment();// new WifiPreferencesFragment();
+		Fragment startFragment = (Fragment) fragmentToBoot;
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
 		getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, menuFragment).replace(R.id.content_frame, startFragment, startFragment.getClass().toString()).commit();
 
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	@Override
@@ -179,8 +198,7 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 	/**
 	 * Changes the fragment shown
 	 * 
-	 * @param content
-	 *            fragment frame to show
+	 * @param content fragment frame to show
 	 */
 	public void switchContent(Fragment newFragment) {
 		if (newFragment == null)
@@ -204,7 +222,7 @@ public class MainActivity extends SlidingFragmentActivity implements OnCloseList
 			fragmentTransaction.commit();
 			
 			if (bootableFragments.contains(newFragment.getClass())) {
-				Log.d(Utils.TAG, "class is contained");
+//				Log.d(Utils.TAG, "class is contained");
 				sharedPref.setBootFragmentClass((Class<? extends MyFragment>) newFragment.getClass());
 				sharedPref.saveData();
 			}

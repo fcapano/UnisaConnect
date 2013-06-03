@@ -1,5 +1,7 @@
 package it.fdev.utils;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import it.fdev.unisaconnect.MainActivity;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ public abstract class MySimpleFragment extends Fragment implements MyFragment {
 		super.onCreate(savedInstanceState);
 		activity = (MainActivity) getActivity();
 		resources = getResources();
+		EasyTracker.getTracker().sendView(this.getClass().toString());
 	}
 
 	@Override

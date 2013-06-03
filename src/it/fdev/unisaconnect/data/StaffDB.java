@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class StaffDB {
 	private SQLiteDatabase dbStaff;
-	private static final String DB_STAFF_DATE = "2013.05.09-20.40.54";
+	private static final String DB_STAFF_DATE = "2013.06.03-15.54.30";
 	private static final String DB_STAFF_NAME = "uc_staff-" + DB_STAFF_DATE + ".db";
 	
 	public StaffDB(Context context) throws IOException {

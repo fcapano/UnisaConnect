@@ -17,8 +17,9 @@ public class StaffMember {
 	private String website;
 	private String ricevimento;
 
-	private final static String RESIZED_PATH = "http://idw.altervista.org/img_prof/2013.05.09-20.40.54/RES/";
-	private final static String ORIGINAL_PATH = "http://idw.altervista.org/img_prof/2013.05.09-20.40.54/ORIG/";
+	private final static String IMG_DATE = "2013.06.03-15.54.30";
+	private final static String RESIZED_PATH = "http://idw.altervista.org/img_prof/" + IMG_DATE + "/RES/";
+	private final static String ORIGINAL_PATH = "http://idw.altervista.org/img_prof/" + IMG_DATE + "/ORIG/";
 
 	public StaffMember(String matricola, String fullname, String imgUrl, String role, String department, 
 			String mapInfo, ArrayList<String> phoneList, ArrayList<String> faxList, String email, String website, String ricevimento) {

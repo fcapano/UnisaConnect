@@ -6,10 +6,10 @@
         <item>@string/webmail</item>
         <item>@string/servizi_esse3</item>
         <item>@string/info_staff</item>
+        <item>@string/meteo</item>
         <item>@string/contattaci</item>
         <item>time</item>
         <item>map</item>
-        <item>meteo</item>
     </string-array>
     
     <string-array name="menu_icons">
@@ -18,10 +18,10 @@
         <item>@drawable/mail</item>
         <item>@drawable/esse3</item>
         <item>@drawable/notebook</item>
+        <item>@drawable/weather</item>
         <item>@drawable/comments</item>
         <item>@drawable/timetable</item>
         <item>@drawable/transparent</item>
-        <item>@drawable/weather_22_mod</item>
     </string-array>
     
     <string-array name="timetable_lesson_colors">

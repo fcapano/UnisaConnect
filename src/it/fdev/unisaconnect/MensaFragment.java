@@ -1,14 +1,20 @@
 package it.fdev.unisaconnect;
 
-import java.util.ArrayList;
-
 import it.fdev.scrapers.MenuMensaScraper;
-import it.fdev.scrapers.MenuMensaScraper.MenuMensa;
-import it.fdev.scrapers.MenuMensaScraper.PiattoMensa;
+import it.fdev.unisaconnect.data.MenuMensa;
+import it.fdev.unisaconnect.data.MenuMensa.PiattoMensa;
+import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MensaFragment extends MySimpleFragment {
-
+	
+	private SharedPrefDataManager pref;
 	private MenuMensaScraper mensaScraper;
 	private boolean alreadyStarted = false;
 	private MenuMensa menu;
@@ -34,6 +41,11 @@ public class MensaFragment extends MySimpleFragment {
 		super.onViewCreated(view, savedInstanceState);
 		menuContainerView = activity.findViewById(R.id.menu_list_container);
 		menuNDView = activity.findViewById(R.id.menu_non_disponibile);
+		pref = SharedPrefDataManager.getDataManager(activity);
+		menu = pref.getMenuMensa();
+		if (menu != null) {
+			Log.d(Utils.TAG, "Menu salvato!");
+		}
 		getMenu(false);
 	}
 
@@ -51,6 +63,23 @@ public class MensaFragment extends MySimpleFragment {
 		if (!isAdded()) {
 			return;
 		}
+		
+		if (!force && menu != null) {
+			Calendar lastUpdateTime = new GregorianCalendar();
+			lastUpdateTime.setTime(menu.getFetchTime());
+			Calendar now = new GregorianCalendar();
+			now.setTime(new Date());
+			// Se il menu è di oggi
+			if (lastUpdateTime.get(GregorianCalendar.DAY_OF_MONTH) == now.get(GregorianCalendar.DAY_OF_MONTH) &&
+			   lastUpdateTime.get(GregorianCalendar.MONTH) == now.get(GregorianCalendar.MONTH) &&
+			   lastUpdateTime.get(GregorianCalendar.YEAR) == now.get(GregorianCalendar.YEAR)) {
+				mostraMenu(null);
+				return;
+			} else {
+				pref.setMenuMensa(null);
+				pref.saveData();
+			}
+		}
 		if (!Utils.hasConnection(activity)) {
 			Utils.goToInternetError(activity, this);
 			return;
@@ -64,9 +93,9 @@ public class MensaFragment extends MySimpleFragment {
 			mensaScraper = new MenuMensaScraper();
 			mensaScraper.setCallerMenuMensaFragment(this);
 			mensaScraper.execute(activity);
-		} else {
-			mostraMenu(menu);
+			return;
 		}
+		mostraMenu(null);
 	}
 
 	public void mostraMenu(MenuMensa menu) {
@@ -127,6 +156,14 @@ public class MensaFragment extends MySimpleFragment {
 				LinearLayout courseView = inflateCourse(takeAwayCourses, getString(R.string.mensa_centino), layoutInflater);
 				menuListView.addView(courseView);
 			}
+		}
+		
+		if (menu != null) {
+			// Il metodo è stato chiamato con il menu aggiornato da salvare
+			Log.d(Utils.TAG, "Salvo il menu" +
+					"!");
+			pref.setMenuMensa(menu);
+			pref.saveData();
 		}
 
 	}

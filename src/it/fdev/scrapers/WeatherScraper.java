@@ -2,16 +2,10 @@ package it.fdev.scrapers;
 
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.WeatherFragment;
-import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.unisaconnect.data.WeatherData;
 import it.fdev.unisaconnect.data.WeatherData.ActualCondition;
 import it.fdev.unisaconnect.data.WeatherData.DailyForecast;
 import it.fdev.utils.Utils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -19,7 +13,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -30,23 +23,23 @@ import android.util.Log;
 public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadStates, Integer> {
 
 	public final String METEO_URL = "http://unisameteo.appspot.com/meteo";
-	private final String METEO_XML_FILENAME = "meteo.xml";
-	private final int MIN_UPDATE_MINUTES_INTERVAL = 10;
+//	private final String METEO_XML_FILENAME = "meteo.xml";
+//	private final int MIN_UPDATE_MINUTES_INTERVAL = 10;
 
 	public boolean isRunning = false;
 
 	private WeatherFragment callerMeteoFragment;
 	private WeatherData meteo;
-	private boolean isCachedData = true;
-	private boolean forceNewDownload = false;
+//	private boolean isCachedData = true;
+//	private boolean forceNewDownload = false;
 
 	public static enum loadStates {
 		START, ANALYZING, NO_INTERNET, METEO_NOT_AVAILABLE, UNKNOWN_PROBLEM, FINISHED
 	};
 	
-	public WeatherScraper(boolean force) {
+	public WeatherScraper() {
 		super();
-		forceNewDownload = force;
+//		forceNewDownload = force;
 	}
 
 	@Override
@@ -54,33 +47,31 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 		try {
 			publishProgress(loadStates.START);
 			MainActivity activity = activities[0];
-			SharedPrefDataManager sPrefs = SharedPrefDataManager.getDataManager(activity);
-			long lastUpdateTime = sPrefs.getWeatherLastUpdateMillis();
-			long minutesPassedLastUpdate = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - lastUpdateTime);
-//			Log.d(Utils.TAG, "Dall'ultima volta sono passati (min) " + minutesPassedLastUpdate);
+//			SharedPrefDataManager sPrefs = SharedPrefDataManager.getDataManager(activity);
+//			long lastUpdateTime = sPrefs.getWeatherLastUpdateMillis();
+//			long minutesPassedLastUpdate = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - lastUpdateTime);
 			Document document;
-			try {
-				// InputStream xmlFileIS = activity.getAssets().open("meteo.xml");
-				// byte[] b = new byte[xmlFileIS.available()];
-				// xmlFileIS.read(b);
-				// document = Jsoup.parse(new String(b));
-				
-				//Se è passato poco tempo dall'ultimo update, carico il file salvato l'ultima volta 
-				if (!forceNewDownload && minutesPassedLastUpdate < MIN_UPDATE_MINUTES_INTERVAL) {
-					// Se esiste il file xml dell'ulima volta lo uso
-					File xmlFile = new File(activity.getFilesDir() + File.separator + METEO_XML_FILENAME);
-					document = Jsoup.parse(xmlFile, null);
-				} else {
-					// E' passato troppo tempo...vado nel catch dove riscarico le previsioni
-					throw new IOException("Force url reload");
-				}
-			} catch (IOException e) {
+//			try {
+//				//Se è passato poco tempo dall'ultimo update, carico il file salvato l'ultima volta 
+//				if (!forceNewDownload && minutesPassedLastUpdate < MIN_UPDATE_MINUTES_INTERVAL) {
+//					// Se esiste il file xml dell'ulima volta lo uso
+//					File xmlFile = new File(activity.getFilesDir() + File.separator + METEO_XML_FILENAME);
+//					Log.d(Utils.TAG, "Riutilizzo il meteo già scaricato");
+//					document = Jsoup.parse(xmlFile, null);
+//				} else {
+//					// E' passato troppo tempo...vado nel catch dove riscarico le previsioni
+//					throw new IOException("Force url reload");
+//				}
+//			} catch (IOException e) {
 				// Scarico le info aggiornate
-//				Log.d(Utils.TAG, "Scarico le previsioni aggiornate!");
+				Log.d(Utils.TAG, "Scarico le previsioni aggiornate!");
+				Log.d(Utils.TAG, "1");
 				Response response = Jsoup.connect(METEO_URL).timeout(30000).execute();
+				Log.d(Utils.TAG, "2");
 				document = response.parse();
-				isCachedData = false;
-			}
+				Log.d(Utils.TAG, "3");
+//				isCachedData = false;
+//			}
 			
 			WeatherData cMeteo = new WeatherData(activity);
 			Elements actualConditionsElements =  document.select("actualCondition > actualWeather");
@@ -129,14 +120,14 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 			meteo = cMeteo;
 			publishProgress(loadStates.FINISHED);
 			
-			// Salvo il file xml in modo da non dover riscaricarlo la prossima volta
-			if (!isCachedData) {
-				FileOutputStream outputStream = activity.openFileOutput(METEO_XML_FILENAME, Context.MODE_PRIVATE);
-				outputStream.write(document.toString().getBytes());
-				outputStream.close();
-				sPrefs.setWeatherLastUpdateMillis(System.currentTimeMillis());
-				sPrefs.saveData();
-			}
+//			// Salvo il file xml in modo da non dover riscaricarlo la prossima volta
+//			if (!isCachedData) {
+//				FileOutputStream outputStream = activity.openFileOutput(METEO_XML_FILENAME, Context.MODE_PRIVATE);
+//				outputStream.write(document.toString().getBytes());
+//				outputStream.close();
+//				sPrefs.setWeatherLastUpdateMillis(System.currentTimeMillis());
+//				sPrefs.saveData();
+//			}
 		} catch (Exception e) {
 			Log.w(Utils.TAG, "Error in scraper meteo", e);
 			meteo = null;
@@ -155,14 +146,14 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 		case NO_INTERNET:
 		case UNKNOWN_PROBLEM:
 			if (callerMeteoFragment != null) {
-				callerMeteoFragment.mostraMeteo(null);
+				callerMeteoFragment.showWeather(null);
 			}
 			Utils.dismissAlert();
 			Utils.dismissDialog();
 			break;
 		case FINISHED:
 			if (callerMeteoFragment != null) {
-				callerMeteoFragment.mostraMeteo(meteo);
+				callerMeteoFragment.showWeather(meteo);
 			}
 			Utils.dismissAlert();
 			Utils.dismissDialog();

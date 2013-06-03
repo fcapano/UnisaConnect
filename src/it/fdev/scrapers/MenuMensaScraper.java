@@ -2,6 +2,8 @@ package it.fdev.scrapers;
 
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.MensaFragment;
+import it.fdev.unisaconnect.data.MenuMensa;
+import it.fdev.unisaconnect.data.MenuMensa.PiattoMensa;
 import it.fdev.utils.Utils;
 
 import java.util.ArrayList;
@@ -140,91 +142,5 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 			}
 		}
 		return coursesList;
-	}
-
-	public class MenuMensa {
-		private String pdfUrl;
-		private ArrayList<PiattoMensa> firstCourses;
-		private ArrayList<PiattoMensa> secondCourses;
-		private ArrayList<PiattoMensa> sideCourses;
-		private ArrayList<PiattoMensa> fruitCourse;
-		private ArrayList<PiattoMensa> takeAwayBasketCourses;
-		private ArrayList<PiattoMensa> otherCourses;
-
-		public MenuMensa(String pdfUrl, ArrayList<PiattoMensa> firstCourses, ArrayList<PiattoMensa> secondCourses, ArrayList<PiattoMensa> sideCourses, ArrayList<PiattoMensa> fruitCourse, ArrayList<PiattoMensa> takeAwayBasketCourses) {
-			this.pdfUrl = pdfUrl;
-			this.firstCourses = firstCourses;
-			this.secondCourses = secondCourses;
-			this.sideCourses = sideCourses;
-			this.fruitCourse = fruitCourse;
-			this.takeAwayBasketCourses = takeAwayBasketCourses;
-
-			if (fruitCourse != null && fruitCourse.size() > 0 && takeAwayBasketCourses != null && takeAwayBasketCourses.size() > 0) {
-				otherCourses = new ArrayList<MenuMensaScraper.PiattoMensa>();
-				otherCourses.addAll(fruitCourse);
-				otherCourses.addAll(takeAwayBasketCourses);
-			}
-
-		}
-
-		public String getPdfUrl() {
-			return pdfUrl;
-		}
-
-		public ArrayList<PiattoMensa> getFirstCourses() {
-			return firstCourses;
-		}
-
-		public ArrayList<PiattoMensa> getSecondCourses() {
-			return secondCourses;
-		}
-
-		public ArrayList<PiattoMensa> getSideCourses() {
-			return sideCourses;
-		}
-
-		public ArrayList<PiattoMensa> getFruitCourses() {
-			return fruitCourse;
-		}
-
-		public ArrayList<PiattoMensa> getTakeAwayBasketCourses() {
-			return takeAwayBasketCourses;
-		}
-		
-		public ArrayList<PiattoMensa> getOtherCourses() {
-			return otherCourses;
-		}
-	}
-
-	public class PiattoMensa {
-		private String nomePiatto;
-		private String ingredientiIt = null;
-		private String ingradientiEn = null;
-
-		public PiattoMensa(String nomePiatto, String ingredientiIt, String ingradientiEn) {
-			this.nomePiatto = nomePiatto;
-			this.ingredientiIt = ingredientiIt;
-			this.ingradientiEn = ingradientiEn;
-		}
-
-		public PiattoMensa(String nomePiatto, String ingredientiIt) {
-			this(nomePiatto, ingredientiIt, null);
-		}
-
-		public PiattoMensa(String nomePiatto) {
-			this(nomePiatto, null, null);
-		}
-
-		public String getNomePiatto() {
-			return nomePiatto;
-		}
-
-		public String getIngredientiIt() {
-			return ingredientiIt;
-		}
-
-		public String getIngradientiEn() {
-			return ingradientiEn;
-		}
 	}
 }
