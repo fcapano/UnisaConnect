@@ -1,14 +1,18 @@
 package it.fdev.unisaconnect;
 
-import com.slidingmenu.lib.SlidingMenu;
-
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.slidingmenu.lib.SlidingMenu;
 /**
  * Frammento da usare in caso di errore di connessione o internet assente
  * @author francesco
@@ -26,8 +30,10 @@ public class ErrorInternetFragment extends MySimpleFragment {
 	}
 	
 	@Override
-	public void setVisibleActions() {
-		activity.setActionRefreshVisible(true);
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_refresh_button);
+		return actionsToShow;
 	}
 	
 	@Override

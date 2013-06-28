@@ -5,6 +5,9 @@ import it.fdev.unisaconnect.MainActivity;
 import it.fdev.utils.MyFragment;
 import it.fdev.utils.ObjectSerializer;
 import it.fdev.utils.Utils;
+
+import java.util.Date;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -18,48 +21,55 @@ import android.util.Log;
  */
 public class SharedPrefDataManager {
 	
+	private static SharedPrefDataManager dm = null;
+	private SharedPreferences settings = null;
+	private final static String[] SSID = new String[] {"Studenti","Personale"};
+	
 	public static final String PREFERENCES_KEY 	= "PREFERENCES";
 	
-	// Settings Pref
+	// Boot Fragment
 	public static final String PREF_BOOTABLE_FRAGMENT = "bootableFragment";
+	private Class<? extends MyFragment> bootFragmentClass;
 	
-	// Login Pref
+	// Login
 	public static final String PREF_USER 		= "user";
 	public static final String PREF_PASS 		= "pass";
 	public static final String PREF_ACCTYPE 	= "tipoAccountIndex";
 	public static final String PREF_AUTOLOGIN 	= "loginAutomatica";
-	
-	// Mensa data
-	public static final String PREF_MENU_MENSA = "menu";
-	
-	// Weather data
-	public static final String PREF_WEATHER = "weather";
-	
-	public static final String PREF_IS_NEW_ENCRYPTION = "isNewEncryption";
-	public static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
-	public static final String PREF_TESTING_ENABLED = "testingEnabled";
-	
-	// Crypto data
-	public static final String NO_ENCODING 		= "NOENC";
-	public static final String PREF_KEY 		= "enc_key";
-	public static final int CRYPTO_VERSION = 3;	// 2=0.5 3=0.6.2
-	
-	private static SharedPrefDataManager dm = null;
-	private SharedPreferences settings = null;
-	
-	// Settings
-	private Class<? extends MyFragment> bootFragmentClass;
-	// Login
 	private String user, pass;
 	private boolean loginAutomatica;
 	private int tipoAccountIndex;
+	
 	// Mensa
+	public static final String PREF_MENU_MENSA = "menu";
 	private MenuMensa menuMensa;
+	
 	// Weather
+	public static final String PREF_WEATHER = "weather";
 	private WeatherData weather;
 	
-	private boolean testingEnabled = MainActivity.isDebugMode;
-	private final static String[] SSID = new String[] {"Studenti","Personale"};
+	// Presenze
+	public static final String PREF_PRESENZE = "presenze";
+	private Presenze presenze;
+	
+	// Presenze
+	public static final String PREF_APPELLI = "appelli";
+	private Appelli appelli;
+	
+	// Libretto
+	public static final String PREF_LIBRETTO_DATE = "libretto_date";
+	private Date librettoFetchDate;
+	
+	// Testing
+	public static final String PREF_TESTING_ENABLED = "testingEnabled";
+	private boolean testingEnabled = MainActivity.isTestingAPK;
+	
+	// Crypto
+	public static final String PREF_IS_NEW_ENCRYPTION = "isNewEncryption";
+	public static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
+	public static final String NO_ENCODING 		= "NOENC";
+	public static final String PREF_KEY 		= "enc_key";
+	public static final int CRYPTO_VERSION = 3;	// 2=0.5 3=0.6.2
 	
 	
 	public static SharedPrefDataManager getDataManager(Context context) {
@@ -85,14 +95,18 @@ public class SharedPrefDataManager {
 				tipoAccountIndex = settings.getInt(PREF_ACCTYPE, 0);
 				loginAutomatica = settings.getBoolean(PREF_AUTOLOGIN, true);
 			}
-			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isDebugMode);
+			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isTestingAPK);
 			menuMensa = (MenuMensa) ObjectSerializer.deserialize(settings.getString(PREF_MENU_MENSA, null));
 			weather = (WeatherData) ObjectSerializer.deserialize(settings.getString(PREF_WEATHER, null));
-			bootFragmentClass = MainActivity.bootableFragments.get(settings.getInt(PREF_BOOTABLE_FRAGMENT, 0));
+			presenze = (Presenze) ObjectSerializer.deserialize(settings.getString(PREF_PRESENZE, null));
+			appelli = (Appelli) ObjectSerializer.deserialize(settings.getString(PREF_APPELLI, null));
+			librettoFetchDate = new Date(settings.getLong(PREF_LIBRETTO_DATE, 0));
+			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isTestingAPK);
+			bootFragmentClass = MainActivity.fragmentsIDs.get(settings.getInt(PREF_BOOTABLE_FRAGMENT, 0));
 			return true;
 		} catch(Exception e) {
 			e.printStackTrace();
-			Log.e(MainActivity.TAG, "Eccezione decodificando i dati...resetto tutto");
+			Log.e(MainActivity.TAG, "Eccezione decodificando i dati...resetto tutto", e);
 			removeData();
 			return false;
 		}
@@ -112,11 +126,14 @@ public class SharedPrefDataManager {
 			editor.putBoolean(PREF_TESTING_ENABLED, testingEnabled);
 			editor.putString(PREF_MENU_MENSA, ObjectSerializer.serialize(menuMensa));
 			editor.putString(PREF_WEATHER, ObjectSerializer.serialize(weather));
-			editor.putInt(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.bootableFragments.indexOf(bootFragmentClass), 0));
+			editor.putString(PREF_PRESENZE, ObjectSerializer.serialize(presenze));
+			editor.putString(PREF_APPELLI, ObjectSerializer.serialize(appelli));
+			editor.putLong(PREF_LIBRETTO_DATE, librettoFetchDate.getTime());
+//			editor.putInt(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.BootableFragmentsEnum.indexOf(bootFragmentClass), 0));
 			editor.commit();
 			return true;
 		} catch(Exception e) {
-			Log.e(MainActivity.TAG, "Eccezione codificando i dati...resetto tutto");
+			Log.e(MainActivity.TAG, "Eccezione codificando i dati...resetto tutto", e);
 			e.printStackTrace();
 			removeData();
 			return false;
@@ -166,36 +183,60 @@ public class SharedPrefDataManager {
 		return tipoAccountIndex;
 	}
 	
-	public void setTipoAccountIndex(int tipoAccountIndex) {
-		this.tipoAccountIndex = tipoAccountIndex;
-	}
-	
 	public String getTipoAccount() {
 		return SSID[tipoAccountIndex];
 	}
 	
-	public void setTestingEnabled(boolean enabled) {
-		this.testingEnabled = enabled;
+	public void setTipoAccountIndex(int tipoAccountIndex) {
+		this.tipoAccountIndex = tipoAccountIndex;
 	}
 	
 	public boolean isTestingingEnabled() {
 		return this.testingEnabled;
 	}
 	
-	public void setMenuMensa(MenuMensa menuMensa) {
-		this.menuMensa = menuMensa;
+	public void setTestingEnabled(boolean enabled) {
+		this.testingEnabled = enabled;
 	}
 	
 	public MenuMensa getMenuMensa() {
 		return menuMensa;
 	}
 	
-	public void setWeather(WeatherData weather) {
-		this.weather= weather;
+	public void setMenuMensa(MenuMensa menuMensa) {
+		this.menuMensa = menuMensa;
 	}
 	
 	public WeatherData getWeather() {
 		return weather;
+	}
+	
+	public void setWeather(WeatherData weather) {
+		this.weather = weather;
+	}
+	
+	public Presenze getPresenze() {
+		return presenze;
+	}
+	
+	public void setPresenze(Presenze presenze) {
+		this.presenze = presenze;
+	}
+	
+	public Date getLibrettoFetchDate() {
+		return librettoFetchDate;
+	}
+	
+	public void setLibrettoFetchDate(Date librettoFetchDate) {
+		this.librettoFetchDate = librettoFetchDate;
+	}
+	
+	public Appelli getAppelli() {
+		return appelli;
+	}
+	
+	public void setAppelli(Appelli appelli) {
+		this.appelli = appelli;
 	}
 
 	public Class<? extends MyFragment> getBootFragmentClass() {

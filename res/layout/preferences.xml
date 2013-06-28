@@ -10,18 +10,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/userLabel"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/username"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/userLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/username" />
+
+            <CheckBox
+                android:id="@+id/do_custom_boot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:checked="true"
+                android:text="@string/login_automatica" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/user"
+            style="@style/MyTextEdit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -42,6 +58,7 @@
 
         <EditText
             android:id="@+id/pass"
+            style="@style/MyTextEdit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -54,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:checked="true"
             android:text="@string/login_automatica" />
 

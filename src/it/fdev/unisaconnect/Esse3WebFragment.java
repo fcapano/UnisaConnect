@@ -1,10 +1,13 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
@@ -39,6 +42,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 
 	public final static String esse3url = "https://esse3web.unisa.it/unisa/auth/Logon.do";
 
+//	private RelativeLayout webViewContainer;
 	private ProgressBar progressBar;
 	private WebView webView;
 	private SharedPrefDataManager dataManager;
@@ -49,6 +53,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
+//		webViewContainer = (RelativeLayout) view.findViewById(R.id.webview_container);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
 		webView = (WebView) view.findViewById(R.id.webview);
 		webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
@@ -60,7 +65,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
 		dataManager = SharedPrefDataManager.getDataManager(activity);
 		if (!dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
+			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.WIFI_PREF, false);
 			return;
 		}
 
@@ -71,10 +76,10 @@ public class Esse3WebFragment extends MySimpleFragment {
 		}
 
 		// Mostro il dialog di caricamento
-		Utils.createDialog(activity, getString(R.string.caricamento), false);
+//		Utils.createDialog(activity, getString(R.string.caricamento), false);
+		activity.setLoadingVisible(true, false);
 
-		// Cancella i cookie in modo da evitare problemi vari (si verificavano
-		// ma non ricordo quali)
+		// Cancella i cookie in modo da evitare problemi vari di login
 		CookieSyncManager.createInstance(activity);
 		CookieManager cookieManager = CookieManager.getInstance();
 		cookieManager.removeAllCookie();
@@ -128,7 +133,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 					Log.d(Utils.TAG, "Inviando dati esse3");
 					handler.proceed(dataManager.getUser(), dataManager.getPass());
 				} else {
-					Utils.createAlert(activity, getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
+					Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.WIFI_PREF, false);
 					Utils.dismissDialog();
 				}
 			}
@@ -150,6 +155,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				progressBar.setVisibility(View.VISIBLE);
+				activity.setLoadingVisible(true, false);
 			}
 
 			// Quando il caricamento si completa rimuovi il dialog
@@ -157,6 +163,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				progressBar.setVisibility(View.GONE);
+				activity.setLoadingVisible(false, false);
 				Utils.dismissDialog();
 				didSendLoginData = false;
 			}
@@ -174,7 +181,7 @@ public class Esse3WebFragment extends MySimpleFragment {
 	public boolean goBack() {
 		// Quando premo il tasto indietro
 		if (webView.canGoBack()) { // Se posso andare indietro nella cronologia della webview...
-			Utils.createDialog(activity, getString(R.string.caricamento), false);
+//			Utils.createDialog(activity, getString(R.string.caricamento), false);
 			webView.goBack();
 			webView.reload();
 			return false;
@@ -189,22 +196,30 @@ public class Esse3WebFragment extends MySimpleFragment {
 	}
 	
 	@Override
-	public void setVisibleActions() {
-		activity.setActionRefreshVisible(true);
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_refresh_button);
+//		actionsToShow.add(R.id.action_loading_animation);
+		return actionsToShow;
 	}
 
 	@Override
 	public void actionRefresh() {
-		if (!isAdded() || webView == null) {
-			return;
+		try {
+			if (!isAdded() || webView == null) {
+				return;
+			}
+			if (!Utils.hasConnection(activity)) {
+				Utils.goToInternetError(activity, thisFragment);
+				return;
+			}
+			didSendLoginData = false;
+//			Utils.createDialog(activity, getString(R.string.caricamento), false);
+			webView.reload();
+		} catch (Exception e) {
+			// ho avuto java.lang.NullPointerException su webView.reload(); nonostante il controllo nel primo if
+			// viene deferenziata giusto tra l'if e il reload? Forse perchè hasConnection() prende un po' di tempo
 		}
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, thisFragment);
-			return;
-		}
-		didSendLoginData = false;
-		Utils.createDialog(activity, getString(R.string.caricamento), false);
-		webView.reload();
 	}
 
 	@Override
@@ -223,19 +238,21 @@ public class Esse3WebFragment extends MySimpleFragment {
 		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		try {
 			webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
+			webView.reload();
 		} catch (Exception e) {
 		}
 		super.onResume();
 	}
 
-	@Override
-	public void onStop() {
-		try {
-			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
-			webView.stopLoading();
-			webView.destroy();
-		} catch (Exception e) {
-		}
-		super.onStop();
-	}
+//	@Override
+//	public void onStop() {
+//		try {
+//			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
+//			webView.stopLoading();
+//			webViewContainer.removeView(webView);
+//			webView.destroy();
+//		} catch (Exception e) {
+//		}
+//		super.onStop();
+//	}
 }

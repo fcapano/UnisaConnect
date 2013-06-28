@@ -6,12 +6,12 @@
         android:drawable="@drawable/transparent"/>
     <item android:id="@android:id/secondaryProgress">
         <scale
-            android:drawable="@drawable/progress_primary_myabsstyle"
+            android:drawable="@drawable/custom_progress_secondary_1"
             android:scaleWidth="100%" />
     </item>
     <item android:id="@android:id/progress">
         <scale
-            android:drawable="@drawable/progress_primary_myabsstyle"
+            android:drawable="@drawable/custom_progress_primary_1"
             android:scaleWidth="100%" />
     </item>
 

@@ -2,7 +2,8 @@ package it.fdev.scrapers;
 
 import it.fdev.unisaconnect.LibrettoFragment;
 import it.fdev.unisaconnect.MainActivity;
-import it.fdev.unisaconnect.data.LibrettoCourse;
+import it.fdev.unisaconnect.data.Libretto.LibrettoCourse;
+import it.fdev.unisaconnect.data.Libretto;
 import it.fdev.unisaconnect.data.LibrettoDB;
 import it.fdev.utils.Utils;
 
@@ -35,17 +36,18 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 
 		publishProgress(loadStates.SYNCING);
 
+		Libretto libretto = new Libretto();
 		ArrayList<LibrettoCourse> corsiList = new ArrayList<LibrettoCourse>();
 
 		try {
 			corsiList = scraperStepLibretto();
 			if (corsiList != null) {
 				Log.d(Utils.TAG, "Ci sono #" + corsiList.size() + " corsi da inserire");
+				libretto.setCorsi(corsiList);
 				LibrettoDB librettoDB = new LibrettoDB(activity);
 				try {
 					librettoDB.open();
-					librettoDB.deleteAllCourses();
-					librettoDB.insertCourses(corsiList);
+					librettoDB.resetLibretto(libretto);
 				} finally {
 					librettoDB.close();
 				}
@@ -62,12 +64,6 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 				publishProgress(loadStates.WRONG_DATA);
 			else
 				publishProgress(loadStates.UNKNOWN_PROBLEM);
-		} catch (IOException e) {
-			Log.w(Utils.TAG, "ERROR ", e);
-			publishProgress(loadStates.UNKNOWN_PROBLEM);
-		} catch (InterruptedException e) {
-			Log.w(Utils.TAG, "ERROR ", e);
-			publishProgress(loadStates.UNKNOWN_PROBLEM);
 		} catch (Exception e) {
 			Log.w(Utils.TAG, "ERROR ", e);
 			publishProgress(loadStates.UNKNOWN_PROBLEM);

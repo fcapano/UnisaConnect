@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
 import android.os.Bundle;
@@ -15,11 +16,12 @@ public class PreferencesFragment extends MySimpleFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		dataManager = SharedPrefDataManager.getDataManager(activity.getApplication());
+		
 	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.wifi_setting, container, false);
+        return inflater.inflate(R.layout.preferences, container, false);
     }
     
     @Override
@@ -27,11 +29,4 @@ public class PreferencesFragment extends MySimpleFragment {
 		super.onViewCreated(view, savedInstanceState);
 	}
     
-	@Override
-	public void setVisibleActions() {
-	}
-
-	@Override
-	public void actionRefresh() {
-	}
 }

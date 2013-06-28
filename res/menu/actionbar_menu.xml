@@ -4,23 +4,27 @@
     <item
         android:id="@+id/action_add_button"
         android:icon="@drawable/add"
-        android:showAsAction="always|withText"
-        android:visible="false"/>
+        android:showAsAction="always"
+        android:visible="true"/>
     <item
         android:id="@+id/action_edit_button"
         android:icon="@drawable/edit"
-        android:showAsAction="always|withText"
-        android:visible="false"/>
+        android:showAsAction="always"
+        android:visible="true"/>
     <item
         android:id="@+id/action_accept_button"
         android:icon="@drawable/accept"
-        android:showAsAction="always|withText"
-        android:visible="false"/>
+        android:showAsAction="always"
+        android:visible="true"/>
     <item
         android:id="@+id/action_refresh_button"
         android:icon="@drawable/refresh"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/aggiorna"
         android:visible="true"/>
-
+    <item
+        android:id="@+id/action_loading_animation"
+        android:showAsAction="always"
+        android:visible="false"/>
+    
 </menu>

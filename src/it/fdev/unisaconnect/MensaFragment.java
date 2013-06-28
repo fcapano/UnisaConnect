@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -39,9 +41,12 @@ public class MensaFragment extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		menuContainerView = activity.findViewById(R.id.menu_list_container);
-		menuNDView = activity.findViewById(R.id.menu_non_disponibile);
+		menuContainerView = view.findViewById(R.id.menu_list_container);
+		menuNDView = view.findViewById(R.id.menu_non_disponibile);
 		pref = SharedPrefDataManager.getDataManager(activity);
+		
+		activity.setLoadingVisible(true, true);
+		
 		menu = pref.getMenuMensa();
 		if (menu != null) {
 			Log.d(Utils.TAG, "Menu salvato!");
@@ -49,9 +54,15 @@ public class MensaFragment extends MySimpleFragment {
 		getMenu(false);
 	}
 
+	
 	@Override
-	public void setVisibleActions() {
-		activity.setActionRefreshVisible(true);
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_refresh_button);
+		if (!alreadyStarted) {
+			actionsToShow.add(R.id.action_loading_animation);
+		}
+		return actionsToShow;
 	}
 
 	@Override
@@ -63,6 +74,8 @@ public class MensaFragment extends MySimpleFragment {
 		if (!isAdded()) {
 			return;
 		}
+
+		activity.setLoadingVisible(true, true);
 		
 		if (!force && menu != null) {
 			Calendar lastUpdateTime = new GregorianCalendar();
@@ -89,7 +102,7 @@ public class MensaFragment extends MySimpleFragment {
 			if (mensaScraper != null && mensaScraper.isRunning) {
 				return;
 			}
-			Utils.createDialog(activity, getString(R.string.caricamento), false);
+//			Utils.createDialog(activity, getString(R.string.caricamento), false);
 			mensaScraper = new MenuMensaScraper();
 			mensaScraper.setCallerMenuMensaFragment(this);
 			mensaScraper.execute(activity);
@@ -104,11 +117,13 @@ public class MensaFragment extends MySimpleFragment {
 		}
 		if (menuContainerView == null || menuNDView == null) { // Dai report di crash sembra succedere a volte, non ho idea del perchè
 			activity.showMenu();							   // Quindi mostro lo slidingmenu per apparare
+			activity.setLoadingVisible(false, false);
 			return;
 		}
 		if (menu == null && this.menu == null) {
 			menuContainerView.setVisibility(View.GONE);
 			menuNDView.setVisibility(View.VISIBLE);
+			activity.setLoadingVisible(false, false);
 			return;
 		} else {
 			menuContainerView.setVisibility(View.VISIBLE);
@@ -160,11 +175,12 @@ public class MensaFragment extends MySimpleFragment {
 		
 		if (menu != null) {
 			// Il metodo è stato chiamato con il menu aggiornato da salvare
-			Log.d(Utils.TAG, "Salvo il menu" +
-					"!");
+			Log.d(Utils.TAG, "Salvo il menu!");
 			pref.setMenuMensa(menu);
 			pref.saveData();
 		}
+		
+		activity.setLoadingVisible(false, false);
 
 	}
 

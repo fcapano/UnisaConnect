@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/searchStaffLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/last_update_time_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:gravity="right|center_vertical"
+        android:visibility="gone"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/last_update_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="fitEnd"
+            android:src="@drawable/refresh"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/last_update_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -16,15 +43,14 @@
 
         <EditText
             android:id="@+id/staff_name"
+            style="@style/MyTextEdit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:drawableLeft="@drawable/abs__ic_search"
             android:hint="@string/cerca_staff_name"
-            android:paddingRight="27dp"
-            style="@style/MyTextEdit" 
-            />
+            android:paddingRight="27dp" />
 
         <ImageView
             android:id="@+id/staff_name_clear"

@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.WeatherData.DailyForecast;
 
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ import android.widget.TextView;
 
 public class WeatherForecastAdapter extends BaseAdapter {
 
+	private Context context;
 	private ArrayList<DailyForecast> forecastList;
 	private LayoutInflater inflater;
 
 	public WeatherForecastAdapter(Context context, ArrayList<DailyForecast> forecastList) {
+		this.context = context;
 		this.forecastList = forecastList;
 		inflater = LayoutInflater.from(context);
 	}
@@ -54,7 +57,7 @@ public class WeatherForecastAdapter extends BaseAdapter {
 		TextView precipitationsView = (TextView) v.findViewById(R.id.forecast_precipitations);
 
 		dayView.setText(cForecast.getValidThrough());
-		iconView.setImageDrawable(cForecast.getIconDrawable());
+		iconView.setImageDrawable(cForecast.getIconDrawable(context));
 		descriptionView.setText(cForecast.getDescription());
 		minTempView.setText(cForecast.getMinTemp());
 		maxTempView.setText(cForecast.getMaxTemp());

@@ -6,6 +6,8 @@ import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -74,7 +76,7 @@ public class TimetableFragment extends MySimpleFragment {
 		 * @Override public boolean onTouch(View v, MotionEvent event) { return gestureDetector.onTouchEvent(event); } });
 		 */
 
-		containerRL = ((RelativeLayout) activity.findViewById(R.id.timetable_container));
+		containerRL = ((RelativeLayout) view.findViewById(R.id.timetable_container));
 
 		// Wait for items loaded to take the needed position measures
 		ViewTreeObserver vto = containerRL.getViewTreeObserver();
@@ -208,35 +210,32 @@ public class TimetableFragment extends MySimpleFragment {
 
 	@Override
 	public void actionAdd() {
-		activity.switchContent(new TimetableAddLessonFragment());
+		TimetableAddLessonFragment addLessonFragment = new TimetableAddLessonFragment();
+		activity.switchContent(addLessonFragment);
 	}
 
 	@Override
 	public void actionEdit() {
 		isEditMode = true;
-		activity.hideActions();
-		setVisibleActions();
+		activity.reloadActionButtons(this);
 	}
 
 	@Override
 	public void actionAccept() {
 		isEditMode = false;
-		activity.hideActions();
-		setVisibleActions();
+		activity.reloadActionButtons(this);
 	}
-
+	
 	@Override
-	public void setVisibleActions() {
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
 		if (isEditMode) {
-			activity.setActionAddVisible(true);
-			activity.setActionAcceptVisible(true);
+			actionsToShow.add(R.id.action_add_button);
+			actionsToShow.add(R.id.action_accept_button);
 		} else {
-			activity.setActionEditVisible(true);
+			actionsToShow.add(R.id.action_edit_button);
 		}
-	}
-
-	@Override
-	public void actionRefresh() {
+		return actionsToShow;
 	}
 
 }

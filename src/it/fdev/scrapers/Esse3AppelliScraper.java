@@ -2,7 +2,8 @@ package it.fdev.scrapers;
 
 import it.fdev.unisaconnect.AppelliFragment;
 import it.fdev.unisaconnect.MainActivity;
-import it.fdev.unisaconnect.data.Appello;
+import it.fdev.unisaconnect.data.Appelli;
+import it.fdev.unisaconnect.data.Appelli.Appello;
 import it.fdev.utils.Utils;
 
 import java.io.IOException;
@@ -21,10 +22,12 @@ import android.util.Log;
  * @author francesco
  * 
  */
-public class Esse3AppelliDisponibiliScraper extends Esse3BasicScraper {
+public class Esse3AppelliScraper extends Esse3BasicScraper {
 	public final String appelliDisponibiliURL = "https://esse3web.unisa.it/unisa/auth/studente/Appelli/AppelliF.do";
+	public final String appelliPrenotatiURL = "https://esse3web.unisa.it/unisa/auth/studente/Appelli/BachecaPrenotazioni.do";
 	private AppelliFragment callerLibrettoFragment;
 	private ArrayList<Appello> listaAppelliDisponibili;
+	private ArrayList<Appello> listaAppelliPrenotati;
 
 	@Override
 	protected Integer doInBackground(MainActivity... activities) {
@@ -32,10 +35,11 @@ public class Esse3AppelliDisponibiliScraper extends Esse3BasicScraper {
 		if (loginResCode != 0)
 			return loginResCode;
 
-//		publishProgress(loadStates.SYNCING);
-
 		try {
+			listaAppelliPrenotati = scraperStepAppelliPrenotati();
 			listaAppelliDisponibili = scraperStepAppelliDisponibili();
+			if (listaAppelliPrenotati != null)
+				Log.d(Utils.TAG, "Ci sono #" + listaAppelliPrenotati.size() + " appelli prenotati");
 			if (listaAppelliDisponibili != null)
 				Log.d(Utils.TAG, "Ci sono #" + listaAppelliDisponibili.size() + " appelli disponibili");
 			publishProgress(loadStates.FINISHED);
@@ -66,13 +70,57 @@ public class Esse3AppelliDisponibiliScraper extends Esse3BasicScraper {
 		super.onProgressUpdate(values);
 		switch (values[0]) {
 		case FINISHED:
-			callerLibrettoFragment.mostraAppelliDisponibili(listaAppelliDisponibili);
+			callerLibrettoFragment.mostraAppelli(new Appelli(listaAppelliDisponibili, listaAppelliPrenotati));
 			break;
 		default:
 			break;
 		}
 	}
 
+	private ArrayList<Appello> scraperStepAppelliPrenotati() throws HttpStatusException, IOException, InterruptedException {
+		Document document = scraperGetUrl(appelliPrenotatiURL);
+		if (document == null) {
+			return null;
+		}
+		ArrayList<Appello> appelliPrenotatiList = new ArrayList<Appello>();
+		Elements detailsTables = document.getElementsByClass("detail_table");
+		if (detailsTables.size() > 0) {
+			for (Element table : detailsTables) {
+				Elements rows = table.getElementsByTag("tr");
+				if (rows.size() != 5) {
+					continue;
+				}
+
+				String row1Text = rows.get(0).child(0).text().trim();
+				String[] row1Data = row1Text.split(" \\- \\[[0-9]+\\] \\- ");
+				if (row1Data.length != 2) {
+					Log.d(Utils.TAG, "Error interpeting row1: " + row1Text);
+					Log.d(Utils.TAG, "Split length: " + row1Data.length);
+					continue;
+				}
+				String name = row1Data[0].trim();
+				String description = row1Data[1].trim();
+
+				String row2Text = rows.get(1).child(0).text().trim();
+				if (!row2Text.matches("Numero Iscrizione: [0-9]+ su [0-9]+")) {
+					Log.d(Utils.TAG, "Error interpeting row2: " + row2Text);
+					continue;
+				}
+				String subscribedNum = row2Text.substring(row2Text.lastIndexOf(" ")).trim();
+
+				String row5Text = rows.get(4).child(0).text().trim();
+				if (!row5Text.matches("[0-9]+\\/[0-9]+\\/[0-9]+")) {
+					Log.d(Utils.TAG, "Error interpeting row5: " + row5Text);
+					continue;
+				}
+				String date = row5Text.trim();
+
+				appelliPrenotatiList.add(new Appello(name, date, description, subscribedNum));
+			}
+		}
+		return appelliPrenotatiList;
+	}
+	
 	private ArrayList<Appello> scraperStepAppelliDisponibili() throws HttpStatusException, IOException, InterruptedException {
 		Document document = scraperGetUrl(appelliDisponibiliURL);
 		if (document == null) {

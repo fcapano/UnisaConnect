@@ -1,13 +1,14 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import com.slidingmenu.lib.SlidingMenu;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -28,9 +31,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.slidingmenu.lib.SlidingMenu;
+
 @SuppressLint("SetJavaScriptEnabled")
 public class WebmailFragment extends MySimpleFragment {
 	
+//	private RelativeLayout webViewContainer;
 	private ProgressBar progressBar;
 	private WebView webView;
 	private Fragment thisFragment;
@@ -41,15 +47,11 @@ public class WebmailFragment extends MySimpleFragment {
 	
 	private static final String URL_STRING = "https://webmail.studenti.unisa.it/";
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View mainView = (View) inflater.inflate(R.layout.web_fragment, container, false);
-		return mainView;
-	}
-	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
+//		webViewContainer = (RelativeLayout) view.findViewById(R.id.webview_container);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
 		webView = (WebView) view.findViewById(R.id.webview);
 		webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
@@ -60,16 +62,28 @@ public class WebmailFragment extends MySimpleFragment {
 		
 		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(activity);
 		if (!dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
+			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.WIFI_PREF, false);
 			return;
 		}
-
+		
+		// Cancella i cookie in modo da evitare problemi vari di login
+		CookieSyncManager.createInstance(activity);
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.removeAllCookie();
+		cookieManager.setAcceptCookie(true);
+		
+		startWebView();
+		
+		return;
+	}
+	
+	private void startWebView() {
 		if(!Utils.hasConnection(activity)) {
 			Utils.goToInternetError(activity, thisFragment);
 			return;
 		}
 		
-		Utils.createDialog(activity, getString(R.string.caricamento), false);
+//		Utils.createDialog(activity, getString(R.string.caricamento), false);
 		
 		webView.setBackgroundColor(resources.getColor(android.R.color.white));
 		WebSettings webSettings = webView.getSettings();
@@ -86,6 +100,15 @@ public class WebmailFragment extends MySimpleFragment {
 			javascriptInterfaceBroken = false;
 			webView.addJavascriptInterface(jsBridge, "UnisaConnectInterface");
 		}
+		
+		webView.setWebChromeClient(new WebChromeClient() {
+			public void onProgressChanged(WebView view, int progress) {
+				// Activities and WebViews measure progress with different scales.
+				// The progress meter will automatically disappear when we reach 100%
+//				activity.setProgress(progress * 1000);
+				progressBar.setProgress(progress);
+			}
+		});
 		
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -162,8 +185,8 @@ public class WebmailFragment extends MySimpleFragment {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
-				progressBar.setProgress(0);
 				progressBar.setVisibility(View.VISIBLE);
+				activity.setLoadingVisible(true, false);
 			}
 	     
 			// Quando il caricamento si completa rimuovi il dialog
@@ -183,6 +206,8 @@ public class WebmailFragment extends MySimpleFragment {
 														"javascript: var UnisaConnectInterface = new UC(); ";
 					view.loadUrl(handleGingerbreadStupidity);
 				}
+				progressBar.setVisibility(View.GONE);
+				activity.setLoadingVisible(false, false);
 			}
 	    });
 		webView.loadUrl(URL_STRING);
@@ -190,7 +215,7 @@ public class WebmailFragment extends MySimpleFragment {
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
                 	SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(activity);
-        			if (dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
+        			if (dataManager.loginDataExists()) { // Sono memorizzati i dati utente
 	        			String user = dataManager.getUser();
 	        			user += dataManager.getTipoAccountIndex() == 0 ? "@studenti.unisa.it" : "";
 	        			String pass = dataManager.getPass();
@@ -218,7 +243,6 @@ public class WebmailFragment extends MySimpleFragment {
                 }
             }
         });
-		return;
 	}
 	
 	public class JavascriptBridge {
@@ -227,39 +251,53 @@ public class WebmailFragment extends MySimpleFragment {
 			if (!isAdded()) {
 				return;
 			}
-			progressBar.setVisibility(View.GONE);
-			Utils.dismissDialog();
+			activity.runOnUiThread(new Runnable() {
+			    public void run() {
+			    	progressBar.setVisibility(View.GONE);
+			    	Utils.dismissDialog();
+			    }
+		    });
         }
 		@JavascriptInterface
         public void wrongDataDialog(){
 			if (!isAdded()) {
 				return;
 			}
-			progressBar.setVisibility(View.GONE);
-			try {
-				Utils.createAlert(activity, getString(R.string.dati_errati), null, false);
-				dismissDialog();
-			} catch(Exception e) {
-				Log.w(Utils.TAG, "Exception in JavascriptBridge wrongDataDialog");
-				e.printStackTrace();
-			}
+			activity.runOnUiThread(new Runnable() {
+			    public void run() {
+			    	progressBar.setVisibility(View.GONE);
+					try {
+						Utils.createAlert(activity, getString(R.string.dati_errati), null, false);
+//						dismissDialog();
+					} catch(Exception e) {
+						Log.w(Utils.TAG, "Exception in JavascriptBridge wrongDataDialog");
+						e.printStackTrace();
+					}
+			    }
+		    });
         }
     }
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View mainView = (View) inflater.inflate(R.layout.web_fragment, container, false);
+		return mainView;
+	}
 	
 	@Override
 	public boolean goBack() {
 		if(webView.canGoBack()) {
-			Utils.createDialog(activity, getString(R.string.caricamento), false);
 	        webView.goBack();
-	        webView.reload();
 	        return false;
 		} else
 			return super.goBack();
 	}
 	
 	@Override
-	public void setVisibleActions() {
-		activity.setActionRefreshVisible(true);
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_refresh_button);
+//		actionsToShow.add(R.id.action_loading_animation);
+		return actionsToShow;
 	}
 	
 	@Override
@@ -276,32 +314,38 @@ public class WebmailFragment extends MySimpleFragment {
 	
 	@Override
 	public void onPause() {
+		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		try {
 			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
 			webView.stopLoading();
 		} catch (Exception e) {
+			// Ignore
+		} finally {
 		}
 		super.onPause();
 	}
 	
 	@Override
 	public void onResume() {
+		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		try {
-			webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
+			webView.setVisibility(View.VISIBLE);
+			webView.reload();
+//			webView.loadUrl(URL_STRING);
 		} catch (Exception e) {
 		}
 		super.onResume();
 	}
 
-	@Override
-	public void onStop() {
-		activity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		try {
-			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
-			webView.stopLoading();
-			webView.destroy();
-		} catch (Exception e) {
-		}
-		super.onStop();
-	}
+//	@Override
+//	public void onStop() {
+//		try {
+//			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
+//			webView.stopLoading();
+////			webViewContainer.removeView(webView);
+////			webView.destroy();
+//		} catch (Exception e) {
+//		}
+//		super.onStop();
+//	}
 }

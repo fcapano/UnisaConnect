@@ -23,15 +23,10 @@ import android.util.Log;
 public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadStates, Integer> {
 
 	public final String METEO_URL = "http://unisameteo.appspot.com/meteo";
-//	private final String METEO_XML_FILENAME = "meteo.xml";
-//	private final int MIN_UPDATE_MINUTES_INTERVAL = 10;
-
 	public boolean isRunning = false;
 
 	private WeatherFragment callerMeteoFragment;
 	private WeatherData meteo;
-//	private boolean isCachedData = true;
-//	private boolean forceNewDownload = false;
 
 	public static enum loadStates {
 		START, ANALYZING, NO_INTERNET, METEO_NOT_AVAILABLE, UNKNOWN_PROBLEM, FINISHED
@@ -39,7 +34,6 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 	
 	public WeatherScraper() {
 		super();
-//		forceNewDownload = force;
 	}
 
 	@Override
@@ -47,35 +41,19 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 		try {
 			publishProgress(loadStates.START);
 			MainActivity activity = activities[0];
-//			SharedPrefDataManager sPrefs = SharedPrefDataManager.getDataManager(activity);
-//			long lastUpdateTime = sPrefs.getWeatherLastUpdateMillis();
-//			long minutesPassedLastUpdate = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - lastUpdateTime);
 			Document document;
-//			try {
-//				//Se è passato poco tempo dall'ultimo update, carico il file salvato l'ultima volta 
-//				if (!forceNewDownload && minutesPassedLastUpdate < MIN_UPDATE_MINUTES_INTERVAL) {
-//					// Se esiste il file xml dell'ulima volta lo uso
-//					File xmlFile = new File(activity.getFilesDir() + File.separator + METEO_XML_FILENAME);
-//					Log.d(Utils.TAG, "Riutilizzo il meteo già scaricato");
-//					document = Jsoup.parse(xmlFile, null);
-//				} else {
-//					// E' passato troppo tempo...vado nel catch dove riscarico le previsioni
-//					throw new IOException("Force url reload");
-//				}
-//			} catch (IOException e) {
-				// Scarico le info aggiornate
-				Log.d(Utils.TAG, "Scarico le previsioni aggiornate!");
-				Log.d(Utils.TAG, "1");
-				Response response = Jsoup.connect(METEO_URL).timeout(30000).execute();
-				Log.d(Utils.TAG, "2");
-				document = response.parse();
-				Log.d(Utils.TAG, "3");
-//				isCachedData = false;
-//			}
+			// Scarico le info aggiornate
+			Log.d(Utils.TAG, "Scarico le previsioni aggiornate!");
+			Response response = Jsoup.connect(METEO_URL).timeout(30000).execute();
+			document = response.parse();
 			
 			WeatherData cMeteo = new WeatherData(activity);
+			
+			// Avoid Iterators: http://stackoverflow.com/questions/10291767/is-there-anything-faster-than-jsoup-for-html-scraping
 			Elements actualConditionsElements =  document.select("actualCondition > actualWeather");
-			for(Element actualElement : actualConditionsElements) {
+			Element actualElement;
+			for (int i=0; i<actualConditionsElements.size(); i++) {
+				actualElement = actualConditionsElements.get(i);
 				String lastUpdate = actualElement.getElementsByTag("lastUpdate").text();
 				String lastUpdateMilliseconds = actualElement.getElementsByTag("lastUpdate").attr("millisec");
 				String description = actualElement.getElementsByTag("description").text();
@@ -100,8 +78,11 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 				cMeteo.addActualCondition(cCondition);
 			}
 			
+			// Avoid Iterators: http://stackoverflow.com/questions/10291767/is-there-anything-faster-than-jsoup-for-html-scraping
 			Elements dailyForecastsElements =  document.select("forecast > dailyForecast");
-			for(Element dailyElement : dailyForecastsElements) {
+			Element dailyElement;
+			for (int i=0; i<dailyForecastsElements.size(); i++) {
+				dailyElement = dailyForecastsElements.get(i);
 				String validThrough = dailyElement.getElementsByTag("validThrough").text();
 				String lastUpdateMilliseconds = dailyElement.getElementsByTag("validThrough").attr("millisec");
 				String description = dailyElement.getElementsByTag("description").text();

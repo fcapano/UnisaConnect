@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.utils.CustomButtonWithImg;
 import it.fdev.utils.MySimpleFragment;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 
 public class Esse3ServicesFragment extends MySimpleFragment {
 	
-	CustomButtonWithImg webBtn, librettoBtn, appelliBtn, pagamentiBtn;
+	CustomButtonWithImg webBtn, librettoBtn, appelliBtn, presenzeBtn, pagamentiBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -22,53 +23,45 @@ public class Esse3ServicesFragment extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-		webBtn = (CustomButtonWithImg) activity.findViewById(R.id.web_page_btn);
-		librettoBtn = (CustomButtonWithImg) activity.findViewById(R.id.libretto_btn);
-		appelliBtn = (CustomButtonWithImg) activity.findViewById(R.id.appelli_btn);
-		pagamentiBtn = (CustomButtonWithImg) activity.findViewById(R.id.pagamenti_btn);
+		webBtn = (CustomButtonWithImg) view.findViewById(R.id.web_page_btn);
+		librettoBtn = (CustomButtonWithImg) view.findViewById(R.id.libretto_btn);
+		appelliBtn = (CustomButtonWithImg) view.findViewById(R.id.appelli_btn);
+		presenzeBtn = (CustomButtonWithImg) view.findViewById(R.id.presenze_btn);
+		pagamentiBtn = (CustomButtonWithImg) view.findViewById(R.id.pagamenti_btn);
 		
 		webBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new Esse3WebFragment());
+				activity.switchContent(BootableFragmentsEnum.ESSE3_WEB, false);
 			}
 		});
 		
 		librettoBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new LibrettoFragment());
+				activity.switchContent(BootableFragmentsEnum.LIBRETTO, false);
 			}
 		});
 		
 		appelliBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new AppelliFragment());
+				activity.switchContent(BootableFragmentsEnum.APPELLI, false);
+			}
+		});
+		
+		presenzeBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				activity.switchContent(BootableFragmentsEnum.PRESENZE, false);
 			}
 		});
 		
 		pagamentiBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new Esse3WebFragment());
+				activity.switchContent(BootableFragmentsEnum.ESSE3_WEB, false);
 			}
 		});
-	}
-	
-	@Override
-	public void setVisibleActions() {
-	}
-
-	@Override
-	public void actionRefresh() {
-		if (!isAdded()) {
-			return;
-		}
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
 	}
 }

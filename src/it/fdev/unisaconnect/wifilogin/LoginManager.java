@@ -144,11 +144,11 @@ public class LoginManager extends IntentService {
 			HttpResponse response = mHttpClient.execute(httppost);
 			Log.v(MainActivity.TAG, "Post done...checking response");
 			String strRes = EntityUtils.toString(response.getEntity());
-			Log.v(MainActivity.TAG + " Result", strRes);
+//			Log.v(MainActivity.TAG + " Result", strRes);
 			
 			if (strRes.contains(LOGIN_SUCCESSFUL_PATTERN)) {
 				// login successful
-				Log.d(MainActivity.TAG, "Successfully logged in!");
+//				Log.d(MainActivity.TAG, "Successfully logged in!");
 				return 1;
 			} else {
 				return 3;
@@ -176,12 +176,12 @@ public class LoginManager extends IntentService {
 			HttpPost httppost = new HttpPost(LOGOUT_URL);
 			httppost.setEntity(entity);
 			HttpResponse response = mHttpClient.execute(httppost);
-			Log.v(MainActivity.TAG, "Post done...checking response");
+//			Log.v(MainActivity.TAG, "Post done...checking response");
 			String strRes = EntityUtils.toString(response.getEntity());
-			Log.v(MainActivity.TAG+" Result", strRes);
+//			Log.v(MainActivity.TAG+" Result", strRes);
 			
 			if (strRes.contains(LOGOUT_SUCCESSFUL_PATTERN)) {
-				Log.d(MainActivity.TAG, "Successfully logged out!");
+//				Log.d(MainActivity.TAG, "Successfully logged out!");
 				return true;
 			} else {
 				return false;
@@ -196,15 +196,15 @@ public class LoginManager extends IntentService {
 	// Controlla che il wifi sia acceso e che si sia collegati alla rete dell'università
 	private static int isWifiOk(Context context) {
 		// Check network connected
-		Log.v(MainActivity.TAG, "Checking network connection");
+//		Log.v(MainActivity.TAG, "Checking network connection");
 
 		ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
 		if (wifi != NetworkInfo.State.CONNECTED) {
-			Log.d(MainActivity.TAG, "Device is not connected");
+//			Log.d(MainActivity.TAG, "Device is not connected");
 			return 2;
 		}
-		Log.v(MainActivity.TAG, "Device is connected");
+//		Log.v(MainActivity.TAG, "Device is connected");
 
 		// Check SSID
 		WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -216,10 +216,10 @@ public class LoginManager extends IntentService {
 			// others have reported this bug through the market
 //			Log.d(Utils.TAG, "Network is: " + wifiMan.getConnectionInfo().getSSID());
 //			Log.d(Utils.TAG, "Type is: " + dataManager.getTipoAccount());
-			Log.d(MainActivity.TAG,	"Device is connected to another network");
+//			Log.d(MainActivity.TAG,	"Device is connected to another network");
 			return 4;
 		}
-		Log.d(MainActivity.TAG,	"Device is connected to the correct network");
+//		Log.d(MainActivity.TAG,	"Device is connected to the correct network");
 		return 1;
 	}
 	
@@ -234,11 +234,11 @@ public class LoginManager extends IntentService {
 				Log.v(MainActivity.TAG, "The device is not logged in");
 				return true;
 			} else {
-				Log.v(MainActivity.TAG, "The device has internet connection");
+//				Log.v(MainActivity.TAG, "The device has internet connection");
 				return false;
 			}
 		} catch(IOException e) {
-			Log.e(MainActivity.TAG, "Problema controllo stato login:" + e.getMessage());
+//			Log.e(MainActivity.TAG, "Problema controllo stato login:" + e.getMessage());
 			e.printStackTrace();
 			return true;
 		}

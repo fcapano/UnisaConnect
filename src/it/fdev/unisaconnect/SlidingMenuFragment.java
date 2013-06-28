@@ -1,5 +1,7 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.ListAdapter;
 import it.fdev.utils.ListAdapter.ListItem;
@@ -10,7 +12,6 @@ import java.util.ArrayList;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,63 +48,55 @@ public class SlidingMenuFragment extends MyListFragment {
 		imgs.recycle();
 		setListAdapter(adapter);
 		
-		View settingsRow = activity.findViewById(R.id.settings_row);
+		View settingsRow = view.findViewById(R.id.settings_row);
 		settingsRow.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.switchContent(new PreferencesFragment());
+				activity.switchContent(BootableFragmentsEnum.PREFERENCES, true);
 			}
 		});
 	}
 
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
-		Fragment newContent = positionToAction((MainActivity) getActivity(), position);
+		BootableFragmentsEnum newContent = positionToAction((MainActivity) getActivity(), position);
 		if (newContent != null) {
-			activity.switchContent(newContent);
+			activity.switchContent(newContent, true);
 		}
 	}
 	
-	public static Fragment positionToAction(MainActivity activity, int position) {
-		Fragment newContent = null;
+	public static BootableFragmentsEnum positionToAction(MainActivity activity, int position) {
+		BootableFragmentsEnum newContent = null;
 		switch (position) {
 		case 0:
-			newContent = new WifiPreferencesFragment();
+			newContent = BootableFragmentsEnum.WIFI_PREF;
 			break;
 		case 1:
-			newContent = new MensaFragment();
+			newContent = BootableFragmentsEnum.MENSA;
 			break;
 		case 2:
-			newContent = new WebmailFragment();
+			newContent = BootableFragmentsEnum.WEBMAIL;
 			break;
 		case 3:
-			newContent = new Esse3ServicesFragment();
+			newContent = BootableFragmentsEnum.ESSE3_SERVICES;
 			break;
 		case 4:
-			newContent = new StaffSearchFragment();
+			newContent = BootableFragmentsEnum.STAFF_SEARCH;
 			break;
 		case 5:
-			newContent = new WeatherFragment();
+			newContent = BootableFragmentsEnum.WEATHER;
 			break;
 		case 6:
 			Utils.sendSupportMail(activity, "Riguardo \"Unisa Connect\"...", "");
 			break;
 		case 7:
-			newContent = new TimetableFragment();
+			newContent = BootableFragmentsEnum.TIMETABLE;
 			break;
 		case 8:
-			newContent = new MapFragment();
+			newContent = BootableFragmentsEnum.MAP;
 			break;
 		}
 		return newContent;
 	}
 	
-	@Override
-	public void setVisibleActions() {
-	}
-
-	@Override
-	public void actionRefresh() {
-	}
-
 }

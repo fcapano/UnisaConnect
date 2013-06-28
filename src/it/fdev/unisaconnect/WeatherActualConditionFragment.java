@@ -2,6 +2,7 @@ package it.fdev.unisaconnect;
 
 import it.fdev.unisaconnect.data.WeatherData.ActualCondition;
 import it.fdev.utils.DrawableManager;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 public class WeatherActualConditionFragment extends Fragment {
 	
+	private Activity activity;
 	private DrawableManager dm;
 	
 	private ActualCondition condition;
@@ -46,6 +48,10 @@ public class WeatherActualConditionFragment extends Fragment {
 		}
 	}
 	
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
+	
 	public void setCondition(ActualCondition condition) {
 		this.condition = condition;
 	}
@@ -62,8 +68,8 @@ public class WeatherActualConditionFragment extends Fragment {
 	
 	public void showCondition() {
 		if (condition != null && lastUpdateTimeView != null && iconView != null && tempView != null && descriptionView != null && humidityView != null && windView != null) {
-			lastUpdateTimeView.setText(condition.getLastUpdate());
-			iconView.setImageDrawable(condition.getIconDrawable());
+//			lastUpdateTimeView.setText(condition.getLastUpdate());
+			iconView.setImageDrawable(condition.getIconDrawable(activity));
 			tempView.setText(condition.getTemp());
 			descriptionView.setText(condition.getDescription());
 			humidityView.setText(condition.getHumidity());

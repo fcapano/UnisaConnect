@@ -29,6 +29,7 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 	
 	private CheckBox checkboxLoginAutomatica;
 	private EditText editTextUser, editTextPass;
+	private TextView bottoneSalva;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,15 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-    	checkboxLoginAutomatica = ((CheckBox) activity.findViewById(R.id.loginAutomatica));
-    	editTextUser = (EditText) activity.findViewById(R.id.user);
+    	checkboxLoginAutomatica = (CheckBox) view.findViewById(R.id.loginAutomatica);
+    	editTextUser = (EditText) view.findViewById(R.id.user);
+    	editTextPass = (EditText) view.findViewById(R.id.pass);
+		bottoneSalva = (TextView) view.findViewById(R.id.buttonSave);
+		
+    	if (checkboxLoginAutomatica == null || editTextUser == null || editTextPass==null || bottoneSalva==null) {
+			
+		}
+    	
     	InputFilter filter = new InputFilter() {
 			public CharSequence filter(CharSequence source, int start, int end,
 					Spanned dest, int dstart, int dend) {
@@ -62,13 +70,9 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 			}
 		};
 		editTextUser.setFilters(new InputFilter[]{filter}); 
-//    	editTextUser.setOnFocusChangeListener(new OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//            	editTextUser.setText(editTextUser.getText().toString().trim().replace(" ", ""));
-//            }
-//        });
-    	editTextUser.addTextChangedListener(new TextWatcher() {
+
+		// Check tooggle test status
+		editTextUser.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable e) {
 				if(editTextUser.getText().toString().equals(Utils.TOGGLE_TESTING_STRING)) {
@@ -89,8 +93,7 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 		});
-    	editTextPass = (EditText) activity.findViewById(R.id.pass);
-		TextView bottoneSalva = (TextView) activity.findViewById(R.id.buttonSave);
+    	
 		bottoneSalva.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String user, pass;
@@ -104,7 +107,7 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 					Toast.makeText(activity.getApplicationContext(), getString(R.string.dati_non_validi), Toast.LENGTH_SHORT).show();
 			}
 		});
-		actionRefresh();
+		fillData();
 	}
     
 	private void salvaDati(String user, String pass, boolean loginAutomatica) {
@@ -130,15 +133,10 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 			}
 			activity.getSlidingMenu().toggle();
 		}
-		actionRefresh();
+		fillData();
 	}
 	
-	@Override
-	public void setVisibleActions() {
-	}
-
-	@Override
-	public void actionRefresh() {
+	public void fillData() {
 		// Restore preferences
 		if (!isAdded()) {
 			return;
@@ -158,4 +156,5 @@ public class WifiPreferencesFragment extends MySimpleFragment {
 		editTextPass.setText((pass!=null?pass:""));
 		checkboxLoginAutomatica.setChecked(loginAutomatica);
 	}
+	
 }

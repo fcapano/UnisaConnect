@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.StaffMember;
 import it.fdev.utils.DrawableManager;
 import it.fdev.utils.MySimpleFragment;
@@ -36,7 +37,6 @@ public class StaffDetailsFragment extends MySimpleFragment {
 	private StaffMember staffMemberDetails;
 	private DrawableManager drawableManager;
 	private ImageLoader imageLoader;
-	private View mainView;
 	
 	private ImageView picture;
 	private TextView infoTitle, mapTitle, emailTitle, ricevimentoTitle, websiteTitle, phoneTitle, faxTitle;
@@ -56,8 +56,7 @@ public class StaffDetailsFragment extends MySimpleFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mainView = (View) inflater.inflate(R.layout.staff_details, container, false);
-		return mainView;
+		return inflater.inflate(R.layout.staff_details, container, false);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -66,41 +65,41 @@ public class StaffDetailsFragment extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-		infoTitle = (TextView) mainView.findViewById(R.id.infoTitle);
-		mapTitle = (TextView) mainView.findViewById(R.id.mapTitle);
-		emailTitle = (TextView) mainView.findViewById(R.id.emailTitle);
-		ricevimentoTitle = (TextView) mainView.findViewById(R.id.ricevimentoTitle);
-		websiteTitle = (TextView) mainView.findViewById(R.id.websiteTitle);
-		phoneTitle = (TextView) mainView.findViewById(R.id.phoneTitle);
-		faxTitle = (TextView) mainView.findViewById(R.id.faxTitle);
+		infoTitle = (TextView) view.findViewById(R.id.infoTitle);
+		mapTitle = (TextView) view.findViewById(R.id.mapTitle);
+		emailTitle = (TextView) view.findViewById(R.id.emailTitle);
+		ricevimentoTitle = (TextView) view.findViewById(R.id.ricevimentoTitle);
+		websiteTitle = (TextView) view.findViewById(R.id.websiteTitle);
+		phoneTitle = (TextView) view.findViewById(R.id.phoneTitle);
+		faxTitle = (TextView) view.findViewById(R.id.faxTitle);
 		
-		infoSep = (View) mainView.findViewById(R.id.infoSep);
-		mapSep = (View) mainView.findViewById(R.id.mapSep);
-		emailSep = (View) mainView.findViewById(R.id.emailSep);
-		ricevimentoSep = (View) mainView.findViewById(R.id.ricevimentoSep);
-		websiteSep = (View) mainView.findViewById(R.id.websiteSep);
-		phoneSep = (View) mainView.findViewById(R.id.phoneSep);
-		faxSep = (View) mainView.findViewById(R.id.faxSep);
+		infoSep = (View) view.findViewById(R.id.infoSep);
+		mapSep = (View) view.findViewById(R.id.mapSep);
+		emailSep = (View) view.findViewById(R.id.emailSep);
+		ricevimentoSep = (View) view.findViewById(R.id.ricevimentoSep);
+		websiteSep = (View) view.findViewById(R.id.websiteSep);
+		phoneSep = (View) view.findViewById(R.id.phoneSep);
+		faxSep = (View) view.findViewById(R.id.faxSep);
 		
-		picture = (ImageView) mainView.findViewById(R.id.picture);
-		fullnameText = (TextView) mainView.findViewById(R.id.fullname);
-		roleText = (TextView) mainView.findViewById(R.id.roleText);
-		deptText = (TextView) mainView.findViewById(R.id.departmentText);
-		deptText = (TextView) mainView.findViewById(R.id.departmentText);
-		mapText = (TextView) mainView.findViewById(R.id.mapText);
-		emailText = (TextView) mainView.findViewById(R.id.emailText);
-		ricevimentoText = (TextView) mainView.findViewById(R.id.ricevimentoText);
-		websiteText = (TextView) mainView.findViewById(R.id.websiteText);
+		picture = (ImageView) view.findViewById(R.id.picture);
+		fullnameText = (TextView) view.findViewById(R.id.fullname);
+		roleText = (TextView) view.findViewById(R.id.roleText);
+		deptText = (TextView) view.findViewById(R.id.departmentText);
+		deptText = (TextView) view.findViewById(R.id.departmentText);
+		mapText = (TextView) view.findViewById(R.id.mapText);
+		emailText = (TextView) view.findViewById(R.id.emailText);
+		ricevimentoText = (TextView) view.findViewById(R.id.ricevimentoText);
+		websiteText = (TextView) view.findViewById(R.id.websiteText);
 		
-		phone1Text = (TextView) mainView.findViewById(R.id.phone1Text);
-		phone2Text = (TextView) mainView.findViewById(R.id.phone2Text);
-		phone3Text = (TextView) mainView.findViewById(R.id.phone3Text);
-		phone4Text = (TextView) mainView.findViewById(R.id.phone4Text);
+		phone1Text = (TextView) view.findViewById(R.id.phone1Text);
+		phone2Text = (TextView) view.findViewById(R.id.phone2Text);
+		phone3Text = (TextView) view.findViewById(R.id.phone3Text);
+		phone4Text = (TextView) view.findViewById(R.id.phone4Text);
 		
-		fax1Text = (TextView) mainView.findViewById(R.id.fax1Text);
-		fax2Text = (TextView) mainView.findViewById(R.id.fax2Text);
-		fax3Text = (TextView) mainView.findViewById(R.id.fax3Text);
-		fax4Text = (TextView) mainView.findViewById(R.id.fax4Text);
+		fax1Text = (TextView) view.findViewById(R.id.fax1Text);
+		fax2Text = (TextView) view.findViewById(R.id.fax2Text);
+		fax3Text = (TextView) view.findViewById(R.id.fax3Text);
+		fax4Text = (TextView) view.findViewById(R.id.fax4Text);
 		
 		
 		Display display = activity.getWindowManager().getDefaultDisplay();
@@ -224,17 +223,12 @@ public class StaffDetailsFragment extends MySimpleFragment {
 	}
 	
 	@Override
-	public void setVisibleActions() {
-	}
-	
-	@Override
 	public void onResume() {
 		super.onResume();
-		actionRefresh();
+		showData();
 	}
 	
-	@Override
-	public void actionRefresh() {
+	public void showData() {
 		if (!isAdded()) {
 			return;
 		}

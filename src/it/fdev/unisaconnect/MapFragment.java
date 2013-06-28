@@ -119,13 +119,14 @@ public class MapFragment extends MySimpleFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mapView = new MapView(activity);
+		mapView = new MapView(activity); 
 		return mapView;
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+//		mapView = (MapView) view;
 		mapView.addZoomLevel(RESIZED_IMG_WIDTH, RESIZED_IMG_HEIGHT, "map/uni_map_" + RESIZED_IMG_WIDTH + "_" + RESIZED_IMG_HEIGHT + "/tile_%row%_%col%.png", "map/uni_map_lr.png");
 		
 		try {
@@ -178,14 +179,6 @@ public class MapFragment extends MySimpleFragment {
 //			// callout.transitionIn();
 //		}
 //	};
-
-	@Override
-	public void setVisibleActions() {
-	}
-
-	@Override
-	public void actionRefresh() {
-	}
 
 	@Override
 	public void onPause() {

@@ -49,13 +49,12 @@
                 custom:text="@string/appelli" />
 
             <it.fdev.utils.CustomButtonWithImg
-                android:id="@+id/autocertificazioni_btn"
+                android:id="@+id/presenze_btn"
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:visibility="invisible"
-                custom:img="@drawable/calendar_full"
-                custom:text="@string/autocertificazioni" />
+                custom:img="@drawable/presenze"
+                custom:text="@string/presenze" />
         </TableRow>
 
         <TableRow
@@ -72,10 +71,14 @@
                 custom:img="@drawable/money"
                 custom:text="@string/pagamenti" />
 
-            <View
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/autocertificazioni_btn"
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="invisible"
+                custom:img="@drawable/calendar_full"
+                custom:text="@string/autocertificazioni" />
         </TableRow>
     </TableLayout>
 

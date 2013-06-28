@@ -1,32 +1,46 @@
 package it.fdev.utils;
 
-import com.google.analytics.tracking.android.EasyTracker;
-
 import it.fdev.unisaconnect.MainActivity;
+
+import java.util.Set;
+
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 public abstract class MyListFragment extends ListFragment implements MyFragment {
 	protected MainActivity activity;
 	protected Resources resources;
+	
+	private boolean firstRun = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		activity = (MainActivity) getActivity();
 		resources = getResources();
-		EasyTracker.getTracker().sendView(this.getClass().toString());
+		try {
+			EasyTracker.getTracker().sendView(this.getClass().toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		activity.reloadActionButtons(this);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		activity.hideActions();
-		setVisibleActions();
+		if (!firstRun) {
+			activity.reloadActionButtons(this);
+		} else {
+			firstRun = false;
+		}
 	}
 
-	public abstract void actionRefresh();
+	public void actionRefresh() {
+	}
 
 	public boolean goBack() {
 		return true;
@@ -39,5 +53,9 @@ public abstract class MyListFragment extends ListFragment implements MyFragment 
 	}
 
 	public void actionAccept() {
+	}
+
+	public Set<Integer> getActionsToShow() {
+		return null;
 	}
 }

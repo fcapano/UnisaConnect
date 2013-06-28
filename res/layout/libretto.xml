@@ -23,6 +23,7 @@
         android:id="@+id/courses_list_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/last_update_time"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -101,5 +102,41 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/last_update_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/last_update_time"
+        android:layout_alignTop="@+id/last_update_time"
+        android:layout_gravity="center_vertical|right"
+        android:layout_toLeftOf="@+id/last_update_time"
+        android:scaleType="fitEnd"
+        android:src="@drawable/refresh"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/last_update_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/last_update_sep"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/last_update_time"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/activity_background_darker_lighter"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -1,6 +1,6 @@
 package it.fdev.unisaconnect.data;
 
-import it.fdev.unisaconnect.R;
+import it.fdev.utils.Utils;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -13,9 +13,10 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 public class WeatherData implements Serializable {
-	private static final long serialVersionUID = -5469551486116200662L;
+	private static final long serialVersionUID = -5469551483116210662L;
 
 	private final String OPTIMIZED_WEBCAM_IMG_URL = "http://unisameteo.appspot.com/serve?id=";
 	private final String YOW_PATH = "Yow/";
@@ -67,13 +68,12 @@ public class WeatherData implements Serializable {
 		yowIconsAssociations.put("nt_partlycloudy", "2.png");
 	}
 	
-	private Context context;
 	private Date fetchTime;
 	private ArrayList<ActualCondition> actualConditionList;
 	private ArrayList<DailyForecast> dailyForecastList;
+	private transient HashMap<String, Drawable> usedImg;
 
 	public WeatherData(Context context) {
-		this.context = context;
 		this.fetchTime = new Date();
 		this.actualConditionList = new ArrayList<ActualCondition>();
 		this.dailyForecastList = new ArrayList<DailyForecast>();
@@ -118,12 +118,12 @@ public class WeatherData implements Serializable {
 	}
 
 	public class ActualCondition implements Serializable {
-		private static final long serialVersionUID = 8492846115841636039L;
+		private static final long serialVersionUID = 8492846515841436039L;
+		
 		private String lastUpdate;
 		private String lastUpdateMilliseconds;
 		private String description;
 		private String iconUrl;
-		private Drawable iconDrawable;
 		private String temp;
 		private String maxTemp;
 		private String minTemp;
@@ -145,7 +145,6 @@ public class WeatherData implements Serializable {
 			this.lastUpdateMilliseconds = lastUpdateMilliseconds;
 			this.description = description;
 			this.iconUrl = iconUrl;
-			this.iconDrawable = WeatherData.this.getIconDrawable(iconUrl);
 			this.temp = temp.replace("C", "").trim();
 			this.maxTemp = maxTemp;
 			this.minTemp = minTemp;
@@ -177,9 +176,9 @@ public class WeatherData implements Serializable {
 			return description;
 		}
 
-		public Drawable getIconDrawable() {
-//			return WeatherData.this.getIconDrawable(iconUrl);
-			return iconDrawable;
+		public Drawable getIconDrawable(Context context) {
+			return WeatherData.this.getIconDrawable(context, iconUrl);
+//			return iconDrawable;
 		}
 
 		public String getTemp() {
@@ -236,12 +235,12 @@ public class WeatherData implements Serializable {
 	}
 
 	public class DailyForecast implements Serializable {
-		private static final long serialVersionUID = -5934884410005634828L;
+		private static final long serialVersionUID = -5934884410095632828L;
+		
 		private String validThrough;
 		private String lastUpdateMilliseconds;
 		private String description;
 		private String iconUrl;
-		private Drawable iconDrawable;
 		private String maxTemp;
 		private String minTemp;
 		private String avgHumidity;
@@ -256,7 +255,6 @@ public class WeatherData implements Serializable {
 			this.lastUpdateMilliseconds = lastUpdateMilliseconds;
 			this.description = description;
 			this.iconUrl = iconUrl;
-			this.iconDrawable = WeatherData.this.getIconDrawable(iconUrl);
 			this.maxTemp = maxTemp;
 			this.minTemp = minTemp;
 			this.avgHumidity = avgHumidity;
@@ -277,9 +275,8 @@ public class WeatherData implements Serializable {
 			return description;
 		}
 
-		public Drawable getIconDrawable() {
-//			return WeatherData.this.getIconDrawable(iconUrl);
-			return iconDrawable;
+		public Drawable getIconDrawable(Context context) {
+			return WeatherData.this.getIconDrawable(context, iconUrl);
 		}
 
 		public String getMaxTemp() {
@@ -313,13 +310,21 @@ public class WeatherData implements Serializable {
 		return name;
 	}
 	
-	private Drawable getIconDrawable(String iconUrl) {
+	private synchronized Drawable getIconDrawable(Context context, String iconUrl) {
 		try {
+			if (usedImg == null)
+				usedImg = new HashMap<String, Drawable>();
+			else if (usedImg.containsKey(iconUrl))
+				return usedImg.get(iconUrl);
+
 			String imageFileName = filenameFromUrl(iconUrl);
 			String yowImageFileName = yowIconsAssociations.get(imageFileName);
-			return Drawable.createFromStream(context.getAssets().open(YOW_PATH + yowImageFileName), null);
+			Drawable img = Drawable.createFromStream(context.getAssets().open(YOW_PATH + yowImageFileName), null);
+			usedImg.put(iconUrl, img);
+			return img;
 		} catch (Exception e) {
-			return context.getResources().getDrawable(R.drawable.transparent);
+			Log.e(Utils.TAG, "Problem fetching the weather icon", e);
+			return null;
 		}
 	}
 }

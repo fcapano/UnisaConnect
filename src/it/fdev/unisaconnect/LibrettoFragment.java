@@ -1,13 +1,19 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.scrapers.Esse3LibrettoScraper;
-import it.fdev.unisaconnect.data.LibrettoCourse;
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
+import it.fdev.unisaconnect.data.Libretto;
+import it.fdev.unisaconnect.data.Libretto.LibrettoCourse;
 import it.fdev.unisaconnect.data.LibrettoDB;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +29,11 @@ public class LibrettoFragment extends MySimpleFragment {
 	private LibrettoDB librettoDB;
 	private boolean alreadyStarted = false;
 	private Esse3LibrettoScraper librettoScraper;
+	
+	private LinearLayout corsiContainerView;
+	private TextView lastUpdateView;
+	private View lastUpdateIconView;
+	private View lastUpdateSepView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,9 +52,17 @@ public class LibrettoFragment extends MySimpleFragment {
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
 		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(activity);
 		if (!dataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
+			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.WIFI_PREF, false);
 			return;
 		}
+		
+		corsiContainerView = (LinearLayout) view.findViewById(R.id.courses_list);
+		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
+		lastUpdateIconView = (View) view.findViewById(R.id.last_update_icon);
+		lastUpdateSepView = (View) view.findViewById(R.id.last_update_sep);
+		
+		activity.setLoadingVisible(true, true);
+		
 		mostraCorsi();
 	}
 
@@ -59,7 +78,8 @@ public class LibrettoFragment extends MySimpleFragment {
 	public void onResume() {
 		super.onResume();
 		if (alreadyStarted && librettoScraper != null && !librettoScraper.isRunning) {
-			ArrayList<LibrettoCourse> corsi = librettoDB.getCourses();
+			Libretto libretto = librettoDB.getLibretto();
+			ArrayList<LibrettoCourse> corsi = libretto.getCorsi();
 			if (corsi.size() == 0) {
 				Log.d(Utils.TAG, "Errore nella creazione del libretto");
 				activity.goToLastFrame();
@@ -68,12 +88,18 @@ public class LibrettoFragment extends MySimpleFragment {
 	}
 
 	@Override
-	public void setVisibleActions() {
-		activity.setActionRefreshVisible(true);
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_refresh_button);
+		if (!alreadyStarted) {
+			actionsToShow.add(R.id.action_loading_animation);
+		}
+		return actionsToShow;
 	}
 
 	@Override
 	public void actionRefresh() {
+		activity.setLoadingVisible(true, false);
 		startEsse3LibrettoScraper(true);
 	}
 
@@ -84,7 +110,8 @@ public class LibrettoFragment extends MySimpleFragment {
 			return;
 		}
 		try {
-			if (force || (!alreadyStarted && librettoDB.getCourses().size() == 0)) {
+			Libretto libretto = librettoDB.getLibretto();
+			if (force || (!alreadyStarted && libretto.getCorsi().size() == 0)) {
 				alreadyStarted = true;
 				if (librettoScraper != null && librettoScraper.isRunning) {
 					return;
@@ -105,11 +132,12 @@ public class LibrettoFragment extends MySimpleFragment {
 		librettoDB = new LibrettoDB(activity);
 		librettoDB.open();
 		try {
-			ArrayList<LibrettoCourse> corsi = librettoDB.getCourses();
+			Libretto libretto = librettoDB.getLibretto();
+			ArrayList<LibrettoCourse> corsi = libretto.getCorsi();
 			if (corsi.size() == 0) {
 				startEsse3LibrettoScraper(false);
 			} else {
-				mostraCorsi(corsi);
+				mostraCorsi(libretto);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -118,17 +146,19 @@ public class LibrettoFragment extends MySimpleFragment {
 		}
 	}
 
-	public void mostraCorsi(ArrayList<LibrettoCourse> corsi) {
+	public void mostraCorsi(Libretto libretto) {
 		int sommaCFU = 0;
 		int sommaVotiPesati = 0;
-		LinearLayout corsiContainer = (LinearLayout) activity.findViewById(R.id.courses_list);
-		corsiContainer.setVisibility(View.INVISIBLE);
 
-		while (corsiContainer.getChildCount() > 2) {
-			corsiContainer.removeViewAt(2);
+		while (corsiContainerView.getChildCount() > 2) {
+			corsiContainerView.removeViewAt(2);
 		}
 
 		LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		ArrayList<LibrettoCourse> corsi = libretto.getCorsi();
+		
+//		for (int i = 0; i < 2; i++)
 		for (LibrettoCourse corso : corsi) {
 			try { // Calcolo la media
 				int cfu = Integer.parseInt(corso.getCFU());
@@ -141,8 +171,8 @@ public class LibrettoFragment extends MySimpleFragment {
 					sommaCFU += cfu;
 					sommaVotiPesati += mark * cfu;
 				}
-			} catch (NumberFormatException e) { // Esami con ideneità. Compaiono
-												// come "SUP"
+			} catch (NumberFormatException e) {
+				// Esami con ideneità. Compaiono come "SUP" e non influiscono sulla media
 			}
 			if (corso.getMark().isEmpty()) // Esame non ancora fatto
 				continue;
@@ -153,14 +183,30 @@ public class LibrettoFragment extends MySimpleFragment {
 			nameView.setText(corso.getName());
 			cfuView.setText(corso.getCFU());
 			markView.setText(corso.getMark());
-			corsiContainer.addView(rowView);
+			corsiContainerView.addView(rowView);
 		}
 
 		float mediaPesata = sommaVotiPesati / (float) sommaCFU;
 		mediaPesata = Math.round(mediaPesata * (float) 1000) / (float) 1000;
-		TextView avgWeightedView = (TextView) corsiContainer.findViewById(R.id.avg_weighted);
+		TextView avgWeightedView = (TextView) corsiContainerView.findViewById(R.id.avg_weighted);
 		avgWeightedView.setText(Float.toString(mediaPesata));
-
-		corsiContainer.setVisibility(View.VISIBLE);
+		
+		corsiContainerView.setVisibility(View.VISIBLE);
+		
+		if (libretto.getFetchTime().getTime() > 0) {
+		    String dateFirstPart = new SimpleDateFormat("dd/MM", Locale.ITALY).format(libretto.getFetchTime());
+		    String dateSecondPart = new SimpleDateFormat("HH:mm", Locale.ITALY).format(libretto.getFetchTime());
+		    String updateText = getString(R.string.aggiornato_il_alle, dateFirstPart, dateSecondPart);
+			lastUpdateView.setText(updateText);
+			lastUpdateView.setVisibility(View.VISIBLE);
+			lastUpdateIconView.setVisibility(View.VISIBLE);
+			lastUpdateSepView.setVisibility(View.VISIBLE);
+		} else {
+			lastUpdateView.setVisibility(View.GONE);
+			lastUpdateIconView.setVisibility(View.GONE);
+			lastUpdateSepView.setVisibility(View.GONE);
+		}
+		
+		activity.setLoadingVisible(false, false);
 	}
 }

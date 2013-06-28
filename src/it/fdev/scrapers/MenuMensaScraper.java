@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
 import android.os.AsyncTask;
 
 /**
- * Frammento che si occupa dell'accesso alla esse3
+ * Frammento che si occupa dell'accesso al menu della mensa
  * 
  * @author francesco
  * 
@@ -70,19 +70,7 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 		super.onProgressUpdate(values);
 		switch (values[0]) {
 		case MENU_NOT_AVAILABLE:
-			if (callerMenuFragment != null) {
-				callerMenuFragment.mostraMenu(null);
-			}
-			Utils.dismissAlert();
-			Utils.dismissDialog();
-			break;
 		case NO_INTERNET:
-			if (callerMenuFragment != null) {
-				callerMenuFragment.mostraMenu(null);
-			}
-			Utils.dismissAlert();
-			Utils.dismissDialog();
-			break;
 		case UNKNOWN_PROBLEM:
 			if (callerMenuFragment != null) {
 				callerMenuFragment.mostraMenu(null);
@@ -126,7 +114,12 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 
 	public ArrayList<PiattoMensa> getCourses(Element courses) {
 		ArrayList<PiattoMensa> coursesList = new ArrayList<PiattoMensa>();
-		for (Element cCourse : courses.getElementsByTag("course")) {
+		
+		// Avoid Iterators: http://stackoverflow.com/questions/10291767/is-there-anything-faster-than-jsoup-for-html-scraping
+		Elements list = courses.getElementsByTag("course");
+		Element cCourse;
+		for (int i=0; i<list.size(); i++) {
+			cCourse = list.get(i);
 			String name = cCourse.getElementsByTag("name").get(0).text();
 			String ingredientsIt, ingredientsEn;
 			Elements ingredientsTags = cCourse.getElementsByTag("ingredients");

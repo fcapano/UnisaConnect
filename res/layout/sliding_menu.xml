@@ -10,15 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="0dp" >
+        android:layout_marginBottom="50dp" >
     </ListView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignTop="@+id/settings_row"
-        android:background="@color/activity_background_darker_lighter"
-        android:visibility="gone" />
+<!--     <View -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="1dp" -->
+<!--         android:layout_alignTop="@+id/settings_row" -->
+<!--         android:background="@color/activity_background_lighter" -->
+<!--         android:visibility="visible" /> -->
 
     <LinearLayout
         android:id="@+id/settings_row"
@@ -26,8 +26,9 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables"
-        android:visibility="gone" >
+        android:visibility="gone"
+        android:background="@color/activity_background_darker_lighter"
+        tools:ignore="UseCompoundDrawables" >
 
         <ImageView
             android:id="@+id/settings_icon"

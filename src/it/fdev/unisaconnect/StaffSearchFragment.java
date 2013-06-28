@@ -52,7 +52,22 @@ public class StaffSearchFragment extends MyListFragment {
 		if (db == null)
 			return;
 		
-		imgClearName = (ImageView) activity.findViewById(R.id.staff_name_clear);
+//		View lastUpdateViewContainer = view.findViewById(R.id.last_update_time_container);
+//		TextView lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
+//		try {
+//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss", Locale.ITALY);
+//			Date date = formatter.parse(StaffDB.DB_STAFF_DATE);
+//			String dateFirstPart = new SimpleDateFormat("dd/MM/yy", Locale.ITALY).format(date);
+//			String updateText = getString(R.string.aggiornato_il, dateFirstPart);
+//			lastUpdateView.setText(updateText);
+//			lastUpdateViewContainer.setVisibility(View.VISIBLE);
+//		} catch (ParseException e) {
+//			Log.e(Utils.TAG, "Error parsing date", e);
+//			lastUpdateViewContainer.setVisibility(View.GONE);
+//		}
+		
+		
+		imgClearName = (ImageView) view.findViewById(R.id.staff_name_clear);
 		imgClearName.setVisibility(View.INVISIBLE);
 		imgClearName.setOnClickListener(new OnClickListener() {
 			@Override
@@ -61,7 +76,7 @@ public class StaffSearchFragment extends MyListFragment {
 			}
 		});
 		
-		editTextStaffName = (EditText) activity.findViewById(R.id.staff_name);
+		editTextStaffName = (EditText) view.findViewById(R.id.staff_name);
 		editTextStaffName.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
 				initList();
@@ -84,16 +99,6 @@ public class StaffSearchFragment extends MyListFragment {
 		StaffDetailsFragment staffDetailsFrag = new StaffDetailsFragment();
 		staffDetailsFrag.setMemberDetails(db.getStaffMember(choosenMember.getMatricola()));
 		activity.switchContent(staffDetailsFrag);
-	}
-	
-	@Override
-	public void setVisibleActions() {
-		activity.setActionRefreshVisible(true);
-	}
-
-	@Override
-	public void actionRefresh() {
-		adapter.notifyDataSetChanged();
 	}
 	
 	public void initList() {

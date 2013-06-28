@@ -1,8 +1,8 @@
 package it.fdev.scrapers;
 
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.R;
-import it.fdev.unisaconnect.WifiPreferencesFragment;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.Utils;
 
@@ -63,7 +63,7 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 
 		try {
 			Document result;
-			try { // Come risposta alla prima richiesta si ha un 401, perchè non vengono inviati cookie
+			try { 	// Come risposta alla prima richiesta si ha un 401, perchè non vengono inviati cookie
 					// La risposta contiene anche l'header Set-Cookie. Il cookie è necessario per autenticarsi
 				scraperGetUrl(startUrl);
 			} catch (Exception e) {
@@ -121,7 +121,7 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 		super.onProgressUpdate(values);
 		switch (values[0]) {
 		case START:
-			Utils.createDialog(activity, activity.getString(R.string.connesione_esse3), false);
+//			Utils.createDialog(activity, activity.getString(R.string.connesione_esse3), false);
 			break;
 		case LOGGED_IN:
 //			Utils.createDialog(activity, activity.getString(R.string.login_ok), false);
@@ -131,13 +131,13 @@ public class Esse3BasicScraper extends AsyncTask<MainActivity, Esse3BasicScraper
 			// activity.getString(R.string.sincronizzazione_esse3), false);
 			break;
 		case SYNCING:
-			Utils.createDialog(activity, activity.getString(R.string.sincronizzazione_esse3), false);
+//			Utils.createDialog(activity, activity.getString(R.string.sincronizzazione_esse3), false);
 			break;
 		case NO_DATA:
-			Utils.createAlert(activity, activity.getString(R.string.dati_non_validi), new WifiPreferencesFragment(), false);
+			Utils.createAlert(activity, activity.getString(R.string.dati_non_validi), BootableFragmentsEnum.WIFI_PREF, false);
 			break;
 		case WRONG_DATA:
-			Utils.createAlert(activity, activity.getString(R.string.dati_errati), new WifiPreferencesFragment(), false);
+			Utils.createAlert(activity, activity.getString(R.string.dati_errati), BootableFragmentsEnum.WIFI_PREF, false);
 			break;
 		case NO_INTERNET:
 			Utils.goToInternetError(activity, null);

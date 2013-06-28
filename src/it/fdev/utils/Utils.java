@@ -1,5 +1,6 @@
 package it.fdev.utils;
 
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.ErrorInternetFragment;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.R;
@@ -96,12 +97,14 @@ public class Utils {
 				dialog.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialog) {
+//						activity.setLoadingVisible(true);
 						if (onCancelGoBack) {
 							((MainActivity) activity).goToLastFrame();
 						}
 					}
 				});
 				dialog.show();
+//				activity.setLoadingVisible(true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,8 +122,8 @@ public class Utils {
 		}
 		return;
 	}
-
-	public static void createAlert(final MainActivity activity, String message, final Fragment goToFragment, final boolean shouldReturnToMenu) {
+	
+	public static void createAlert(final MainActivity activity, String message, final BootableFragmentsEnum goToFragmentEnum, final boolean shouldReturnToMenu) {
 		try {
 			dismissDialog();
 			dismissAlert();
@@ -133,8 +136,8 @@ public class Utils {
 				public void onClick(DialogInterface dialog, int which) {
 					activity.runOnUiThread(new Runnable() {
 						public void run() {
-							if (goToFragment != null)
-								activity.switchContent(goToFragment);
+							if (goToFragmentEnum != null)
+								activity.switchContent(goToFragmentEnum, false);
 							if (shouldReturnToMenu)
 								((SlidingFragmentActivity) activity).getSlidingMenu().toggle();
 						}

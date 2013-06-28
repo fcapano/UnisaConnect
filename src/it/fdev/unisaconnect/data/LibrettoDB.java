@@ -1,5 +1,7 @@
 package it.fdev.unisaconnect.data;
 
+import it.fdev.unisaconnect.data.Libretto.LibrettoCourse;
+
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -17,6 +19,8 @@ public class LibrettoDB {
 	public static final int DB_VERSION = 6; //Version number, can be any number
 	public static final String DB_NAME = "libretto.db"; //Name of the database
 	
+	private SharedPrefDataManager pref;
+	
 	
 	public class DBHelper extends SQLiteOpenHelper { //Helps create DB		
 		//Constructor
@@ -26,12 +30,12 @@ public class LibrettoDB {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) { //Called once and only once for a User to create a DB
-			String query = "CREATE TABLE Libretto"
+			String query1 = "CREATE TABLE Libretto"
 					+ "(name TEXT PRIMARY KEY," 
 					+ "cfu TEXT,"
 					+ "mark TEXT"
 				+ ");";
-			db.execSQL(query);
+			db.execSQL(query1);
 		}
 
 		@Override
@@ -44,7 +48,7 @@ public class LibrettoDB {
 	//Class Constructor
 	public LibrettoDB(Context c) {
 		ourContext = c; //Initialize the context with passed in context
-		
+		pref = SharedPrefDataManager.getDataManager(c);
 	}
 	
 	//Open method
@@ -57,13 +61,13 @@ public class LibrettoDB {
 		ourHelper.close();
 	}
 	
-	public void insertCourse(String name, String cfu, String mark) {
+	public void insertCourse(LibrettoCourse course) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			ContentValues values = new ContentValues();
-			values.put("name", name);
-			values.put("cfu", cfu);
-			values.put("mark", mark);
+			values.put("name", course.getName());
+			values.put("cfu", course.getCFU());
+			values.put("mark", course.getMark());
 			db.insert("Libretto", "", values);
 		} finally {
 			if(db!= null)
@@ -75,11 +79,7 @@ public class LibrettoDB {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		for(LibrettoCourse c : list) {
 			try {
-				ContentValues values = new ContentValues();
-				values.put("name", c.getName());
-				values.put("cfu", c.getCFU());
-				values.put("mark", c.getMark());
-				db.insert("Libretto", "", values);
+				insertCourse(c);
 			} catch (Exception e) {
 //				Log.d(Utils.TAG, "");
 			}
@@ -96,6 +96,19 @@ public class LibrettoDB {
 			if(db!= null)
 				db.close();
 		}
+	}
+	
+	public void resetLibretto(Libretto libretto) {
+		deleteAllCourses();
+		insertCourses(libretto.getCorsi());
+		pref.setLibrettoFetchDate(libretto.getFetchTime());
+		pref.saveData();
+	}
+	
+	public Libretto getLibretto() {
+		ArrayList<LibrettoCourse> corsi = getCourses();
+		Libretto l = new Libretto(pref.getLibrettoFetchDate(), corsi);
+		return l;
 	}
 	
 	public ArrayList<LibrettoCourse> getCourses() {

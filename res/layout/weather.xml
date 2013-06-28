@@ -85,7 +85,7 @@
                     android:shadowColor="@android:color/black"
                     android:shadowDx="0"
                     android:shadowDy="0"
-                    android:shadowRadius="4"
+                    android:shadowRadius="10"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textSize="70sp"
@@ -100,7 +100,7 @@
                 android:shadowColor="@android:color/black"
                 android:shadowDx="0"
                 android:shadowDy="0"
-                android:shadowRadius="4"
+                android:shadowRadius="10"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
@@ -120,7 +120,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/thermometer_75" />
+                android:src="@drawable/thermometer_75"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,7 +130,7 @@
                 android:gravity="center_vertical"
                 android:padding="0dp"
                 android:singleLine="true"
-                android:text="Umidità"
+                android:text="@string/umidita"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -139,6 +140,10 @@
                 android:layout_margin="0dp"
                 android:gravity="center_vertical"
                 android:padding="0dp"
+                android:shadowColor="@android:color/black"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
@@ -151,7 +156,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/ic_wind" />
+                android:src="@drawable/ic_wind"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -160,7 +166,7 @@
                 android:gravity="center_vertical"
                 android:padding="0dp"
                 android:singleLine="true"
-                android:text="Vento"
+                android:text="@string/vento"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -170,6 +176,10 @@
                 android:layout_marginRight="5dp"
                 android:gravity="center_vertical"
                 android:padding="0dp"
+                android:shadowColor="@android:color/black"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
@@ -181,12 +191,17 @@
                 android:layout_margin="0dp"
                 android:gravity="center_vertical"
                 android:padding="0dp"
+                android:shadowColor="@android:color/black"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 tools:ignore="SelectableText" />
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/last_update_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/last_update_time"
@@ -204,9 +219,14 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="40dp"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="4"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/white"
             tools:ignore="SelectableText" />
     </RelativeLayout>
 

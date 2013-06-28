@@ -21,7 +21,7 @@
         <item>@drawable/weather</item>
         <item>@drawable/comments</item>
         <item>@drawable/timetable</item>
-        <item>@drawable/transparent</item>
+        <item>@drawable/mapicon</item>
     </string-array>
     
     <string-array name="timetable_lesson_colors">

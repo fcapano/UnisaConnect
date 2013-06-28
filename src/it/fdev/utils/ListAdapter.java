@@ -74,7 +74,7 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 				else
 					viewHolder.textView.setTextColor(parent.getResources().getColor(android.R.color.white));
 
-				viewHolder.imageView.setImageResource(R.drawable.transparent);
+				viewHolder.imageView.setImageDrawable(null);
 				viewHolder.imageView.setVisibility(View.VISIBLE);
 				if (item.iconURL != null) {
 					if (item.useCache) {
@@ -121,7 +121,7 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 
 	public static class ListItem {
 		public String text = null;
-		public int iconRes = R.drawable.transparent;
+		public int iconRes = -1;
 		public String iconURL = null;
 		public boolean useCache = false;
 		public boolean testing = false;
@@ -130,7 +130,7 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 		public int backgroundColor;
 
 		public ListItem(String tag) {
-			this(tag, R.drawable.transparent);
+			this(tag, -1);
 		}
 
 		public ListItem(String tag, int iconRes) {

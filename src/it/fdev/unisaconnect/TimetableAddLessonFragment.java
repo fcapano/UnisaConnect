@@ -6,6 +6,8 @@ import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -60,16 +62,16 @@ public class TimetableAddLessonFragment extends MySimpleFragment {
 		ttDB = new TimetableDB(activity);
 		ttDB.open();
 		
-		subjectName = (AutoCompleteTextView) activity.findViewById(R.id.subject_name);
-		choosenColorView = activity.findViewById(R.id.choosen_color);
-		colorLinearLayout = (LinearLayout) activity.findViewById(R.id.color_list);
-		addLesson = (LinearLayout) activity.findViewById(R.id.add_lesson);
+		subjectName = (AutoCompleteTextView) view.findViewById(R.id.subject_name);
+		choosenColorView = view.findViewById(R.id.choosen_color);
+		colorLinearLayout = (LinearLayout) view.findViewById(R.id.color_list);
+		addLesson = (LinearLayout) view.findViewById(R.id.add_lesson);
+		lessonsParent = (LinearLayout) view.findViewById(R.id.lesson_data_container); 
 		
-		lessonsParent = (LinearLayout) activity.findViewById(R.id.lesson_data_container); 
 		lInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		activity.setActionAcceptVisible(true);
-		activity.setActionRefreshVisible(false);
+//		activity.setActionAcceptVisible(true);
+//		activity.setActionRefreshVisible(false);
 		
 		TypedArray colorsResources = resources.obtainTypedArray(R.array.timetable_lesson_colors);
 		colorsArray = new int[colorsResources.length()];
@@ -165,8 +167,10 @@ public class TimetableAddLessonFragment extends MySimpleFragment {
 	}
 	
 	@Override
-	public void setVisibleActions() {
-		activity.setActionAcceptVisible(true);
+	public Set<Integer> getActionsToShow() {
+		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_accept_button);
+		return actionsToShow;
 	}
 	
 	@Override

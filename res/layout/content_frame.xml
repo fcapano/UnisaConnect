@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content_frame"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/activity_background" />
+    android:background="@color/activity_background" >
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/content_loading_animation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/activity_background"
+        android:visibility="gone"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

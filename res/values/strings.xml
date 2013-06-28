@@ -7,7 +7,7 @@
     <string name="login_wifi">Login \'Studenti\'</string>
     <string name="menu_mensa">Menu mensa</string>
     <string name="webmail">Webmail</string>
-    <string name="servizi_esse3">Servizi ESSE3</string>
+    <string name="servizi_esse3">Servizi studenti</string>
     <string name="info_staff">Rubrica docenti</string>
     <string name="meteo">Meteo</string>
     <string name="recensione">Lascia una recensione</string>
@@ -18,10 +18,11 @@
 
     <!-- Esse3 Services -->
     <string name="esse3">Esse3</string>
-    <string name="pagina_web">Pagina Web</string>
+    <string name="pagina_web">ESSE3 Web</string>
     <string name="libretto">Libretto</string>
     <string name="pagamenti">Pagamenti</string>
     <string name="appelli">Appelli</string>
+    <string name="presenze">Presenze</string>
     <string name="autocertificazioni">Autocertificazioni</string>
     <!-- end of Esse3 Services -->
 
@@ -73,7 +74,7 @@
     <!-- Libretto -->
     <string name="libretto_vuoto">Non sono presenti esami nel libretto</string>
     <string name="media_ponderata">Media Ponderata:</string>
-    <string name="su_30"> / 30</string>
+    <string name="su_30">/30</string>
     <string name="esame">Esame</string>
     <string name="cfu">CFU</string>
     <string name="voto">Voto</string>
@@ -94,6 +95,11 @@
     <string name="iscritti">Iscritti: </string>
     <string name="sincronizzazione_esse3">Sincronizzazione&#8230;</string>
     <!-- end of Esse3Scraper -->
+    
+    
+    <!-- Presenze -->
+    <string name="presenze_non_disponibili">Nessun registro presenze trovato</string>
+    <!-- end of Presenze -->
 
 
     <!-- Mensa -->
@@ -107,6 +113,8 @@
     <!-- end of Mensa -->
     
     <!-- Meteo -->
+    <string name="vento">Vento</string>
+    <string name="umidita">Umidità</string>
     <string name="meteo_non_disponibile">Si è verificato un errore nel reperire il meteo</string>
     <!-- end of Meteo -->
     
@@ -125,6 +133,8 @@
     <string name="aggiorna">Aggiorna</string>
     <string name="problema_di_connessione_generico">Si è verificato un errore nell\'eseguire la richiesta</string>
     <string name="cerca_staff_name">Cerca docente</string>
+    <string name="aggiornato_il">Aggiornato il %1$s</string>
+    <string name="aggiornato_il_alle">Aggiornato il %1$s alle %2$s</string>
     <string name="ok">OK</string>
 
 </resources>
