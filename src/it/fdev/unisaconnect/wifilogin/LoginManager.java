@@ -1,9 +1,9 @@
 package it.fdev.unisaconnect.wifilogin;
 
-import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySSLSocketFactory;
+import it.fdev.utils.Utils;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -55,7 +55,7 @@ public class LoginManager extends IntentService {
 		HttpURLConnection.setFollowRedirects(false);
 	}
 
-	private final static String INTENT_TAG = MainActivity.TAG + " LoginManager";
+	private final static String INTENT_TAG = Utils.TAG + " LoginManager";
 	private final static String URL = "http://google.com/";
 	private final static String FORM_URL = "https://wlc.unisa.it/login.html?buttonClicked=0&redirect_url=google.com";
 	private final static String LOGOUT_URL = "https://wlc.unisa.it/logout.html";
@@ -69,7 +69,7 @@ public class LoginManager extends IntentService {
 	
 	// Serve per creare il toast
 	private final Handler mHandler = new Handler();
-
+	
 	private static DefaultHttpClient mHttpClient;
 	static {
 		mHttpClient  = getNewHttpClient();
@@ -94,14 +94,14 @@ public class LoginManager extends IntentService {
 			}
 			if (response_connect == 1) {
 				createToastNotification(R.string.login_ok, Toast.LENGTH_SHORT);
-				Log.v(MainActivity.TAG, "Login successful");
+				Log.v(Utils.TAG, "Login successful");
 			}
 		} catch (Exception e) {
 			// a bug in HttpClient library
 			// thrown when there is a connection failure when handling a
 			// redirect
-			Log.w(MainActivity.TAG, "Login failed: Exception");
-			Log.w(MainActivity.TAG, e.toString());
+			Log.w(Utils.TAG, "Login failed: Exception");
+			Log.w(Utils.TAG, e.toString());
 		}
 	}
 
@@ -115,8 +115,8 @@ public class LoginManager extends IntentService {
 	 * @return status result/problem
 	 */
 	protected static int login(Context context) {
-		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(context);
-		if (!dataManager.loginDataExists()) // Non sono memorizzati i dati utente
+		SharedPrefDataManager mDataManager = new SharedPrefDataManager(context);
+		if (!mDataManager.loginDataExists()) // Non sono memorizzati i dati utente
 			return 3;
 		
 		try {
@@ -126,9 +126,9 @@ public class LoginManager extends IntentService {
 			if (!isLoginRequired()) // Gia si ha l'accesso ad internet
 				return 0;
 	
-			String user = dataManager.getUser();
-			String pass = dataManager.getPass();
-			user += dataManager.getTipoAccountIndex() == 0 ? "@studenti.unisa.it" : "";
+			String user = mDataManager.getUser();
+			String pass = mDataManager.getPass();
+			user += "@studenti.unisa.it";
 
 			List<NameValuePair> formparams = new ArrayList<NameValuePair>();
 			formparams.add(new BasicNameValuePair("referer", "https://captive.unisa.it/main.htm"));
@@ -142,19 +142,17 @@ public class LoginManager extends IntentService {
 			HttpPost httppost = new HttpPost(FORM_URL);
 			httppost.setEntity(entity);
 			HttpResponse response = mHttpClient.execute(httppost);
-			Log.v(MainActivity.TAG, "Post done...checking response");
+			Log.v(Utils.TAG, "Post done...checking response");
 			String strRes = EntityUtils.toString(response.getEntity());
-//			Log.v(MainActivity.TAG + " Result", strRes);
 			
 			if (strRes.contains(LOGIN_SUCCESSFUL_PATTERN)) {
 				// login successful
-//				Log.d(MainActivity.TAG, "Successfully logged in!");
 				return 1;
 			} else {
 				return 3;
 			}
 		} catch (Exception e) {
-			Log.e(MainActivity.TAG, "CAUSA FALLIMENTO CONNESSIONE:" + e.getMessage());
+			Log.e(Utils.TAG, "CAUSA FALLIMENTO CONNESSIONE:" + e.getMessage());
 			e.printStackTrace();
 			return 2;
 		}
@@ -176,18 +174,15 @@ public class LoginManager extends IntentService {
 			HttpPost httppost = new HttpPost(LOGOUT_URL);
 			httppost.setEntity(entity);
 			HttpResponse response = mHttpClient.execute(httppost);
-//			Log.v(MainActivity.TAG, "Post done...checking response");
 			String strRes = EntityUtils.toString(response.getEntity());
-//			Log.v(MainActivity.TAG+" Result", strRes);
-			
+
 			if (strRes.contains(LOGOUT_SUCCESSFUL_PATTERN)) {
-//				Log.d(MainActivity.TAG, "Successfully logged out!");
 				return true;
 			} else {
 				return false;
 			}
 		} catch (Exception e) {
-			Log.e(MainActivity.TAG, "CAUSA FALLIMENTO CONNESSIONE LOGOUT:" + e.getMessage());
+			Log.e(Utils.TAG, "CAUSA FALLIMENTO CONNESSIONE LOGOUT:" + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -195,50 +190,32 @@ public class LoginManager extends IntentService {
 
 	// Controlla che il wifi sia acceso e che si sia collegati alla rete dell'università
 	private static int isWifiOk(Context context) {
-		// Check network connected
-//		Log.v(MainActivity.TAG, "Checking network connection");
-
 		ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
 		if (wifi != NetworkInfo.State.CONNECTED) {
-//			Log.d(MainActivity.TAG, "Device is not connected");
 			return 2;
 		}
-//		Log.v(MainActivity.TAG, "Device is connected");
 
 		// Check SSID
 		WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		SharedPrefDataManager dataManager = SharedPrefDataManager.getDataManager(context);
-		if (wifi==null || wifiMan==null || wifiMan.getConnectionInfo()==null || wifiMan.getConnectionInfo().getSSID()==null || !wifiMan.getConnectionInfo().getSSID().contains(dataManager.getTipoAccount())) {
-			// wifi is sometimes null on strange circumstances
-			// I've experienced it once connecting to a secured network with an
-			// invalid password
-			// others have reported this bug through the market
-//			Log.d(Utils.TAG, "Network is: " + wifiMan.getConnectionInfo().getSSID());
-//			Log.d(Utils.TAG, "Type is: " + dataManager.getTipoAccount());
-//			Log.d(MainActivity.TAG,	"Device is connected to another network");
+		if (wifi==null || wifiMan==null || wifiMan.getConnectionInfo()==null || wifiMan.getConnectionInfo().getSSID()==null || !wifiMan.getConnectionInfo().getSSID().contains(SharedPrefDataManager.SSID_STUDENTI)) {
 			return 4;
 		}
-//		Log.d(MainActivity.TAG,	"Device is connected to the correct network");
 		return 1;
 	}
 	
 	private static boolean isLoginRequired() {
-//		if(true) return true;
 		try {
 			HttpResponse response = mHttpClient.execute(new HttpGet(URL));
 			String strRes = EntityUtils.toString(response.getEntity());
-//			Log.v(MainActivity.TAG,	"Richiesta controllo login richiesta completata, la risposta è: " + strRes);
-			Log.v(MainActivity.TAG,	"Richiesta controllo login richiesta completata");
+			Log.v(Utils.TAG,	"Richiesta controllo login richiesta completata");
 			if (strRes.contains(REDIRECT_PAGE_PATTERN)) {
-				Log.v(MainActivity.TAG, "The device is not logged in");
+				Log.v(Utils.TAG, "The device is not logged in");
 				return true;
 			} else {
-//				Log.v(MainActivity.TAG, "The device has internet connection");
 				return false;
 			}
 		} catch(IOException e) {
-//			Log.e(MainActivity.TAG, "Problema controllo stato login:" + e.getMessage());
 			e.printStackTrace();
 			return true;
 		}

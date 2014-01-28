@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notification"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/song_album_art_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/song_album_art"
+        android:layout_alignLeft="@id/song_album_art"
+        android:layout_alignRight="@id/song_album_art"
+        android:layout_alignTop="@id/song_album_art"
+        android:src="@color/orange_actionbar_transparent_40" />
+    
+    <ImageView
+        android:id="@+id/song_album_art"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:adjustViewBounds="true"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/music_note" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/button_stop"
+        android:layout_toRightOf="@+id/song_album_art"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/song_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@android:style/TextAppearance.Medium" />
+
+        <TextView
+            android:id="@+id/song_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="?android:textColorSecondary" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/button_stop"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="0dp"
+        android:background="@drawable/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_stat_delete" />
+
+</RelativeLayout>

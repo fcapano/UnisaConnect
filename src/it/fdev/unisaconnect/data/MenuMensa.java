@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MenuMensa implements Serializable {
-	private static final long serialVersionUID = -7048895143773667488L;
+	private static final long serialVersionUID = -7048895143773661488L;
 	private Date fetchTime;
+	private String menuDate;
 	private String pdfUrl;
 	private ArrayList<PiattoMensa> firstCourses;
 	private ArrayList<PiattoMensa> secondCourses;
@@ -15,8 +16,9 @@ public class MenuMensa implements Serializable {
 	private ArrayList<PiattoMensa> takeAwayBasketCourses;
 	private ArrayList<PiattoMensa> otherCourses;
 
-	public MenuMensa(String pdfUrl, ArrayList<PiattoMensa> firstCourses, ArrayList<PiattoMensa> secondCourses, ArrayList<PiattoMensa> sideCourses, ArrayList<PiattoMensa> fruitCourse, ArrayList<PiattoMensa> takeAwayBasketCourses) {
+	public MenuMensa(String menuDate, String pdfUrl, ArrayList<PiattoMensa> firstCourses, ArrayList<PiattoMensa> secondCourses, ArrayList<PiattoMensa> sideCourses, ArrayList<PiattoMensa> fruitCourse, ArrayList<PiattoMensa> takeAwayBasketCourses) {
 		this.fetchTime = new Date();
+		this.menuDate = menuDate;
 		this.pdfUrl = pdfUrl;
 		this.firstCourses = firstCourses;
 		this.secondCourses = secondCourses;
@@ -34,6 +36,10 @@ public class MenuMensa implements Serializable {
 	
 	public Date getFetchTime() {
 		return fetchTime;
+	}
+	
+	public String getDate() {
+		return menuDate;
 	}
 
 	public void setFetchTime(Date fetchTime) {

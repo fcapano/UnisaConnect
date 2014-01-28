@@ -44,7 +44,7 @@ public class WeatherForecastAdapter extends BaseAdapter {
 		View v = convertView;
 
 		if (v == null) {
-			v = inflater.inflate(R.layout.weather_forecast_col, parent, false);
+			v = inflater.inflate(R.layout.weather_forecast_column, parent, false);
 		}
 
 		DailyForecast cForecast = forecastList.get(position);

@@ -23,7 +23,7 @@ public class CustomButtonWithImg extends RelativeLayout {
 		a.recycle();
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.custom_button, this, true);
+		inflater.inflate(R.layout.custom_button_with_img, this, true);
 
 		ImageView imgView = (ImageView) findViewById(R.id.btn_icon);
 		TextView textView = (TextView) findViewById(R.id.btn_text);
@@ -39,7 +39,7 @@ public class CustomButtonWithImg extends RelativeLayout {
 		String text = context.getResources().getString(textID);
 		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.custom_button, this, true);
+		inflater.inflate(R.layout.custom_button_with_img, this, true);
 
 		ImageView imgView = (ImageView) findViewById(R.id.btn_icon);
 		TextView textView = (TextView) findViewById(R.id.btn_text);

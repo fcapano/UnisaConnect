@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Appelli implements Serializable {
-	private static final long serialVersionUID = -8103729698218190556L;
+	private static final long serialVersionUID = -8103729698218890556L;
 	
 	private Date fetchDate;
 	private ArrayList<Appello> listaAppelliDisponibili, listaAppelliPrenotati;
@@ -35,20 +35,36 @@ public class Appelli implements Serializable {
 	public void setListaAppelliPrenotati(ArrayList<Appello> listaAppelliPrenotati) {
 		this.listaAppelliPrenotati = listaAppelliPrenotati;
 	}
+	
+	public boolean isEmpty(){
+		return listaAppelliDisponibili.isEmpty() && listaAppelliPrenotati.isEmpty();
+	}
 
 	public static class Appello implements Serializable  {
-		private static final long serialVersionUID = -8224175339820904440L;
+		private static final long serialVersionUID = -8224175339824904440L;
 		
 		private String name;
 		private String date;
+		private String time;
 		private String description;
 		private String subscribedNum;
+		private String location;
 
-		public Appello(String name, String date, String description, String subscribedNum) {
+		public Appello(String name, String date, String time, String description, String subscribedNum, String location) {
 			this.name = name;
 			this.date = date;
+			if (time == null) {
+				this.time = "";
+			} else {
+				this.time = time;
+			}
 			this.description = description;
 			this.subscribedNum = subscribedNum;
+			if (location == null) {
+				this.location = "";
+			} else {
+				this.location = location;
+			}
 		}
 
 		public String getName() {
@@ -58,6 +74,10 @@ public class Appelli implements Serializable {
 		public String getDate() {
 			return date;
 		}
+		
+		public String getTime() {
+			return time;
+		}
 
 		public String getDescription() {
 			return description;
@@ -65,6 +85,10 @@ public class Appelli implements Serializable {
 
 		public String getSubscribedNum() {
 			return subscribedNum;
+		}
+		
+		public String getLocation() {
+			return location;
 		}
 
 	}

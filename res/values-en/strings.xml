@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- SlidingMenu -->
+    <string name="app_name">Unisa Connect</string>
+    <string name="dev_email">fdev.developers@gmail.com</string>
+    <string name="login_wifi">Login \'Studenti\'</string>
+    <string name="menu_mensa">Cafeteria Menu</string>
+    <string name="webmail">Webmail</string>
+    <string name="servizi_esse3">Students\' services</string>
+    <string name="rubrica">Address book</string>
+    <string name="meteo">Weather</string>
+    <string name="recensione">Leave a review</string>
+    <string name="contattaci">Problems? Ideas?</string>
+    <string name="preferenze">Preferences</string>
+    <!-- end of SlidingMenu -->
+
+
+    <!-- Esse3 Services -->
+    <string name="esse3">Esse3</string>
+    <string name="pagina_web">ESSE3 Web</string>
+    <string name="libretto">Record book</string>
+    <string name="pagamenti">Payments</string>
+    <string name="appelli">Appelli</string>
+    <string name="presenze">Attendance</string>
+    <string name="autocertificazioni">Self-certifications</string>
+    <!-- end of Esse3 Services -->
+
+
+    <!-- Wifi Preferenze -->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login_automatica">Automatically login when connected to the wifi network \'Studenti\'</string>
+    <string name="save_and_login">Save/Login</string>
+    <string name="save">Salva</string>
+    <!-- end of Wifi Preferenze -->
+
+    <!-- Dettagli -->
+    <string name="informazioni">Informations</string>
+    <string name="ufficio">Office</string>
+    <string name="email">Email</string>
+    <string name="ricevimento">Orario di ricevimento</string>
+    <string name="website">Web page</string>
+    <string name="telefono">Phone number</string>
+    <string name="fax">Fax</string>
+    <string name="testo_copiato">Copied to clipboard</string>
+    <!-- end of Dettagli -->
+
+
+    <!-- Timetable -->
+    <string name="monday">mon</string>
+    <string name="thusday">tue</string>
+    <string name="wensday">wed</string>
+    <string name="thursday">thu</string>
+    <string name="friday">fri</string>
+    <string name="nome_corso">Course name</string>
+    <string name="aula_corso">Classroom</string>
+    <!-- End of Timetable -->
+
+
+    <!-- Libretto -->
+    <string name="libretto_vuoto">There are no exams in the record book</string>
+    <string name="media_ponderata">Weighted average:</string>
+    <string name="esame">Course</string>
+    <string name="cfu">CFU</string>
+    <string name="voto">Mark</string>
+    <!-- end of Libretto -->
+    
+    
+    <!-- Pagamenti -->
+    <string name="pagamenti_vuoto">Non risultano presenti non pervenuti</string>
+    <string name="pagamenti_non_disponibili">Impossibile riperire i pagamenti</string>
+    <string name="descrizione">Descrizione</string>
+    <string name="importo">Importo</string>
+    <string name="scadenza">Scadenza</string>
+    <!-- end of Pagamenti -->
+
+
+    <!-- Esse3Scraper -->
+    <string name="connesione_esse3">Connecting&#8230;</string>
+    <string name="autenticazione_esse3">Authenticating ESSE3&#8230;</string>
+    <string name="sincronizzazione_esse3">Synchronizing&#8230;</string>
+    <!-- end of Esse3Scraper -->
+
+
+    <!-- Appelli -->
+    <string name="appelli_vuoto">There are no booked or availeble appelli</string>
+    <string name="appelli_disponibili">AVAILABLE APPELLI</string>
+    <string name="appelli_prenotati">BOOKED APPELLI</string>
+    <string name="iscritti">Subscribed: </string>
+    <!-- end of Esse3Scraper -->
+    
+    
+    <!-- Presenze -->
+    <string name="presenze_non_disponibili">No attendance record found</string>
+    <!-- end of Presenze -->
+
+
+    <!-- Mensa -->
+    <string name="mensa_menu_non_disponibile">The menu is currently unavailable</string>
+    <string name="mensa_primi">First courses</string>
+    <string name="mensa_secondi">Second courses</string>
+    <string name="mensa_contorni">Side dishes</string>
+    <string name="mensa_frutta">Fruits</string>
+    <string name="mensa_centino">Basket</string>
+    <string name="mensa_altro">Others</string>
+    <!-- end of Mensa -->
+    
+    <!-- Meteo -->
+    <string name="vento">Wind</string>
+    <string name="umidita">Humidity</string>
+    <string name="meteo_non_disponibile">An error occurred while downloadind weather info</string>
+    <!-- end of Meteo -->
+    
+    
+    <!-- Da ordinare / Generale -->
+    <string name="email_chooser_titolo">Send the email with</string>
+    <string name="controlla_connessione">Check your\ninternet\nconnection</string>
+    <string name="dati_errati">Wrong username and/or password</string>
+    <string name="dati_errati_o_problema_gingerbread">Authentication falliled.\nIt\'s possibile that login data is incorrect, or that the authentication is impossible bacause you are using an Android version too old</string>
+    <string name="inserire_dati_webmail">Enter your login data to access WebMail Unisa</string>
+    <string name="dati_non_validi">Invalid data</string>
+    <string name="dati_salvati">Data saved</string>
+    <string name="logging_in">Logging in</string>
+    <string name="login_ok">Login completed</string>
+    <string name="caricamento">Loading&#8230;</string>
+    <string name="aggiorna">Refresh</string>
+    <string name="problema_di_connessione_generico">An error occurred while processing your request</string>
+    <string name="cerca_staff_name">Find staff</string>
+    <string name="aggiornato_il">Updated the %1$s</string>
+    <string name="aggiornato_il_alle">Updated the %1$s at %2$s</string>
+
+</resources>

@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="MyTheme" parent="@style/Theme.Sherlock">
-        <item name="spinnerItemStyle">@style/SpinnerItemStyle</item>
-        <item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="icon">@drawable/logo_actionbar</item>
+        <item name="android:icon">@drawable/logo_actionbar</item>
+        <item name="background">@drawable/actionbar_orange</item>
+        <item name="android:background">@drawable/actionbar_orange</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="android:titleTextStyle" tools:targetApi="11">@style/MyActionBarTitleText</item>
     </style>
-
-    <style name="SpinnerItemStyle" parent="Widget.Sherlock.TextView.SpinnerItem">
-        <item name="android:textAppearance">@style/TextAppearance.MySpinnerItem</item>
-    </style>
-
-    <style name="TextAppearance.MySpinnerItem" parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">#FFFFFF</item>
-    </style>
-
-    <style name="MyTextEdit" parent="MyTheme">
+    
+    <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textCursorDrawable" tools:targetApi="honeycomb_mr1">@null</item>
-        <item name="android:padding">7dp</item>
-        <item name="android:inputType">textNoSuggestions|textVisiblePassword</item>
+    </style>
+
+    <style name="MyEditText" parent="MyTheme_Orangy">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHighlight">@android:color/white</item>
+        <item name="android:textCursorDrawable" tools:targetApi="12">@null</item>
         <item name="android:background">@color/activity_background_darker_lighter</item>
+        <item name="android:focusable">true</item>
         <item name="android:padding">7dp</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 
 </resources>

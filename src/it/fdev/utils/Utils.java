@@ -1,8 +1,8 @@
 package it.fdev.utils;
 
-import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
-import it.fdev.unisaconnect.ErrorInternetFragment;
+import it.fdev.unisaconnect.FragmentInternetError;
 import it.fdev.unisaconnect.MainActivity;
+import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.R;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -17,12 +17,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.slidingmenu.lib.app.SlidingFragmentActivity;
-
 public class Utils {
 
 	public final static String TAG = "UnisaConnect";
-	public final static String TOGGLE_TESTING_STRING = "!testtoggle!";
+	public final static String TOGGLE_TESTING_STRING = "testing!";
 
 	private static ProgressDialog dialog = null;
 	private static boolean dialogOnCancelBoBack = false;
@@ -34,7 +32,7 @@ public class Utils {
 
 	public static void goToInternetError(MainActivity activity, Fragment goBackFragment) {
 		try {
-			ErrorInternetFragment errorFrag = new ErrorInternetFragment();
+			FragmentInternetError errorFrag = new FragmentInternetError();
 			errorFrag.setBackFragment(goBackFragment);
 			activity.getSupportFragmentManager().popBackStack();
 			((MainActivity) activity).switchContent(errorFrag);
@@ -57,27 +55,29 @@ public class Utils {
 //		}
 //	}
 
-	public static void sendSupportMail(MainActivity activity, String title, String subject) {
-		String aEmailList[] = { activity.getString(R.string.dev_email) };
-		sendMail(activity, aEmailList, title, subject);
-	}
-
 	public static void startDial(FragmentActivity fragmentActivity, String number) {
-		String uri = "tel:" + number.trim();
-		Intent intent = new Intent(Intent.ACTION_DIAL);
-		intent.setData(Uri.parse(uri));
-		fragmentActivity.startActivity(intent);
+		try {
+			String uri = "tel:" + number.trim();
+			Intent intent = new Intent(Intent.ACTION_DIAL);
+			intent.setData(Uri.parse(uri));
+			fragmentActivity.startActivity(intent);
+		} catch (Exception e) {
+			// No Activity found to handle Intent { act=android.intent.action.DIAL...
+			// Tablet? La chiamata non partirà. Ignora l'errore
+		}
+	}
+	
+	public static void sendSupportMail(MainActivity activity, String title, String subject) {
+		String email = activity.getString(R.string.dev_email);
+		sendMail(activity, email, title, subject);
 	}
 
-	public static void sendMail(MainActivity activity, String[] recipients, String title, String subject) {
-		// Intent
-		Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-		// define TO email
-		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
+	public static void sendMail(MainActivity activity, String recipient, String title, String subject) {
+//		Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", recipient, null));
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-		emailIntent.setType("plain/text");
+//		emailIntent.setType("plain/text");
 		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, subject);
-		// support multiple email clients
 		activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.email_chooser_titolo)));
 	}
 
@@ -132,14 +132,14 @@ public class Utils {
 			alert.setCanceledOnTouchOutside(false);
 			alert.setIcon(R.drawable.ic_launcher);
 			alert.setMessage(message);
-			alert.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			alert.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							if (goToFragmentEnum != null)
-								activity.switchContent(goToFragmentEnum, false);
+								activity.switchContent(goToFragmentEnum, true);
 							if (shouldReturnToMenu)
-								((SlidingFragmentActivity) activity).getSlidingMenu().toggle();
+								((MainActivity) activity).toggleDrawer();
 						}
 					});
 				}
@@ -189,7 +189,7 @@ public class Utils {
 			return true;
 		}
 	}
-
+	
 //	/**
 //	 * This method convets dp unit to equivalent device specific value in
 //	 * pixels.

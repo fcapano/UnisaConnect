@@ -2,16 +2,19 @@ package it.fdev.unisaconnect.data;
 
 import it.fdev.encryptionUtils.CryptoMan_2;
 import it.fdev.unisaconnect.MainActivity;
-import it.fdev.utils.MyFragment;
+import it.fdev.utils.MyFragmentInterface;
 import it.fdev.utils.ObjectSerializer;
 import it.fdev.utils.Utils;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+
+import com.securepreferences.SecurePreferences;
 
 /**
  * Gestisce i dati salvati nelle sharedpreferences
@@ -21,230 +24,227 @@ import android.util.Log;
  */
 public class SharedPrefDataManager {
 	
-	private static SharedPrefDataManager dm = null;
-	private SharedPreferences settings = null;
-	private final static String[] SSID = new String[] {"Studenti","Personale"};
+	public static final String SSID_STUDENTI = "Studenti";
 	
-	public static final String PREFERENCES_KEY 	= "PREFERENCES";
+	private SharedPreferences mPrefs = null;
+	private SecurePreferences mSecurePrefs = null;
+	
+	private static final String PREFERENCES_KEY = "PREFERENCES";
 	
 	// Boot Fragment
-	public static final String PREF_BOOTABLE_FRAGMENT = "bootableFragment";
-	private Class<? extends MyFragment> bootFragmentClass;
-	
+	private static final String PREF_BOOTABLE_FRAGMENT = "bootableFragment";
 	// Login
-	public static final String PREF_USER 		= "user";
-	public static final String PREF_PASS 		= "pass";
-	public static final String PREF_ACCTYPE 	= "tipoAccountIndex";
-	public static final String PREF_AUTOLOGIN 	= "loginAutomatica";
-	private String user, pass;
-	private boolean loginAutomatica;
-	private int tipoAccountIndex;
-	
+	private static final String PREF_USER 			= "user";
+	private static final String PREF_PASS 			= "pass";
+	private static final String PREF_AUTOLOGIN 		= "loginAutomatica";
+	private static final String PREF_NOME_COGNOME 	= "nomeCognome";
 	// Mensa
-	public static final String PREF_MENU_MENSA = "menu";
-	private MenuMensa menuMensa;
-	
+	private static final String PREF_MENU_MENSA = "menu";
 	// Weather
-	public static final String PREF_WEATHER = "weather";
-	private WeatherData weather;
-	
+	private static final String PREF_WEATHER = "weather";
 	// Presenze
-	public static final String PREF_PRESENZE = "presenze";
-	private Presenze presenze;
-	
-	// Presenze
-	public static final String PREF_APPELLI = "appelli";
-	private Appelli appelli;
-	
+	private static final String PREF_PRESENZE = "presenze";
+	// Appelli
+	private static final String PREF_APPELLI = "appelli";
 	// Libretto
-	public static final String PREF_LIBRETTO_DATE = "libretto_date";
-	private Date librettoFetchDate;
-	
+	private static final String PREF_LIBRETTO_DATE = "libretto_date";
+	// Pagamenti
+	private static final String PREF_PAGAMENTI = "pagamenti";
 	// Testing
-	public static final String PREF_TESTING_ENABLED = "testingEnabled";
-	private boolean testingEnabled = MainActivity.isTestingAPK;
-	
+	private static final String PREF_TESTING_ENABLED = "testingEnabled";
 	// Crypto
-	public static final String PREF_IS_NEW_ENCRYPTION = "isNewEncryption";
-	public static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
-	public static final String NO_ENCODING 		= "NOENC";
-	public static final String PREF_KEY 		= "enc_key";
-	public static final int CRYPTO_VERSION = 3;	// 2=0.5 3=0.6.2
+	private static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
+	private static final int CRYPTO_VERSION = 4;	// 2=0.5 3=0.6.2 4=0.6.9
 	
 	
-	public static SharedPrefDataManager getDataManager(Context context) {
-		if(dm == null) {
-			dm = new SharedPrefDataManager(context);
+	public SharedPrefDataManager(Context context) {
+		mSecurePrefs = new SecurePreferences(context);
+		mPrefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+		
+		int cVersion = mPrefs.getInt(PREF_ENCRYPTION_VERSION, CRYPTO_VERSION);
+		if (cVersion < CRYPTO_VERSION) {
+			updateDataToCurrentVersion();
 		}
-		return dm;
+		
+		mPrefs.edit().putInt(PREF_ENCRYPTION_VERSION, CRYPTO_VERSION).commit();
 	}
 	
-	private SharedPrefDataManager(Context context) {
-		settings = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-		settings.edit().putInt(PREF_ENCRYPTION_VERSION, CRYPTO_VERSION).commit();
-		loadData();
-	}
-	
-	public boolean loadData() {
+	public void updateDataToCurrentVersion() {
 		try {
-			String userCod = settings.getString(PREF_USER, null);
-			String passCod = settings.getString(PREF_PASS, null);
-			if (userCod != null && passCod != null) {
-				user = CryptoMan_2.decrypt(userCod);
-				pass = CryptoMan_2.decrypt(passCod);
-				tipoAccountIndex = settings.getInt(PREF_ACCTYPE, 0);
-				loginAutomatica = settings.getBoolean(PREF_AUTOLOGIN, true);
+			if (CRYPTO_VERSION == 4) { //Intro to securepreferences
+				
+				if (mSecurePrefs.getString(PREF_USER, null)!=null && mSecurePrefs.getString(PREF_PASS, null)!=null) {
+					return;
+				}
+				
+				String username, password;
+				String userCod = mPrefs.getString(PREF_USER, null);
+				String passCod = mPrefs.getString(PREF_PASS, null);
+				if (userCod != null && passCod != null) {
+					username = CryptoMan_2.decrypt(userCod);
+					password = CryptoMan_2.decrypt(passCod);
+				} else {
+					username = null;
+					password = null;
+					removeData();
+				}
+				if (username==null || password==null) {
+					return;
+				}
+				
+				Editor editor = mPrefs.edit();
+				editor.remove(PREF_USER);
+				editor.remove(PREF_PASS);
+				editor.commit();
+				
+				com.securepreferences.SecurePreferences.Editor secureEditor = mSecurePrefs.edit();
+				secureEditor.putString(PREF_USER, username);
+				secureEditor.putString(PREF_PASS, password);
+				secureEditor.commit();
 			}
-			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isTestingAPK);
-			menuMensa = (MenuMensa) ObjectSerializer.deserialize(settings.getString(PREF_MENU_MENSA, null));
-			weather = (WeatherData) ObjectSerializer.deserialize(settings.getString(PREF_WEATHER, null));
-			presenze = (Presenze) ObjectSerializer.deserialize(settings.getString(PREF_PRESENZE, null));
-			appelli = (Appelli) ObjectSerializer.deserialize(settings.getString(PREF_APPELLI, null));
-			librettoFetchDate = new Date(settings.getLong(PREF_LIBRETTO_DATE, 0));
-			testingEnabled = settings.getBoolean(PREF_TESTING_ENABLED, MainActivity.isTestingAPK);
-			bootFragmentClass = MainActivity.fragmentsIDs.get(settings.getInt(PREF_BOOTABLE_FRAGMENT, 0));
-			return true;
 		} catch(Exception e) {
-			e.printStackTrace();
-			Log.e(MainActivity.TAG, "Eccezione decodificando i dati...resetto tutto", e);
+			Log.e(Utils.TAG, "Exception converting to secureEditor", e);
 			removeData();
-			return false;
-		}
-	}
-	
-	public boolean saveData() {
-		try {
-			Editor editor = settings.edit();
-			if (user != null && pass != null) {
-				String userCod = CryptoMan_2.encrypt(user);
-				String passCod = CryptoMan_2.encrypt(pass);
-				editor.putString(PREF_USER, userCod);
-				editor.putString(PREF_PASS, passCod);
-			}
-			editor.putBoolean(PREF_AUTOLOGIN, loginAutomatica);
-			editor.putInt(PREF_ACCTYPE, tipoAccountIndex);
-			editor.putBoolean(PREF_TESTING_ENABLED, testingEnabled);
-			editor.putString(PREF_MENU_MENSA, ObjectSerializer.serialize(menuMensa));
-			editor.putString(PREF_WEATHER, ObjectSerializer.serialize(weather));
-			editor.putString(PREF_PRESENZE, ObjectSerializer.serialize(presenze));
-			editor.putString(PREF_APPELLI, ObjectSerializer.serialize(appelli));
-			editor.putLong(PREF_LIBRETTO_DATE, librettoFetchDate.getTime());
-//			editor.putInt(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.BootableFragmentsEnum.indexOf(bootFragmentClass), 0));
-			editor.commit();
-			return true;
-		} catch(Exception e) {
-			Log.e(MainActivity.TAG, "Eccezione codificando i dati...resetto tutto", e);
-			e.printStackTrace();
-			removeData();
-			return false;
 		}
 	}
 	
 	//Controlla che siano stati precedentemente salvati i dati di login
 	public boolean loginDataExists() {
-		return (settings.contains(PREF_USER) && user!=null &&
-				settings.contains(PREF_PASS) && pass!=null &&
-				settings.contains(PREF_ACCTYPE) && tipoAccountIndex>=0 && tipoAccountIndex<SSID.length &&
-				settings.contains(PREF_AUTOLOGIN));
+		return (mSecurePrefs.contains(PREF_USER) && getUser()!=null &&
+				mSecurePrefs.contains(PREF_PASS) && getPass()!=null &&
+				mPrefs.contains(PREF_AUTOLOGIN));
 	}
 	
 	private void removeData() {
 		Log.d(Utils.TAG, "DataManager vacuum preferences");
-		Editor editor = settings.edit();
+		Editor editor = mPrefs.edit();
 		editor.clear().commit();
 	}
 	
 	public String getUser() {
-		return user;
+		return mSecurePrefs.getString(PREF_USER, null);
 	}
 
 	public void setUser(String user) {
 		user = (user.contains("@") ?  user.substring(0,user.lastIndexOf("@")) : user); //elimino la @ e seguito
-		this.user = user;
+		com.securepreferences.SecurePreferences.Editor secureEditor = mSecurePrefs.edit();
+		secureEditor.putString(PREF_USER, user);
+		secureEditor.commit();
 	}
 
 	public String getPass() {
-		return pass;
+		return mSecurePrefs.getString(PREF_PASS, null);
 	}
 
 	public void setPass(String pass) {
-		this.pass = pass;
+		com.securepreferences.SecurePreferences.Editor secureEditor = mSecurePrefs.edit();
+		secureEditor.putString(PREF_PASS, pass);
+		secureEditor.commit();
 	}
 
 	public boolean isLoginAutomatica() {
-		return loginAutomatica;
+		return mPrefs.getBoolean(PREF_AUTOLOGIN, true);
 	}
 
 	public void setLoginAutomatica(boolean loginAutomatica) {
-		this.loginAutomatica = loginAutomatica;
+		saveField(PREF_AUTOLOGIN, loginAutomatica);
 	}
 
-	public int getTipoAccountIndex() {
-		return tipoAccountIndex;
-	}
-	
-	public String getTipoAccount() {
-		return SSID[tipoAccountIndex];
-	}
-	
-	public void setTipoAccountIndex(int tipoAccountIndex) {
-		this.tipoAccountIndex = tipoAccountIndex;
-	}
-	
 	public boolean isTestingingEnabled() {
-		return this.testingEnabled;
+		return mPrefs.getBoolean(PREF_TESTING_ENABLED, MainActivity.isTestingAPK);
 	}
 	
-	public void setTestingEnabled(boolean enabled) {
-		this.testingEnabled = enabled;
+	public void setTestingEnabled(boolean testingEnabled) {
+		saveField(PREF_TESTING_ENABLED, testingEnabled);
+	}
+	
+	public String getNomeCognome() {
+		return mPrefs.getString(PREF_NOME_COGNOME, null);
+	}
+	
+	public void setNomeCognome(String nomeCognome) {
+		saveField(PREF_NOME_COGNOME, nomeCognome);
 	}
 	
 	public MenuMensa getMenuMensa() {
-		return menuMensa;
+		return (MenuMensa) ObjectSerializer.deserialize(mPrefs.getString(PREF_MENU_MENSA, null));
 	}
 	
 	public void setMenuMensa(MenuMensa menuMensa) {
-		this.menuMensa = menuMensa;
+		saveField(PREF_MENU_MENSA, menuMensa);
 	}
 	
 	public WeatherData getWeather() {
-		return weather;
+		return (WeatherData) ObjectSerializer.deserialize(mPrefs.getString(PREF_WEATHER, null));
 	}
 	
 	public void setWeather(WeatherData weather) {
-		this.weather = weather;
+		saveField(PREF_WEATHER, weather);
 	}
 	
 	public Presenze getPresenze() {
-		return presenze;
+		return (Presenze) ObjectSerializer.deserialize(mPrefs.getString(PREF_PRESENZE, null));
 	}
 	
 	public void setPresenze(Presenze presenze) {
-		this.presenze = presenze;
+		saveField(PREF_PRESENZE, presenze);
 	}
 	
 	public Date getLibrettoFetchDate() {
-		return librettoFetchDate;
+		return new Date(mPrefs.getLong(PREF_LIBRETTO_DATE, 0));
 	}
 	
 	public void setLibrettoFetchDate(Date librettoFetchDate) {
-		this.librettoFetchDate = librettoFetchDate;
+		saveField(PREF_LIBRETTO_DATE, librettoFetchDate.getTime());
 	}
 	
 	public Appelli getAppelli() {
-		return appelli;
+		return (Appelli) ObjectSerializer.deserialize(mPrefs.getString(PREF_APPELLI, null));
 	}
 	
 	public void setAppelli(Appelli appelli) {
-		this.appelli = appelli;
+		saveField(PREF_APPELLI, appelli);
+	}
+	
+	public Pagamenti getPagamenti() {
+		return (Pagamenti) ObjectSerializer.deserialize(mPrefs.getString(PREF_PAGAMENTI, null));
 	}
 
-	public Class<? extends MyFragment> getBootFragmentClass() {
-		return bootFragmentClass;
+	public void setPagamenti(Pagamenti pagamenti) {
+		saveField(PREF_PAGAMENTI, pagamenti);
+	}
+	
+	public Class<? extends MyFragmentInterface> getBootFragmentClass() {
+		return MainActivity.fragmentsIDs.get(mPrefs.getInt(PREF_BOOTABLE_FRAGMENT, 0));
 	}
 
-	public void setBootFragmentClass(Class<? extends MyFragment> bootFragmentClass) {
-		this.bootFragmentClass = bootFragmentClass;
+	public void setBootFragmentClass(Class<? extends MyFragmentInterface> bootFragmentClass) {
+//		editor.putInt(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.BootableFragmentsEnum.indexOf(bootFragmentClass), 0));
+//		saveField(PREF_BOOTABLE_FRAGMENT, Math.max(MainActivity.BootableFragmentsEnum.indexOf(bootFragmentClass), 0)));
+	}
+	
+	private boolean saveField(String field, Object value) {
+		Editor editor = mPrefs.edit();
+		try {
+			if (value instanceof Integer) {
+				editor.putInt(field, (Integer) value);
+			} else if (value instanceof Long) {
+				editor.putLong(field, (Long) value);
+			} else if (value instanceof String) {
+				editor.putString(field, (String) value);
+			} else if (value instanceof Boolean) {
+				editor.putBoolean(field, (Boolean) value);
+			} else {
+				editor.putString(field, ObjectSerializer.serialize((Serializable) value));
+			}
+		} catch(Exception e) {
+			Log.e(Utils.TAG, "Eccezione codificando i dati...resetto: " + field, e);
+			editor.remove(field);
+			return false;
+		} finally {
+			editor.commit();
+		}
+		return true;
 	}
 
 }

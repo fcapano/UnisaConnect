@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:unisaconnect="http://schemas.android.com/apk/res-auto" >
 
+     <item
+        android:id="@+id/action_search_button"
+        android:showAsAction="always"
+        unisaconnect:actionViewClass="android.support.v7.widget.SearchView"
+        unisaconnect:showAsAction="always"
+        android:visible="false"/>
     <item
         android:id="@+id/action_add_button"
-        android:icon="@drawable/add"
-        android:showAsAction="always"
-        android:visible="true"/>
+        android:icon="@drawable/ic_action_add"
+        android:showAsAction="ifRoom"
+        android:visible="true"
+        unisaconnect:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_edit_button"
-        android:icon="@drawable/edit"
-        android:showAsAction="always"
-        android:visible="true"/>
+        android:icon="@drawable/ic_action_edit"
+        android:showAsAction="ifRoom"
+        android:visible="true"
+        unisaconnect:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_accept_button"
-        android:icon="@drawable/accept"
+        android:icon="@drawable/ic_action_accept"
         android:showAsAction="always"
-        android:visible="true"/>
+        android:visible="true"
+        unisaconnect:showAsAction="always"/>
     <item
         android:id="@+id/action_refresh_button"
-        android:icon="@drawable/refresh"
+        android:icon="@drawable/ic_action_refresh"
         android:showAsAction="always"
         android:title="@string/aggiorna"
-        android:visible="true"/>
+        android:visible="true"
+        unisaconnect:showAsAction="always"/>
     <item
         android:id="@+id/action_loading_animation"
-        android:showAsAction="always"
-        android:visible="false"/>
-    
+        android:showAsAction="ifRoom"
+        android:visible="false"
+        unisaconnect:showAsAction="ifRoom"/>
 </menu>

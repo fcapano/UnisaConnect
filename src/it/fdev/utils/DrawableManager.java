@@ -45,22 +45,14 @@ public class DrawableManager {
        if (drawableMap.containsKey(urlString)) {
            return drawableMap.get(urlString);
        }
-
-//       Log.d(this.getClass().getSimpleName(), "image url:" + urlString);
        try {
            InputStream is = fetch(urlString);
            Drawable drawable = Drawable.createFromStream(is, "src");
-
-
            if (drawable != null) {
                drawableMap.put(urlString, drawable);
-//               Log.d(this.getClass().getSimpleName(), "got a thumbnail drawable: " + drawable.getBounds() + ", "
-//                       + drawable.getIntrinsicHeight() + "," + drawable.getIntrinsicWidth() + ", "
-//                       + drawable.getMinimumHeight() + "," + drawable.getMinimumWidth());
            } else {
              Log.w(Utils.TAG, "could not get thumbnail");
            }
-
            return drawable;
        } catch (MalformedURLException e) {
            Log.e(Utils.TAG, "fetchDrawable failed", e);
@@ -69,6 +61,30 @@ public class DrawableManager {
            Log.e(Utils.TAG, "fetchDrawable failed", e);
            return null;
        }
+   }
+   
+   public void fetchDrawableOnThread(final String urlString, final DrawableManagerListener listener) {
+	   if (drawableMap.containsKey(urlString)) {
+           listener.onLoadingComplete(drawableMap.get(urlString));
+       }
+       final Handler handler = new Handler() {
+           @Override
+           public void handleMessage(Message message) {
+        	   listener.onLoadingComplete((Drawable) message.obj);
+           }
+       };
+       Thread thread = new Thread() {
+           @Override
+           public void run() {
+               //TODO : set imageView to a "pending" image
+               Drawable drawable = fetchDrawable(urlString);
+               if(drawable != null) {
+	               Message message = handler.obtainMessage(1, drawable);
+	               handler.sendMessage(message);
+               }
+           }
+       };
+       thread.start();
    }
 
    public void fetchDrawableOnThread(final String urlString, final ImageView imageView) {
@@ -101,4 +117,9 @@ public class DrawableManager {
        HttpResponse response = httpClient.execute(request);
        return response.getEntity().getContent();
    }
+   
+   public static interface DrawableManagerListener {
+	   public void onLoadingComplete(Drawable image);
+   }
+   
 }

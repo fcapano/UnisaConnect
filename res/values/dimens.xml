@@ -14,5 +14,9 @@
 	<dimen name="timetable_margin_left">30dp</dimen>
 	<dimen name="timetable_colopicker_square">35dp</dimen>
 	<!-- End of Timetable Dimensions -->
+	
+	<!-- Cards Animations -->
+	<integer name="durata_animazione_offset_card">1</integer>
+	<!-- End of Cards Animations -->
 
 </resources>

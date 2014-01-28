@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="unisa_orange">#FF9900</color>
-    <color name="unisa_orange_light">#FFBD59</color>
+    <color name="orange_actionbar">#F4842D</color>
+    <color name="orange">#FF9900</color>
+    <color name="orange_light">#FFBD59</color>
+    <color name="orange_dark">#E38800</color>
     
     <color name="dark_gray">#333333</color>
+    <color name="darker_gray">#171717</color>
     <color name="light_gray">#757575</color>
     <color name="lighter_gray">#B5B5B5</color>
     
-    <color name="ics_background_start">#ff020202</color>
-   	<color name="ics_background_end">#ff272D33</color>
-   	
    	<color name="holo_blue">#33B5E5</color>
-   	<color name="transparent_background">#88000000</color>
+   	
+   	<color name="transparent_black_5">#0D000000</color>
+   	<color name="transparent_black_10">#1A000000</color>
+   	<color name="transparent_black_20">#33000000</color>
+   	<color name="transparent_black_30">#4D000000</color>
+   	<color name="transparent_black_40">#66000000</color>
+   	<color name="transparent_black_50">#80000000</color>
+   	<color name="transparent_black_60">#990000</color>
+   	<color name="transparent_black_70">#B3000000</color>
+   	
+   	<color name="transparent_white_50">#80FFFFFF</color>
+   	
+   	<color name="orange_actionbar_transparent_40">#66F4842D</color>
+   	
+   	
    	<color name="activity_background">#1C1C1C</color>
    	<color name="menu_background">#333333</color>
    	<color name="activity_background_lighter">#E6E6E6</color>

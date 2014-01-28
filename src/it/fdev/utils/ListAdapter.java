@@ -123,8 +123,8 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 		public String text = null;
 		public int iconRes = -1;
 		public String iconURL = null;
-		public boolean useCache = false;
-		public boolean testing = false;
+		public boolean useCache = false;	// for internet retrieved images
+		public boolean testing = false;		// it testing=true the text is red
 		
 		// On GB when scrolling the rows have black background instead of transparent 
 		public int backgroundColor;

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Unisa Connect</string>
 
     <!-- SlidingMenu -->
-    <string name="app_name">Unisa Connect</string>
     <string name="dev_email">fdev.developers@gmail.com</string>
     <string name="login_wifi">Login \'Studenti\'</string>
     <string name="menu_mensa">Menu mensa</string>
     <string name="webmail">Webmail</string>
     <string name="servizi_esse3">Servizi studenti</string>
-    <string name="info_staff">Rubrica docenti</string>
+    <string name="rubrica">Rubrica</string>
     <string name="meteo">Meteo</string>
     <string name="recensione">Lascia una recensione</string>
     <string name="contattaci">Problemi? Idee?</string>
@@ -18,7 +18,8 @@
 
     <!-- Esse3 Services -->
     <string name="esse3">Esse3</string>
-    <string name="pagina_web">ESSE3 Web</string>
+    <string name="account">Account</string>
+    <string name="esse3_pagina_web">ESSE3 Web</string>
     <string name="libretto">Libretto</string>
     <string name="pagamenti">Pagamenti</string>
     <string name="appelli">Appelli</string>
@@ -29,14 +30,17 @@
 
     <!-- Wifi Preferenze -->
     <string name="username">Nome utente</string>
-    <string name="unisa_mail">\@studenti.unisa.it</string>
-    <string name="password">Password</string>
-    <string name="login_automatica">Effettua la login automaticamente quando connessi alla rete \'Studenti\'</string>
+    <string name="unisa_mail">username\@studenti.unisa.it</string>
+    <string name="non_inserire_at">Non inserire \'\@studenti.unisa.it\'</string>
+    <string name="password">password</string>
+    <string name="login_automatica">Effettua la login automaticamente quando connessi alla rete Wifi \'Studenti\'</string>
     <string name="save_and_login">Salva/Login</string>
     <string name="save">Salva</string>
+    <string name="data_management_info">Per utilizzare i servizi dedicati agli studenti (webmail, libretto, appelli, &#8230;) è necessario inserire la propria username e password. Questi dati vengono memorizzati cifrati su questo dispositivo ed utilizzati unicamente per accedere ai servizi dell\'università.</string>
     <!-- end of Wifi Preferenze -->
 
     <!-- Dettagli -->
+    <string name="dettagli">Dettagli</string>
     <string name="informazioni">Informazioni</string>
     <string name="ufficio">Ufficio</string>
     <string name="email">Email</string>
@@ -74,17 +78,32 @@
     <!-- Libretto -->
     <string name="libretto_vuoto">Non sono presenti esami nel libretto</string>
     <string name="media_ponderata">Media Ponderata:</string>
+    <string name="media_aritmetica">Media Aritmetica:</string>
+    <string name="parti_da">Parti da:</string>
     <string name="su_30">/30</string>
+    <string name="su_110">/110</string>
+    <string name="andamenti_esami">Andamento Esami</string>
+    <string name="superato_il_con">Superato il %1$s con %2$s/30</string>
     <string name="esame">Esame</string>
     <string name="cfu">CFU</string>
     <string name="voto">Voto</string>
     <!-- end of Libretto -->
+    
+    
+    <!-- Pagamenti -->
+    <string name="pagamenti_vuoto">Non risultano pagamenti non pervenuti</string>
+    <string name="pagamenti_non_disponibili">Impossibile riperire i pagamenti</string>
+    <string name="descrizione">Descrizione</string>
+    <string name="importo">Importo</string>
+    <string name="scadenza">Scadenza</string>
+    <!-- end of Pagamenti -->
 
 
     <!-- Esse3Scraper -->
-    <string name="connesione_esse3">Connessione in corso&#8230;</string>
-    <string name="autenticazione_esse3">Autenticazione ESSE3&#8230;</string>
+    <string name="connesione_esse3">Connessione&#8230;</string>
+    <string name="autenticazione_esse3">Autenticazione&#8230;</string>
     <string name="sincronizzazione_esse3">Sincronizzazione&#8230;</string>
+    <string name="completamento_esse3">Recupero informazioni completato.</string>
     <!-- end of Esse3Scraper -->
 
 
@@ -93,7 +112,6 @@
     <string name="appelli_disponibili">APPELLI DISPONIBILI</string>
     <string name="appelli_prenotati">APPELLI PRENOTATI</string>
     <string name="iscritti">Iscritti: </string>
-    <string name="sincronizzazione_esse3">Sincronizzazione&#8230;</string>
     <!-- end of Esse3Scraper -->
     
     
@@ -103,6 +121,7 @@
 
 
     <!-- Mensa -->
+    <string name="sincronizzazione_menu">Sincronizzazione menu&#8230;</string>
     <string name="mensa_menu_non_disponibile">Il menu non è al momento disponibile</string>
     <string name="mensa_primi">Primi</string>
     <string name="mensa_secondi">Secondi</string>
@@ -113,16 +132,22 @@
     <!-- end of Mensa -->
     
     <!-- Meteo -->
+    <string name="sincronizzazione_meteo">Sincronizzazione meteo&#8230;</string>
     <string name="vento">Vento</string>
     <string name="umidita">Umidità</string>
     <string name="meteo_non_disponibile">Si è verificato un errore nel reperire il meteo</string>
     <!-- end of Meteo -->
     
+    <!-- WebRadio -->
+    <string name="unisound">Unis@und Radio</string>
+    <!-- end of WebRadio -->
+    
     
     <!-- Da ordinare / Generale -->
+    <string name="cerca">Cerca</string>
     <string name="email_chooser_titolo">Invia la mail con</string>
     <string name="controlla_connessione">Controlla la\nconnessione\nad internet</string>
-    <string name="dati_errati">Username e/o password non corretti</string>
+    <string name="dati_errati">I dati di accesso non sono corretti</string>
     <string name="dati_errati_o_problema_gingerbread">Autenticazione fallita.\nE\' possibile che i dati di accesso non siano corretti, o che l\'accesso non sia possibile perchè si sta usando una versione Android troppo vecchia</string>
     <string name="inserire_dati_webmail">Inserire i dati di login per accedere alla WebMail Unisa</string>
     <string name="dati_non_validi">Dati non validi</string>
@@ -135,6 +160,8 @@
     <string name="cerca_staff_name">Cerca docente</string>
     <string name="aggiornato_il">Aggiornato il %1$s</string>
     <string name="aggiornato_il_alle">Aggiornato il %1$s alle %2$s</string>
-    <string name="ok">OK</string>
+    <string name="card_list_empty">Nessun risultato</string>
+    <string name="drawer_open">Apri il menu di navigazione</string>
+    <string name="drawer_close">Chiudi il menu di navigazione</string>
 
 </resources>

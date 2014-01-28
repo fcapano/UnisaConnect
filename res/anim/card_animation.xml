@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dichiaro un set, fatto da n effetti -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+    android:startOffset="@integer/durata_animazione_offset_card" >
+
+    <translate
+        android:duration="300"
+        android:fromYDelta="90%p"
+        android:toYDelta="0" />
+
+    <alpha
+        android:duration="300"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0" />
+
+    <!-- <rotate android:duration="700" android:fromDegrees="5" android:toDegrees="0"/> -->
+
+</set>

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/libretto_vuoto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right|center_vertical"
+        android:gravity="right|center_vertical"
+        android:paddingBottom="40sp"
+        android:paddingRight="10sp"
+        android:text="@string/libretto_vuoto"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/last_update_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/last_update_time"
+        android:layout_alignTop="@+id/last_update_time"
+        android:layout_gravity="center_vertical|right"
+        android:layout_toLeftOf="@+id/last_update_time"
+        android:scaleType="fitEnd"
+        android:src="@drawable/ic_action_refresh"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/last_update_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/riepilogo_libretto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/last_update_time"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/card_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/media_aritmetica"
+                android:textColor="@android:color/secondary_text_light" />
+
+            <TextView
+                android:id="@+id/avg_arithmetic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:ignore="SelectableText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/su_30"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/lighter_gray" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/media_ponderata"
+                android:textColor="@android:color/secondary_text_light" />
+
+            <TextView
+                android:id="@+id/avg_weighted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:ignore="SelectableText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/su_30"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/lighter_gray" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/parti_da"
+                android:textColor="@android:color/secondary_text_light" />
+
+            <TextView
+                android:id="@+id/base_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:ignore="SelectableText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/su_110"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/riepilogo_libretto"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="3dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp" >
+
+            <!-- <LinearLayout -->
+            <!-- android:id="@+id/libretto_progressbar_container" -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_below="@+id/riepilogo_libretto" -->
+            <!-- android:layout_marginBottom="10dp" -->
+            <!-- android:layout_marginLeft="10dp" -->
+            <!-- android:layout_marginRight="10dp" -->
+            <!-- android:background="@drawable/card_background" -->
+            <!-- android:gravity="center_vertical" -->
+            <!-- android:orientation="horizontal" -->
+            <!-- android:visibility="gone" > -->
+
+
+            <!-- <TextView -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_marginRight="5dp" -->
+            <!-- android:text="30%" -->
+            <!-- android:textColor="@android:color/secondary_text_light" -->
+            <!-- android:textSize="30sp" /> -->
+
+
+            <!-- <LinearLayout -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:gravity="center_vertical" -->
+            <!-- android:orientation="vertical" > -->
+
+
+            <!-- <ProgressBar -->
+            <!-- android:id="@+id/libretto_progressbar" -->
+            <!-- style="?android:attr/progressBarStyleHorizontal" -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_below="@+id/riepilogo_libretto" -->
+            <!-- android:indeterminate="false" -->
+            <!-- android:max="100" -->
+            <!-- android:progress="30" /> -->
+
+
+            <!-- <TextView -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:text="Hai ottenuto 60 dei 150 CFU previsti" -->
+            <!-- android:textColor="@android:color/secondary_text_light" /> -->
+            <!-- </LinearLayout> -->
+            <!-- </LinearLayout> -->
+
+            <RelativeLayout
+                android:id="@+id/libretto_line_graph_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/card_background"
+                android:paddingBottom="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/andamenti_esami"
+                    android:textColor="@android:color/secondary_text_light" />
+
+                <com.echo.holographlibrary.LineGraph
+                    android:id="@+id/libretto_line_graph"
+                    android:layout_width="fill_parent"
+                    android:layout_height="110dp" />
+
+                <LinearLayout
+                    android:id="@+id/libretto_graph_esame_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="0dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="0dp"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:id="@+id/libretto_graph_esame_nome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/secondary_text_light" />
+
+                    <TextView
+                        android:id="@+id/libretto_graph_esame_superato"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/secondary_text_light" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!-- <com.echo.holographlibrary.PieGraph -->
+            <!-- android:id="@+id/graph1" -->
+            <!-- android:layout_width="match_parent" -->
+            <!-- android:layout_height="200dp" /> -->
+
+            <LinearLayout
+                android:id="@+id/lista_corsi"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/libretto_line_graph_container"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

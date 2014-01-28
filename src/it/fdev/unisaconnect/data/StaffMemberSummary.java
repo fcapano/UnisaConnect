@@ -8,7 +8,7 @@ public class StaffMemberSummary extends ListItem {
 	private String matricola;
 
 	public StaffMemberSummary(String matricola, String fullname, String imgUrl) {
-		super(fullname, StaffMember.getSmallImgUrl(matricola, imgUrl), true, R.color.activity_background);
+		super(fullname, imgUrl, true, R.color.activity_background);
 		this.matricola = matricola;
 	}
 

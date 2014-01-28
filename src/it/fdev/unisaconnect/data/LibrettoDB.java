@@ -1,6 +1,6 @@
 package it.fdev.unisaconnect.data;
 
-import it.fdev.unisaconnect.data.Libretto.LibrettoCourse;
+import it.fdev.unisaconnect.data.Libretto.CorsoLibretto;
 
 import java.util.ArrayList;
 
@@ -14,12 +14,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LibrettoDB {
 	
 	private DBHelper ourHelper; //Create a Helper object
-	private final Context ourContext; //Create a Context object
+	private final Context mContext; //Create a Context object
 	
-	public static final int DB_VERSION = 6; //Version number, can be any number
+	public static final int DB_VERSION = 7; //Version number, can be any number
 	public static final String DB_NAME = "libretto.db"; //Name of the database
 	
-	private SharedPrefDataManager pref;
+	private SharedPrefDataManager mDataManager;
 	
 	
 	public class DBHelper extends SQLiteOpenHelper { //Helps create DB		
@@ -33,6 +33,7 @@ public class LibrettoDB {
 			String query1 = "CREATE TABLE Libretto"
 					+ "(name TEXT PRIMARY KEY," 
 					+ "cfu TEXT,"
+					+ "date TEXT,"
 					+ "mark TEXT"
 				+ ");";
 			db.execSQL(query1);
@@ -46,14 +47,14 @@ public class LibrettoDB {
 
 	}
 	//Class Constructor
-	public LibrettoDB(Context c) {
-		ourContext = c; //Initialize the context with passed in context
-		pref = SharedPrefDataManager.getDataManager(c);
+	public LibrettoDB(Context mContext) {
+		this.mContext = mContext; //Initialize the context with passed in context
+		mDataManager = new SharedPrefDataManager(mContext);
 	}
 	
 	//Open method
 	public LibrettoDB open() throws SQLException {
-		ourHelper = new DBHelper(ourContext);
+		ourHelper = new DBHelper(mContext);
 		return this;
 	}
 	
@@ -61,12 +62,13 @@ public class LibrettoDB {
 		ourHelper.close();
 	}
 	
-	public void insertCourse(LibrettoCourse course) {
+	public void insertCourse(CorsoLibretto course) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			ContentValues values = new ContentValues();
 			values.put("name", course.getName());
 			values.put("cfu", course.getCFU());
+			values.put("date", course.getDate());
 			values.put("mark", course.getMark());
 			db.insert("Libretto", "", values);
 		} finally {
@@ -75,9 +77,9 @@ public class LibrettoDB {
 		}
 	}
 	
-	public void insertCourses(ArrayList<LibrettoCourse> list) {
+	public void insertCourses(ArrayList<CorsoLibretto> list) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
-		for(LibrettoCourse c : list) {
+		for(CorsoLibretto c : list) {
 			try {
 				insertCourse(c);
 			} catch (Exception e) {
@@ -101,27 +103,27 @@ public class LibrettoDB {
 	public void resetLibretto(Libretto libretto) {
 		deleteAllCourses();
 		insertCourses(libretto.getCorsi());
-		pref.setLibrettoFetchDate(libretto.getFetchTime());
-		pref.saveData();
+		mDataManager.setLibrettoFetchDate(libretto.getFetchTime());
 	}
 	
 	public Libretto getLibretto() {
-		ArrayList<LibrettoCourse> corsi = getCourses();
-		Libretto l = new Libretto(pref.getLibrettoFetchDate(), corsi);
+		ArrayList<CorsoLibretto> corsi = getCourses();
+		Libretto l = new Libretto(mDataManager.getLibrettoFetchDate(), corsi);
 		return l;
 	}
 	
-	public ArrayList<LibrettoCourse> getCourses() {
+	public ArrayList<CorsoLibretto> getCourses() {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
-			ArrayList<LibrettoCourse> courseList = new ArrayList<LibrettoCourse>();
+			ArrayList<CorsoLibretto> courseList = new ArrayList<CorsoLibretto>();
 			Cursor c = db.rawQuery("SELECT * FROM Libretto ORDER BY name", null);
 			c.moveToFirst();
 			while(!c.isAfterLast()) {
 				String name = c.getString(c.getColumnIndex("name"));
 				String cfu = c.getString(c.getColumnIndex("cfu"));
+				String date = c.getString(c.getColumnIndex("date"));
 				String mark = c.getString(c.getColumnIndex("mark"));
-				LibrettoCourse course = new LibrettoCourse(name, cfu, mark);
+				CorsoLibretto course = new CorsoLibretto(name, cfu, date, mark);
 				courseList.add(course);
 				c.moveToNext();
 			}

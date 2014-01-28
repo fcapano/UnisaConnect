@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal" >
+
+    <!-- <it.fdev.utils.RoundedImageView -->
+    <!-- android:id="@+id/row_icon" -->
+    <!-- android:layout_width="60dp" -->
+    <!-- android:layout_height="60dp" -->
+    <!-- android:layout_margin="0dp" -->
+    <!-- android:padding="5dp" -->
+    <!-- android:scaleType="centerCrop" -->
+    <!-- android:src="@drawable/transparent" -->
+    <!-- custom:is_oval="true" -->
+    <!-- custom:round_background="true" /> -->
+
+    <ImageView
+        android:id="@+id/row_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="0dp"
+        android:padding="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/transparent" />
+
+    <TextView
+        android:id="@+id/row_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+</LinearLayout>

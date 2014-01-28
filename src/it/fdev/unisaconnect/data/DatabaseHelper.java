@@ -16,7 +16,7 @@ import android.util.Log;
 public class DatabaseHelper {
 
     private String databaseName;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private String SP_KEY_DB_VER = "db_ver";
     private final Context mContext;
 

@@ -15,15 +15,13 @@
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/transparent_black_50"
-        tools:ignore="ContentDescription" />
+        android:background="@color/transparent_black_10" />
 
 </RelativeLayout>
