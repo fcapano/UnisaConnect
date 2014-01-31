@@ -1,7 +1,6 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.utils.DrawableManager;
-import it.fdev.utils.ShoutCastMetadataRetriever;
 import it.fdev.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -11,6 +10,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,13 +42,14 @@ import de.umass.lastfm.Track;
 
 public class WebRadioPlayerService extends Service implements OnCompletionListener, OnPreparedListener, OnErrorListener, AudioManager.OnAudioFocusChangeListener, OnInfoListener {
 
+	private static final String ICECAST_URL = "http://streamingradio.unisa.it/status.xsl?mount=/stream";
 	private static final String LASTFM_API_KEY = "5d28b9b80d89cebd38f1f604e5ddf01d";
 	public static final String BROADCAST_STATUS_CHANGED = "it.fdev.webradio.STATUS_CHANGED";
 	public static final String ACTION_PLAY = "it.fdev.webradio.PLAY";
 	public static final String ACTION_STOP = "it.fdev.webradio.STOP";
 	public static final String ACTION_UPDATE = "it.fdev.webradio.UPDATE";
 	public static final int NOTIFICATION_ID = 1;
-	public static final int INTERVAL_FETCH_METADATA = 10 * 1000; // Milliseconds
+	public static final int INTERVAL_FETCH_METADATA = 15 * 1000; // Milliseconds
 
 	private static MediaPlayer mMediaPlayer = null;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -121,7 +125,8 @@ public class WebRadioPlayerService extends Service implements OnCompletionListen
 				Runnable retrieverTask = new Runnable() {
 					public void run() {
 						try {
-							retrieveMetadata(streamingURL);
+							retrieveMetadata();
+//							retrieveMetadata(streamingURL);
 						} catch (Exception e) {
 							Log.e(Utils.TAG, "Exception in WebRadioPlayerService", e);
 						}
@@ -352,11 +357,12 @@ public class WebRadioPlayerService extends Service implements OnCompletionListen
 			context.startService(playerService);
 		}
 	}
-
-	private void retrieveMetadata(String streamingURL) {
+	
+	private void retrieveMetadata() {
 		try {
-			ShoutCastMetadataRetriever metadataRetriever = new ShoutCastMetadataRetriever(streamingURL);
-			String metadata = metadataRetriever.getMetadata();
+			Response response = Jsoup.connect(ICECAST_URL).timeout(30000).execute();
+			Document document = response.parse();
+			String metadata = document.getElementsContainingOwnText("Current Song").first().nextElementSibling().text();
 			if (metadata.equalsIgnoreCase(lastMetadata))
 				return;
 			lastMetadata = metadata;
@@ -379,7 +385,7 @@ public class WebRadioPlayerService extends Service implements OnCompletionListen
 			mAlbumArt = null;
 			mAlbumArtFileName = null;
 		}
-
+		
 		if (mSongTitle == null) {
 			// Problema ner reperire il tag. -> imposto una notifica generica
 			mSongArtist = null;
