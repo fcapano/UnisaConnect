@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class StaffDB {
 //	private static final String DB_UPDATE_URL = "http://idw.altervista.org/img_prof/latest.xml";
-	private static final String DB_STAFF_DATE = "2014.01.17-20.17.29";	//First used: V19
+	private static final String DB_STAFF_DATE = "2014.05.23-20.45.17";	//First used: V19
 	private static final String DB_STAFF_NAME = "uc_staff-" + DB_STAFF_DATE + ".db";
 	
 	private SQLiteDatabase dbStaff;

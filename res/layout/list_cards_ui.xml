@@ -22,8 +22,9 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="5dp"
+        android:fastScrollEnabled="true"
+        android:layout_marginRight="5dp"
         android:divider="@null"
         android:dividerHeight="0dp" >
     </ListView>

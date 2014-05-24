@@ -41,7 +41,7 @@ public class FragmentWeather extends MySimpleFragment {
 	private ViewPager pager;
 
 	private TextView lastUpdateView;
-	private View lastUpdateIconView;
+	private ImageView lastUpdateIconView;
 	private ImageView iconView;
 	private TextView tempView;
 	private TextView descriptionView;
@@ -61,7 +61,7 @@ public class FragmentWeather extends MySimpleFragment {
 		meteoNDView = (TextView) view.findViewById(R.id.meteo_non_disponibile);
 		pager = (ViewPager) view.findViewById(R.id.meteo_pager);
 		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
-		lastUpdateIconView = view.findViewById(R.id.last_update_icon);
+		lastUpdateIconView = (ImageView) view.findViewById(R.id.last_update_icon);
 		iconView = (ImageView) view.findViewById(R.id.weather_icon);
 		tempView = (TextView) view.findViewById(R.id.weather_temp);
 		descriptionView = (TextView) view.findViewById(R.id.weather_description);
@@ -226,7 +226,7 @@ public class FragmentWeather extends MySimpleFragment {
 				cFragment = new FragmentWeatherActualCondition();
 				cFragment.setActivity(activity);
 				cFragment.setCondition(meteo.getActualCondition(position));
-				cFragment.setViews(lastUpdateView, iconView, tempView, descriptionView, humidityView, windView, windDirView);
+				cFragment.setViews(lastUpdateView, lastUpdateIconView, iconView, tempView, descriptionView, humidityView, windView, windDirView);
 				fragmentsList[position] = cFragment;
 			} else {
 				cFragment = fragmentsList[position];

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="orange_actionbar">#F4842D</color>
-    <color name="orange">#FF9900</color>
     <color name="orange_light">#FFBD59</color>
     <color name="orange_dark">#E38800</color>
     
@@ -10,8 +9,6 @@
     <color name="light_gray">#757575</color>
     <color name="lighter_gray">#B5B5B5</color>
     
-   	<color name="holo_blue">#33B5E5</color>
-   	
    	<color name="transparent_black_5">#0D000000</color>
    	<color name="transparent_black_10">#1A000000</color>
    	<color name="transparent_black_20">#33000000</color>

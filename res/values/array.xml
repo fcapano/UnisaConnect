@@ -5,11 +5,11 @@
         <item>@string/menu_mensa</item>
         <item>@string/rubrica</item>
         <item>@string/meteo</item>
+        <item>@string/orari_lezioni</item>
+        <item>@string/news</item>
         <item>@string/unisound</item>
         <item>@string/contattaci</item>
-        <item>time</item>
         <item>map</item>
-        <item>news all</item>
         <item>biblio</item>
     </string-array>
     
@@ -18,11 +18,11 @@
         <item>@drawable/ic_drawer_fork_knife</item>
         <item>@drawable/ic_drawer_notebook</item>
         <item>@drawable/ic_drawer_weather</item>
+        <item>@drawable/ic_drawer_timetable</item>
+        <item>@drawable/ic_drawer_news</item>
         <item>@drawable/ic_drawer_music</item>
         <item>@drawable/ic_drawer_comments</item>
-        <item>@drawable/ic_drawer_timetable</item>
         <item>@drawable/ic_drawer_mapicon</item>
-        <item>@drawable/ic_drawer_news</item>
         <item>@drawable/transparent</item>
     </string-array>
     

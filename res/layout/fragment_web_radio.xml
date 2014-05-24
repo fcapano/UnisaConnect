@@ -14,7 +14,7 @@
         android:adjustViewBounds="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/unisound_background_dark" />
+        android:src="@drawable/unisound_background_dark_orange" />
 
     <LinearLayout
         android:layout_width="fill_parent"

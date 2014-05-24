@@ -5,6 +5,7 @@ import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.ListAdapter;
 import it.fdev.utils.ListAdapter.ListItem;
 import it.fdev.utils.MyFragmentInterface;
+import it.fdev.utils.UpdateChecker;
 import it.fdev.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -20,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -94,12 +96,14 @@ public class MainActivity extends ActionBarActivity {
 		actions.add(R.id.action_accept_button);
 		actions.add(R.id.action_edit_button);
 		actions.add(R.id.action_add_button);
+		actions.add(R.id.action_cancel_button);
 		actions.add(R.id.action_refresh_button);
+		actions.add(R.id.action_twitter_button);
 	}
 	
 	private String mAppName;
 	
-	private static final int VALID_NAVIGATION_DRAWER_ELEMENTS_NUM = 6;	// When testing is disabled only these elements are shown
+	private static final int VALID_NAVIGATION_DRAWER_ELEMENTS_NUM = 8;	// When testing is disabled only these elements are shown
 																		// To enable testing in the account preferences as username enter
 																	 	// the string in Utils.TOGGLE_TESTING_STRING ("testing!")
 	
@@ -200,6 +204,11 @@ public class MainActivity extends ActionBarActivity {
 	    
 //	    showTnd();
 //	    setupUpxAppBanner();
+		new UpdateChecker(this).start();
+	    
+//	    WVersionManager versionManager = new WVersionManager(this);
+//	    versionManager.setVersionContentUrl("http://fdev.eu/unisaconnect/version"); // your update content url, see the response format below
+//	    versionManager.checkVersion();
 	}
 	
 	@Override
@@ -301,7 +310,6 @@ public class MainActivity extends ActionBarActivity {
 			if (fragment == null) {
 				return true;
 			}
-			
 			switch (item.getItemId()) {
 			case android.R.id.home:
 				toggleDrawer();
@@ -317,6 +325,12 @@ public class MainActivity extends ActionBarActivity {
 				return true;
 			case R.id.action_refresh_button:
 				fragment.actionRefresh();
+				return true;
+			case R.id.action_cancel_button:
+				fragment.actionCancel();
+				return true;
+			case R.id.action_twitter_button:
+				fragment.actionTwitter();
 				return true;
 			}
 		} catch (ClassCastException e) {
@@ -714,19 +728,30 @@ public class MainActivity extends ActionBarActivity {
 			newContent = BootableFragmentsEnum.WEATHER;
 			break;
 		case 4:
-			newContent = BootableFragmentsEnum.WEB_RADIO;
-			break;
-		case 5:
-			Utils.sendSupportMail(this, "Riguardo \"Unisa Connect\"...", "Versione Android: " + Build.VERSION.SDK_INT + "\n\n");
-			break;
-		case 6:
 			newContent = BootableFragmentsEnum.TIMETABLE;
 			break;
+		case 5:
+			newContent = BootableFragmentsEnum.NEWS_ALL;
+			break;
+		case 6:
+			newContent = BootableFragmentsEnum.WEB_RADIO;
+			break;
 		case 7:
-			newContent = BootableFragmentsEnum.MAP;
+			int curVersion;
+			try {
+				curVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+				curVersion = -1; 
+			}
+			Utils.sendSupportMail(this, "Riguardo \"Unisa Connect\"...",
+										"------------------------\n" +
+										"Versione Android: " + Build.VERSION.SDK_INT + "\n" +
+										"Versione Unisa Connect: " + curVersion + "\n" +
+										"------------------------\n");
 			break;
 		case 8:
-			newContent = BootableFragmentsEnum.NEWS_ALL;
+			newContent = BootableFragmentsEnum.MAP;
 			break;
 		case 9:
 			newContent = BootableFragmentsEnum.BIBLIO_SEARCH;

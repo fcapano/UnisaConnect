@@ -61,6 +61,14 @@ public abstract class MyListFragment extends ListFragment implements MyFragmentI
 	@Override
 	public void actionAccept() {
 	}
+	
+	@Override
+	public void actionCancel() {
+	}
+	
+	@Override
+	public void actionTwitter() {
+	}
 
 	@Override
 	public Set<Integer> getActionsToShow() {

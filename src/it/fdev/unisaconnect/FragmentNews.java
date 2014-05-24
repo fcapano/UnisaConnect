@@ -1,6 +1,6 @@
 package it.fdev.unisaconnect;
 
-import it.fdev.scraper.RssScraper;
+import it.fdev.scraper.NewsScraper;
 import it.fdev.utils.CardsAdapter;
 import it.fdev.utils.CardsAdapter.CardItem;
 import it.fdev.utils.MyListFragment;
@@ -13,6 +13,7 @@ import java.util.Set;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,11 @@ import android.widget.TextView;
 
 public class FragmentNews extends MyListFragment {
 
-	private final String NEWS_URL = "http://www.unisa.it/modules/news/front/rss/index/idCategory/0/idStructure/1";
-	private final int MAX_NEWS_NUMBER = 30;
-	private final int MAX_TEXT_LENGTH = 150;
+	private final String NEWS_URL_NEW = "http://unisafeed.appspot.com/readFeed";
 	
 	private CardsAdapter adapter;
 	private boolean alreadyStarted = false;
-	private RssScraper rssScraper;
+	private NewsScraper rssScraper;
 	private ArrayList<CardItem> cardsList = null;
 	private TextView listEmptyView;
 	private ListView listCardsView;
@@ -37,7 +36,7 @@ public class FragmentNews extends MyListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new CardsAdapter(activity, R.layout.card, new ArrayList<CardItem>());
+		adapter = new CardsAdapter(activity, R.layout.card_news, new ArrayList<CardItem>());
 		setListAdapter(adapter);
 	}
 	
@@ -73,14 +72,19 @@ public class FragmentNews extends MyListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		String url = cardsList.get(position).getLink();
-		Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(webIntent);
+		try {
+			String url = cardsList.get(position).getLink();
+			Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+	        startActivity(webIntent);
+		} catch(Exception e) {
+			Log.w(Utils.TAG, e);
+		}
 	}
 	
 	@Override
 	public Set<Integer> getActionsToShow() {
 		Set<Integer> actionsToShow = new HashSet<Integer>();
+		actionsToShow.add(R.id.action_twitter_button);
 		actionsToShow.add(R.id.action_refresh_button);
 		if (!alreadyStarted) {
 			actionsToShow.add(R.id.action_loading_animation);
@@ -91,6 +95,22 @@ public class FragmentNews extends MyListFragment {
 	@Override
 	public void actionRefresh() {
 		getNews(true);
+	}
+	
+	@Override
+	public void actionTwitter() {	
+		try {
+			String url = "https://twitter.com/UniSA_news";
+			Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+	        startActivity(webIntent);
+		} catch(Exception e) {
+			Log.e(Utils.TAG, "Error opening twitter link", e);
+		}
+	}
+	
+	@Override
+	public int getTitleResId() {
+		return R.string.news;
 	}
 
 	public void getNews(boolean force) {
@@ -115,9 +135,9 @@ public class FragmentNews extends MyListFragment {
 			activity.setLoadingVisible(true);
 			return;
 		}
-		rssScraper = new RssScraper(NEWS_URL);
-		rssScraper.setMaxItems(MAX_NEWS_NUMBER);
-		rssScraper.setMaxTextLength(MAX_TEXT_LENGTH);
+		rssScraper = new NewsScraper(NEWS_URL_NEW);
+//		rssScraper.setMaxItems(MAX_NEWS_NUMBER);
+//		rssScraper.setMaxTextLength(MAX_TEXT_LENGTH);
 		rssScraper.setCallerFragment(this);
 		rssScraper.execute(activity);
 		return;
@@ -129,7 +149,7 @@ public class FragmentNews extends MyListFragment {
 		}
 		
 		if (listEmptyView == null || listCardsView == null) { 			// Dai report di crash sembra succedere a volte, non ho idea del perchè
-			activity.setDrawerOpen(true);							   			// Quindi mostro lo slidingmenu per apparare
+			activity.setDrawerOpen(true);							   	// Quindi mostro lo slidingmenu per apparare
 			activity.setLoadingVisible(false, false);
 			return;
 		}
@@ -148,10 +168,10 @@ public class FragmentNews extends MyListFragment {
 			listCardsView.setVisibility(View.GONE);
 			activity.setLoadingVisible(false, false);
 			return;
+		} else {
+			listEmptyView.setVisibility(View.GONE);
+			listCardsView.setVisibility(View.VISIBLE);
 		}
-		
-		listEmptyView.setVisibility(View.GONE);
-		listCardsView.setVisibility(View.VISIBLE);
 		
 		adapter.clear();
 		adapter.addAll(cardsList);

@@ -5,8 +5,8 @@
         <item name="actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBar</item>
         
-        <item name="android:textColor">@android:color/primary_text_dark</item>
-        <item name="android:textColorSecondary">@android:color/secondary_text_dark</item>
+        <item name="android:textColor">@android:color/primary_text_dark_nodisable</item>
+        <item name="android:textColorSecondary">@android:color/secondary_text_dark_nodisable</item>
     </style>
 
 <!--     <style name="MyTheme_Light" parent="@style/MyOrangyTheme"> -->

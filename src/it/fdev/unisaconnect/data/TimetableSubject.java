@@ -26,7 +26,7 @@ public class TimetableSubject {
 		this.color = color;
 	}
 
-	public static class Lesson {
+	public static class Lesson implements Comparable<Lesson>{
 		private int id;
 		private String subjectName;
 		private int day;
@@ -111,6 +111,20 @@ public class TimetableSubject {
 		public int getDuration() {
 			return duration;
 		}
-	}
 
+		@Override
+		public int compareTo(Lesson comp) {
+			if(day < comp.day)
+				return -1;
+			if(day > comp.day)
+				return 1;
+			if(day == comp.day) {
+				if (startHour < comp.startHour)
+					return -1;
+				if (startHour > comp.startHour)
+					return 1;
+			}
+			return 0;
+		}
+	}
 }

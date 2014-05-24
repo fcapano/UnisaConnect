@@ -77,11 +77,20 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 				if (cells.size() < 12) {
 					return null;
 				}
-				String courseName = cells.get(2).text();
-				String courseCFU = cells.get(10).text();
-				String courseDate = cells.get(11).text();
-				String courseMark = cells.get(12).text();
-				corsiList.add(new CorsoLibretto(courseName.substring(courseName.indexOf("-") + 1).trim(), courseCFU.trim(), courseDate.trim(), courseMark.trim()));
+				String courseName = cells.get(1).text();
+				courseName = courseName.substring(courseName.indexOf("-") + 1);
+				String courseCFU = cells.get(6).text();
+				String courseMarkDate = cells.get(9).text();
+				String courseMark;
+				String courseDate;
+				try {
+					courseMark = courseMarkDate.substring(0, courseMarkDate.indexOf("-"));
+					courseDate = courseMarkDate.substring(courseMarkDate.indexOf("-")+1);
+				} catch(Exception e) {
+					courseMark = "";
+					courseDate = "";
+				}
+				corsiList.add(new CorsoLibretto(courseName.replace("\u00a0","").trim(), courseCFU.replace("\u00a0","").trim(), courseDate.replace("\u00a0","").trim(), courseMark.replace("\u00a0","").trim()));
 			}
 			return corsiList;
 		}

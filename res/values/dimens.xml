@@ -11,6 +11,8 @@
     
     <!-- Timetable Dimensions -->
 	<dimen name="timetable_margin_top">30dp</dimen>
+	<dimen name="timetable_margin_top_half">20dp</dimen>
+	<dimen name="timetable_margin_top_half_neg">-20dp</dimen>
 	<dimen name="timetable_margin_left">30dp</dimen>
 	<dimen name="timetable_colopicker_square">35dp</dimen>
 	<!-- End of Timetable Dimensions -->

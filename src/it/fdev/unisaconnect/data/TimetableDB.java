@@ -4,6 +4,7 @@ import it.fdev.unisaconnect.data.TimetableSubject.Lesson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,7 +17,7 @@ public class TimetableDB {
 	private DBHelper ourHelper; //Create a Helper object
 	private final Context ourContext; //Create a Context object
 	
-	public static final int DB_VERSION = 3; //Version number, can be any number
+	public static final int DB_VERSION = 13; //Version number, can be any number
 	public static final String DB_NAME = "timetable.db"; //Name of the database
 	
 	
@@ -29,12 +30,14 @@ public class TimetableDB {
 		@Override
 		public void onCreate(SQLiteDatabase db) { //Called once and only once for a User to create a DB
 			String query = "CREATE TABLE Subjects"
-					+ "(name TEXT PRIMARY KEY," //name - Paper number 
+					+ "("
+					+ "name TEXT PRIMARY KEY," //name - Paper number 
 					+ "color INTEGER" //color
 					+ ");";
 				db.execSQL(query);
 				query = "CREATE TABLE Hours"
-						+ "(_id INTEGER AUTO_INCREMENT PRIMARY KEY," //id
+						+ "("
+						+ "lesson_id INTEGER PRIMARY KEY AUTOINCREMENT," //id
 						+ "name TEXT," //
 						+ "day INTEGER," // Day
 						+ "room INTEGER," //Class
@@ -49,10 +52,8 @@ public class TimetableDB {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { //Runs only if a new version of DB (maybe you've added new tables or rows in an update)
-
 			db.execSQL("DROP TABLE IF EXISTS Hours");
 			db.execSQL("DROP TABLE IF EXISTS Subjects");
-	
 		    this.onCreate(db);
 		}
 
@@ -60,7 +61,6 @@ public class TimetableDB {
 	//Class Constructor
 	public TimetableDB(Context c) {
 		ourContext = c; //Initialize the context with passed in context
-		
 	}
 	
 	//Open method
@@ -72,12 +72,6 @@ public class TimetableDB {
 	public void close() {
 		ourHelper.close();
 	}
-	
-	//METHODS FOR DATA INSERTION****************************************************
-	
-	//METHODS FOR DATA RETRIEVAL****************************************************
-	
-	//***********************************************************************************
 	
 	public void insertSubject(String name, int color) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
@@ -97,7 +91,7 @@ public class TimetableDB {
 		try {
 			ContentValues values = new ContentValues();
 			values.put("color", color);
-			db.update("Subjects", values, "name='"+name+"'", null);
+			db.update("Subjects", values, "name = ?", new String[] { name });
 		} finally {
 			if(db!= null)
 				db.close();
@@ -107,8 +101,8 @@ public class TimetableDB {
 	public void deleteSubject(String name) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
-			db.delete("Subjects", "name='"+name+"'", null);
-			db.delete("Hours", "name='"+name+"'", null);
+			db.delete("Subjects", "name = ?", new String[] { name });
+			db.delete("Hours", "name = ?", new String[] { name });
 		} finally {
 			if(db!= null)
 				db.close();
@@ -119,42 +113,41 @@ public class TimetableDB {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			db.delete("Subjects", "Subjects.name NOT IN (SELECT name FROM Hours)", null);
-//			db.rawQuery("DELETE FROM Subjects WHERE Subjects.name NOT IN (SELECT name FROM Hours)",null);
 		} finally {
 			if(db!= null)
 				db.close();
 		}
 	}
 	
-	public void updateLesson(Lesson oldLesson, Lesson newLesson) {
-		SQLiteDatabase db = ourHelper.getWritableDatabase();
-		try {
-			ContentValues values = new ContentValues();
-			values.put("name", newLesson.getSubjectName());
-			values.put("day", newLesson.getDay());
-			values.put("room", newLesson.getRoom());
-			values.put("start_hour", newLesson.getStartHour());
-			values.put("start_minutes", newLesson.getStartMinutes());
-			values.put("end_hour", newLesson.getEndHour());
-			values.put("end_minutes", newLesson.getEndMinutes());
-			db.update("Hours", values, "name='"+oldLesson.getSubjectName()+"'" +
-					"AND room='"+oldLesson.getRoom()+"'" +
-					"AND day='"+oldLesson.getDay()+"'" +
-					"AND start_hour='"+oldLesson.getStartHour()+"'" +
-					"AND start_minutes='"+oldLesson.getStartMinutes()+"'" +
-					"AND end_hour='"+oldLesson.getEndHour()+"'" +
-					"AND end_minutes='"+oldLesson.getEndMinutes()+"'", null);
-		} finally {
-			if(db!= null)
-				db.close();
-		}
-	}
+//	public void updateLesson(Lesson oldLesson, Lesson newLesson) {
+//		SQLiteDatabase db = ourHelper.getWritableDatabase();
+//		try {
+//			ContentValues values = new ContentValues();
+//			values.put("name", newLesson.getSubjectName());
+//			values.put("day", newLesson.getDay());
+//			values.put("room", newLesson.getRoom());
+//			values.put("start_hour", newLesson.getStartHour());
+//			values.put("start_minutes", newLesson.getStartMinutes());
+//			values.put("end_hour", newLesson.getEndHour());
+//			values.put("end_minutes", newLesson.getEndMinutes());
+//			db.update("Hours", values, "name='"+oldLesson.getSubjectName()+"'" +
+//					"AND room='"+oldLesson.getRoom()+"'" +
+//					"AND day='"+oldLesson.getDay()+"'" +
+//					"AND start_hour='"+oldLesson.getStartHour()+"'" +
+//					"AND start_minutes='"+oldLesson.getStartMinutes()+"'" +
+//					"AND end_hour='"+oldLesson.getEndHour()+"'" +
+//					"AND end_minutes='"+oldLesson.getEndMinutes()+"'", null);
+//		} finally {
+//			if(db!= null)
+//				db.close();
+//		}
+//	}
 	
 	public HashMap<String, TimetableSubject> selectSubjects() {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			HashMap<String, TimetableSubject> subjectMap = new HashMap<String, TimetableSubject>();
-			Cursor c = db.rawQuery("select * from Subjects",null);
+			Cursor c = db.rawQuery("SELECT * FROM Subjects",null);
 			c.moveToFirst();
 			while(!c.isAfterLast()) {
 				subjectMap.put(c.getString(0),new TimetableSubject(c.getString(0),c.getString(1)));
@@ -169,9 +162,15 @@ public class TimetableDB {
 	}
 	
 	public void insertLesson(Lesson lesson) {
+		if (lesson.getId() >= 0) {
+			deleteLesson(lesson);
+		}
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			ContentValues values = new ContentValues();
+			if (lesson.getId() >= 0) {
+				values.put("lesson_id", lesson.getId());
+			}
 			values.put("name", lesson.getSubjectName());
 			values.put("day", lesson.getDay());
 			values.put("room", lesson.getRoom());
@@ -179,7 +178,7 @@ public class TimetableDB {
 			values.put("start_minutes", lesson.getStartMinutes());
 			values.put("end_hour", lesson.getEndHour());
 			values.put("end_minutes", lesson.getEndMinutes());
-			db.insert("Hours", "", values);
+			db.insert("Hours", null, values);
 		} finally {
 			if(db!= null)
 				db.close();
@@ -189,14 +188,17 @@ public class TimetableDB {
 	public void deleteLesson(Lesson lesson) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
-			db.delete("Hours",
-					"name = '"+lesson.getSubjectName()+"' " +
-					"AND day = '"+lesson.getDay()+"' " +
-					"AND room = '"+lesson.getRoom()+"' " +
-					"AND start_hour = '"+lesson.getStartHour()+"' " +
-					"AND start_minutes = '"+lesson.getStartMinutes()+"' " +
-					"AND end_hour = '"+lesson.getEndHour()+"' " +
-					"AND end_minutes = '"+lesson.getEndMinutes()+"' ", null);
+			db.delete( "Hours",
+					   "lesson_id = ?",
+					   new String[] { String.valueOf(lesson.getId()) });
+//			db.delete("Hours",
+//					"name = '"+lesson.getSubjectName()+"' " +
+//					"AND day = '"+lesson.getDay()+"' " +
+//					"AND room = '"+lesson.getRoom()+"' " +
+//					"AND start_hour = '"+lesson.getStartHour()+"' " +
+//					"AND start_minutes = '"+lesson.getStartMinutes()+"' " +
+//					"AND end_hour = '"+lesson.getEndHour()+"' " +
+//					"AND end_minutes = '"+lesson.getEndMinutes()+"' ", null);
 		} finally {
 			if(db!= null)
 				db.close();
@@ -204,27 +206,55 @@ public class TimetableDB {
 		deleteSubjectsWOLessons();
 	}
 	
-	public void deleteAllLessons() {
-		SQLiteDatabase db = ourHelper.getWritableDatabase();
-		try {
-			db.delete("Hours", null, null);
-		} finally {
-			if(db!= null)
-				db.close();
-		}
-	}
+//	public void deleteAllLessons() {
+//		SQLiteDatabase db = ourHelper.getWritableDatabase();
+//		try {
+//			db.delete("Hours", null, null);
+//		} finally {
+//			if(db!= null)
+//				db.close();
+//		}
+//	}
 	
-	public ArrayList<Lesson> getLessons(int day) {
+//	public ArrayList<Lesson> getLessons(int day) {
+//		SQLiteDatabase db = ourHelper.getWritableDatabase();
+//		try {
+//			ArrayList<Lesson> lessonList = new ArrayList<Lesson>();
+//			Cursor c = db.rawQuery("SELECT * FROM Subjects, Hours WHERE Subjects.name=Hours.name and day="+day+" order by hour",null);
+//			c.moveToFirst();
+//			while(!c.isAfterLast()) {
+//				String name = c.getString(c.getColumnIndex("name"));
+//				String room = c.getString(c.getColumnIndex("room"));
+//				int color = c.getInt(c.getColumnIndex("color"));
+//				int id = c.getInt(c.getColumnIndex("lesson_id"));
+//				int startHour = c.getInt(c.getColumnIndex("start_hour"));
+//				int startMinutes = c.getInt(c.getColumnIndex("start_minutes"));
+//				int endHour = c.getInt(c.getColumnIndex("end_hour"));
+//				int endMinutes = c.getInt(c.getColumnIndex("end_minutes"));
+//				Lesson lesson = new Lesson(id, name, day, startHour, startMinutes, endHour, endMinutes, room, color);
+//				lessonList.add(lesson);
+//				c.moveToNext();
+//			}
+//			c.close();
+//			return lessonList;
+//		} finally {
+//			if(db!= null)
+//				db.close();
+//		}
+//	}
+	
+	public ArrayList<Lesson> getLessons() {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			ArrayList<Lesson> lessonList = new ArrayList<Lesson>();
-			Cursor c = db.rawQuery("select * from Subjects, Hours where Subjects.name=Hours.name and day="+day+" order by hour",null);
+			Cursor c = db.rawQuery("SELECT * FROM Subjects, Hours WHERE Subjects.name=Hours.name", null);
 			c.moveToFirst();
 			while(!c.isAfterLast()) {
 				String name = c.getString(c.getColumnIndex("name"));
 				String room = c.getString(c.getColumnIndex("room"));
 				int color = c.getInt(c.getColumnIndex("color"));
-				int id = c.getInt(c.getColumnIndex("_id"));
+				int id = c.getInt(c.getColumnIndex("lesson_id"));
+				int day = c.getInt(c.getColumnIndex("day"));
 				int startHour = c.getInt(c.getColumnIndex("start_hour"));
 				int startMinutes = c.getInt(c.getColumnIndex("start_minutes"));
 				int endHour = c.getInt(c.getColumnIndex("end_hour"));
@@ -241,17 +271,18 @@ public class TimetableDB {
 		}
 	}
 	
-	public ArrayList<Lesson> getLessons() {
+	public ArrayList<Lesson> getLessonsByName(String name) {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
 			ArrayList<Lesson> lessonList = new ArrayList<Lesson>();
-			Cursor c = db.rawQuery("select * from Subjects, Hours where Subjects.name=Hours.name",null);
+			// TODO correggi sqlinject
+			Cursor c = db.rawQuery("SELECT * FROM Subjects, Hours WHERE Subjects.name=? AND Subjects.name=Hours.name", new String[] { name });
 			c.moveToFirst();
 			while(!c.isAfterLast()) {
-				String name = c.getString(c.getColumnIndex("name"));
+//				String name = c.getString(c.getColumnIndex("name"));
 				String room = c.getString(c.getColumnIndex("room"));
 				int color = c.getInt(c.getColumnIndex("color"));
-				int id = c.getInt(c.getColumnIndex("_id"));
+				int id = c.getInt(c.getColumnIndex("lesson_id"));
 				int day = c.getInt(c.getColumnIndex("day"));
 				int startHour = c.getInt(c.getColumnIndex("start_hour"));
 				int startMinutes = c.getInt(c.getColumnIndex("start_minutes"));
@@ -272,7 +303,7 @@ public class TimetableDB {
 	public String[] getSubjectsNames() {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
-			Cursor c = db.rawQuery("select name from Subjects",null);
+			Cursor c = db.rawQuery("select name from Subjects", null);
 			String[] subjectNames = new String[c.getCount()];
 			c.moveToFirst();
 			int cSubjIndex = 0;
@@ -293,7 +324,7 @@ public class TimetableDB {
 	public String[] getRoomNames() {
 		SQLiteDatabase db = ourHelper.getWritableDatabase();
 		try {
-			Cursor c = db.rawQuery("SELECT DISTINCT room FROM Hours",null);
+			Cursor c = db.rawQuery("SELECT DISTINCT room FROM Hours", null);
 			String[] roomNames = new String[c.getCount()];
 			c.moveToFirst();
 			int cRoomIndex = 0;

@@ -118,7 +118,7 @@
         android:text="@string/_8" />
 
     <View
-        android:id="@+id/sh1"
+        android:id="@+id/sh8"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -131,13 +131,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh1"
+        android:layout_below="@+id/sh8"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_9" />
 
     <View
-        android:id="@+id/sh2"
+        android:id="@+id/sh9"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -150,13 +150,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh2"
+        android:layout_below="@+id/sh9"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_10" />
 
     <View
-        android:id="@+id/sh3"
+        android:id="@+id/sh10"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -169,13 +169,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh3"
+        android:layout_below="@+id/sh10"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_11" />
 
     <View
-        android:id="@+id/sh4"
+        android:id="@+id/sh11"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -188,13 +188,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh4"
+        android:layout_below="@+id/sh11"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_12" />
 
     <View
-        android:id="@+id/sh5"
+        android:id="@+id/sh12"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -207,13 +207,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh5"
+        android:layout_below="@+id/sh12"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_13" />
 
     <View
-        android:id="@+id/sh6"
+        android:id="@+id/sh13"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -226,13 +226,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh6"
+        android:layout_below="@+id/sh13"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_14" />
 
     <View
-        android:id="@+id/sh7"
+        android:id="@+id/sh14"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -245,13 +245,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh7"
+        android:layout_below="@+id/sh14"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_15" />
 
     <View
-        android:id="@+id/sh8"
+        android:id="@+id/sh15"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -264,13 +264,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh8"
+        android:layout_below="@+id/sh15"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_16" />
 
     <View
-        android:id="@+id/sh9"
+        android:id="@+id/sh16"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -283,13 +283,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh9"
+        android:layout_below="@+id/sh16"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_17" />
 
     <View
-        android:id="@+id/sh10"
+        android:id="@+id/sh17"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -302,13 +302,13 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh10"
+        android:layout_below="@+id/sh17"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_18" />
 
     <View
-        android:id="@+id/sh11"
+        android:id="@+id/sh18"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
@@ -321,7 +321,7 @@
         android:layout_width="@dimen/timetable_margin_left"
         android:layout_height="1dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sh11"
+        android:layout_below="@+id/sh18"
         android:gravity="center_vertical|right"
         android:paddingRight="5dp"
         android:text="@string/_19" />

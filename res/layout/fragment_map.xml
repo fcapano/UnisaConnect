@@ -1,14 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/map_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-<!--     <it.fdev.utils.TouchImageView -->
-<!-- 		android:id="@+id/map" -->
-<!-- 		android:layout_width="fill_parent" -->
-<!-- 		android:layout_height="fill_parent" -->
-<!-- 		android:scaleType="centerCrop" -->
-<!-- 		android:src="@drawable/ic_launcher" /> -->
+    <LinearLayout
+        android:id="@+id/floor_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:visibility="gone" >
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/floor_picker_n1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="-1"
+            android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/floor_picker_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="3dp"
+            android:text="0"
+            android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/floor_picker_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="3dp"
+            android:text="1"
+            android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/floor_picker_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="2"
+            android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/floor_picker_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="3dp"
+            android:text="3"
+            android:textColor="@android:color/darker_gray" />
+    </LinearLayout>
+
+</RelativeLayout>

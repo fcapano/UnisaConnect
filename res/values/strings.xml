@@ -10,6 +10,8 @@
     <string name="servizi_esse3">Servizi studenti</string>
     <string name="rubrica">Rubrica</string>
     <string name="meteo">Meteo</string>
+    <string name="orari_lezioni">Orari lezioni</string>
+    <string name="news">News</string>
     <string name="recensione">Lascia una recensione</string>
     <string name="contattaci">Problemi? Idee?</string>
     <string name="preferenze">Preferenze</string>
@@ -73,6 +75,16 @@
     <string name="nome_corso">Nome corso</string>
     <string name="aula_corso">Aula</string>
     <!-- End of Timetable -->
+    
+    <!-- Timetable Aggiungi Corso -->
+    <string name="aggiungi_corso">Aggiungi un corso</string>
+    <string name="il">Il</string>
+    <string name="in">in</string>
+    <string name="dalle">dalle</string>
+    <string name="alle">alle</string>
+    <string name="almeno_una_lezione">Aggiungi almeno una lezione</string>
+    <string name="nome_corso_non_vuoto">Il nome del corso non puo\' essere vuoto</string>
+    <!-- End of Timetable Aggiungi Corso -->
 
 
     <!-- Libretto -->
@@ -138,13 +150,26 @@
     <string name="meteo_non_disponibile">Si è verificato un errore nel reperire il meteo</string>
     <!-- end of Meteo -->
     
+    <!--  News -->
+    <string name="sync_news">Carico le news&#8230;</string>
+    <!--  end of News -->
+    
     <!-- WebRadio -->
     <string name="unisound">Unis@und Radio</string>
     <!-- end of WebRadio -->
     
+    <!-- ActionBar -->
+    <string name="cerca">Cerca</string>
+    <string name="aggiorna">Aggiorna</string>
+    <string name="cancella">Cancella</string>
+    <string name="aggiungi">Aggiungi</string>
+    <string name="modifica">Modifica</string>
+    <string name="accetta">Accetta</string>
+    <string name="twitter">Twitter</string>
+    <!-- end of ActionBar -->
+    
     
     <!-- Da ordinare / Generale -->
-    <string name="cerca">Cerca</string>
     <string name="email_chooser_titolo">Invia la mail con</string>
     <string name="controlla_connessione">Controlla la\nconnessione\nad internet</string>
     <string name="dati_errati">I dati di accesso non sono corretti</string>
@@ -155,7 +180,6 @@
     <string name="logging_in">Login in corso</string>
     <string name="login_ok">Login completata</string>
     <string name="caricamento">Caricamento&#8230;</string>
-    <string name="aggiorna">Aggiorna</string>
     <string name="problema_di_connessione_generico">Si è verificato un errore nell\'eseguire la richiesta</string>
     <string name="cerca_staff_name">Cerca docente</string>
     <string name="aggiornato_il">Aggiornato il %1$s</string>

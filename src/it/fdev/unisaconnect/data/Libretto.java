@@ -1,10 +1,14 @@
 package it.fdev.unisaconnect.data;
 
+import it.fdev.utils.Utils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import android.util.Log;
 
 public class Libretto {
 	private Date fetchTime;
@@ -46,18 +50,19 @@ public class Libretto {
 		int sommaVoti = 0;
 		for (CorsoLibretto corso : corsi) {
 			try { // Calcolo la media
-				int cfu = Integer.parseInt(corso.getCFU());
+				int cfu = Integer.parseInt(corso.getCFU().trim());
 				int mark;
 				if (corso.getMark().equalsIgnoreCase("30L"))
 					mark = 30;
 				else
-					mark = Integer.parseInt(corso.getMark());
+					mark = Integer.parseInt(corso.getMark().trim());
 				if (cfu > 0 && mark >= 18) {
 					numeroEsami++;
 					sommaVoti += mark;
 				}
 			} catch (NumberFormatException e) {
 				// Esami con ideneità. Compaiono come "SUP" e non influiscono sulla media
+				Log.w(Utils.TAG, "Voto o cfu non numerico: '" + corso.getCFU() + "' | '" + corso.getMark() + "'", e);
 			}
 			if (corso.getMark().isEmpty()) // Esame non ancora fatto
 				continue;

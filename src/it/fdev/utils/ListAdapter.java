@@ -84,7 +84,10 @@ public class ListAdapter extends ArrayAdapter<ListItem> {
 							}
 							@Override
 							public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
-								arg1.setVisibility(View.INVISIBLE);
+								try {
+									arg1.setVisibility(View.INVISIBLE);
+								} catch(Exception e) {
+								}
 							}
 							@Override
 							public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {

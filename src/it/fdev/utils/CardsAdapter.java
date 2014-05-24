@@ -57,7 +57,13 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 			if (item != null) {
 				viewHolder.titleView.setText(item.title);
 				viewHolder.textView.setText(item.text);
+				
+				if (item.date == null) {
+					item.date = "";
+				}
+				
 				viewHolder.dateView.setText(item.date);
+				viewHolder.titleView.setSingleLine(item.isSingleLine());
 			}
 		}
 		return view;
@@ -80,12 +86,18 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 		private String link = null;
 		private String text = null;
 		private String date = null;
+		private boolean singleLine;
 
-		public CardItem(String title, String link, String text, String date) {
+		public CardItem(String title, String link, String text, String date, boolean singleLine) {
 			this.title = title;
 			this.link = link;
 			this.text = text;
 			this.date = date;
+			this.singleLine = singleLine;
+		}
+		
+		public CardItem(String title, String link, String text, String date) {
+			this(title, link, text, date, true);
 		}
 
 		public String getTitle() {
@@ -118,6 +130,10 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 
 		public void setDate(String date) {
 			this.date = date;
+		}
+		
+		public boolean isSingleLine() {
+			return singleLine;
 		}
 		
 	}
