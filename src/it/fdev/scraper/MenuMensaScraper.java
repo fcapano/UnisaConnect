@@ -58,13 +58,14 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 			}
 			// publishProgress(loadStates.ANALYZING);
 			String menuDate = document.getElementsByTag("date").first().text();
+			String menuDateMillis = document.getElementsByTag("date").first().attr("millis");
 			String menuUrl = document.getElementsByTag("menuUrl").first().text();
 			ArrayList<PiattoMensa> firstCourses = getCourses(document.select("menu > firstCourses").first());
 			ArrayList<PiattoMensa> secondCourses = getCourses(document.select("menu > secondCourses").first());
 			ArrayList<PiattoMensa> sideCourses = getCourses(document.select("menu > sideCourses").first());
 			ArrayList<PiattoMensa> fruitCourse = getCourses(document.select("menu > fruitCourse").first());
 			ArrayList<PiattoMensa> takeAwayBasket = getCourses(document.select("menu > takeAwayBasket").first());
-			menu = new MenuMensa(menuDate, menuUrl, firstCourses, secondCourses, sideCourses, fruitCourse, takeAwayBasket);
+			menu = new MenuMensa(menuDate, menuDateMillis, menuUrl, firstCourses, secondCourses, sideCourses, fruitCourse, takeAwayBasket);
 			publishProgress(loadStates.FINISHED);
 		} catch (Exception e) {
 			menu = null;

@@ -4,14 +4,17 @@ import it.fdev.scraper.MenuMensaScraper;
 import it.fdev.unisaconnect.data.MenuMensa;
 import it.fdev.unisaconnect.data.MenuMensa.PiattoMensa;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
+import it.fdev.utils.MyDateUtils;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import android.content.Context;
@@ -30,7 +33,8 @@ public class FragmentMensa extends MySimpleFragment {
 	private boolean alreadyStarted = false;
 	private MenuMensa menu;
 	
-	private TextView menuDateView;
+	private TextView lastUpdateTimeView;
+	private View lastUpdateIconView;
 	private View menuContainerView;
 	private TextView menuNDView;
 
@@ -42,7 +46,8 @@ public class FragmentMensa extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		menuDateView = (TextView) view.findViewById(R.id.menu_date);
+		lastUpdateTimeView = (TextView) view.findViewById(R.id.last_update_time);
+		lastUpdateIconView =  view.findViewById(R.id.last_update_icon);
 		menuContainerView = view.findViewById(R.id.menu_list_container);
 		menuNDView = (TextView) view.findViewById(R.id.menu_non_disponibile);
 		mDataManager = new SharedPrefDataManager(activity);
@@ -146,7 +151,23 @@ public class FragmentMensa extends MySimpleFragment {
 			this.menu = menu;
 		}
 		
-		menuDateView.setText(this.menu.getDate());
+		String updateText;
+		try {
+			SimpleDateFormat inputFormatterTime = new SimpleDateFormat("dd/MM/yy", Locale.ITALY);
+			Date date = inputFormatterTime.parse(this.menu.getDate());
+//			long millis = Long.parseLong(this.menu.getDateMillis());
+			updateText = MyDateUtils.getLastUpdateString(activity, date.getTime(), true);
+		} catch (Exception e) {
+			updateText = this.menu.getDate();
+		}
+		if (updateText != null && !updateText.isEmpty()) {
+			lastUpdateTimeView.setText(updateText);
+			lastUpdateTimeView.setVisibility(View.VISIBLE);
+			lastUpdateIconView.setVisibility(View.VISIBLE);
+		} else {
+			lastUpdateTimeView.setVisibility(View.GONE);
+			lastUpdateIconView.setVisibility(View.GONE);
+		}
 		
 		LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout menuListView = (LinearLayout) activity.findViewById(R.id.menu_list);
@@ -208,6 +229,7 @@ public class FragmentMensa extends MySimpleFragment {
 
 	private LinearLayout inflateCourse(ArrayList<PiattoMensa> courses, String name, LayoutInflater layoutInflater) {
 		LinearLayout courseView = (LinearLayout) layoutInflater.inflate(R.layout.mensa_course, null);
+		
 		TextView labelView = (TextView) courseView.findViewById(R.id.course_label);
 		labelView.setText(name);
 

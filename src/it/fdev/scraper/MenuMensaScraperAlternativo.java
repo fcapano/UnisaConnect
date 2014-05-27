@@ -53,7 +53,7 @@ public class MenuMensaScraperAlternativo extends AsyncTask<MainActivity, MenuMen
 			ArrayList<PiattoMensa> sideCourses = getCourses(document.getElementsByClass("contorno").first());
 			ArrayList<PiattoMensa> fruitCourse = getCourses(document.getElementsByClass("altro").first());
 			ArrayList<PiattoMensa> takeAwayBasket = new ArrayList<MenuMensa.PiattoMensa>();
-			menu = new MenuMensa(menuDate, menuUrl, firstCourses, secondCourses, sideCourses, fruitCourse, takeAwayBasket);
+			menu = new MenuMensa(menuDate, null, menuUrl, firstCourses, secondCourses, sideCourses, fruitCourse, takeAwayBasket);
 			
 			publishProgress(loadStates.FINISHED);
 		} catch (Exception e) {

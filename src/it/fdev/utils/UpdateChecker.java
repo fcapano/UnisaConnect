@@ -20,6 +20,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager.BadTokenException;
 
 /**
  * Version 1.1 - For latest version check here: http://blog.fdev.eu/updatechecker/
@@ -87,7 +88,7 @@ public class UpdateChecker {
 		try {
 			/* Should Activity Check for Updates Now? */
 			if ((lastUpdateTime + TIME_TOLERANCE) > System.currentTimeMillis()) {
-				Log.v(TAG, "I check for updates a short time ago.");
+				Log.v(TAG, "I checked for updates a short time ago.");
 				return;
 			}
 
@@ -133,8 +134,12 @@ public class UpdateChecker {
 					editor.commit();
 				}
 			});
-
-			builder.show();
+			
+			try {
+				builder.show();
+			} catch (BadTokenException e) {
+				// Activity not running anymore
+			}
 		}
 	};
 

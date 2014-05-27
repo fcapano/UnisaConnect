@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/course_details"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="10dp" >
 
-    <TextView
-        android:id="@+id/course_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:singleLine="true"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"
-        tools:ignore="SelectableText" />
+        android:layout_margin="0dp"
+        android:background="@drawable/card_background"
+        android:orientation="vertical"
+        android:padding="7dp" >
 
-    <TextView
-        android:id="@+id/course_ingredients_it"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:textAppearance="@android:style/TextAppearance.Small"
-        android:textColor="?android:attr/textColorSecondary"
-        tools:ignore="SelectableText" />
+        <TextView
+            android:id="@+id/course_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="3dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/primary_text_light_nodisable" />
 
-    <TextView
-        android:id="@+id/course_ingredients_en"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:textAppearance="@android:style/TextAppearance.Small"
-        android:textColor="?android:attr/textColorSecondary"
-        tools:ignore="SelectableText" />
+        <TextView
+            android:id="@+id/course_ingredients_it"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray" />
+
+        <TextView
+            android:id="@+id/course_ingredients_en"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="left"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -27,7 +26,10 @@ import android.widget.TextView;
 
 public class FragmentTimetable extends MySimpleFragment {
 
-	RelativeLayout containerRL;
+	private RelativeLayout lessonsContainer;
+	private int containerHeight = 0; 
+	private OnGlobalLayoutListener mLayoutObserver;
+	private boolean observerRunning = false;
 	LinearLayout hContainer;
 	private int[] dayXLoc = new int[5];
 	private View[] daysList = new View[5];
@@ -42,7 +44,7 @@ public class FragmentTimetable extends MySimpleFragment {
 	private final int[] dayIDs = new int[] { R.id.d1, R.id.d2, R.id.d3, R.id.d4, R.id.d5 };
 //	private final int[] timeIDs = new int[] { R.id.h8, R.id.h9, R.id.h10, R.id.h11, R.id.h12, R.id.h13, R.id.h14, R.id.h15, R.id.h16, R.id.h17, R.id.h18 };
 	private final int[] sepIDs = new int[] { R.id.sh8, R.id.sh9, R.id.sh10, R.id.sh11, R.id.sh12, R.id.sh13, R.id.sh14, R.id.sh15, R.id.sh16, R.id.sh17, R.id.sh18 };
-
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View mainView = (View) inflater.inflate(R.layout.fragment_timetable1, container, false);
 		ttDB = new TimetableDB(activity);
@@ -50,60 +52,78 @@ public class FragmentTimetable extends MySimpleFragment {
 		return mainView;
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onViewCreated(final View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		containerRL = ((RelativeLayout) view.findViewById(R.id.timetable_container));
+		lessonsContainer = ((RelativeLayout) view.findViewById(R.id.lessons_container));
 		hContainer = ((LinearLayout) view.findViewById(R.id.hcontainer));
-		final int sdk = android.os.Build.VERSION.SDK_INT;
+		
 		// Wait for items loaded to take the needed position measures
-		ViewTreeObserver vto = containerRL.getViewTreeObserver();
-		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@SuppressWarnings("deprecation")
+		mLayoutObserver = new OnGlobalLayoutListener() {
 			@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 			@Override
 			public void onGlobalLayout() {
-				if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-					containerRL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				} else {
-					containerRL.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				if (observerRunning) {
+					return;
 				}
-				setMeasures();
-				loadLessons();
-
-				try {
-					if (sdk > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
-						/*
-						 * Quando si passa dall'activity di aggiunta lezione a questa con la tastiera aperta le misure vengono prese comprensive di tastiera. 
-						 * Vanno riprese una volta che la tastiera viene chiusa dal sistema. 
-						 * Come fare per Gingerbread?
-						 */
-						view.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-							@Override
-							public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-								setMeasures();
-								loadLessons();
-							}
-						});
-					}
-				} catch (Exception e) {
-					// Non ancora pronto per prendere le misure
+				observerRunning = true;
+				int newContainerHeight = lessonsContainer.getHeight();
+				if (newContainerHeight != containerHeight) {
+					containerHeight = newContainerHeight;
+					setMeasures();
+					loadLessons();
 				}
+				observerRunning = false;
 			}
-		});
+		};
+		
+		resumeLayoutObserver();
 	}
-
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		resumeLayoutObserver();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		pauseLayoutObserver();
+	}
+	
+	public void resumeLayoutObserver() {
+		if (mLayoutObserver == null) {
+			return;
+		}
+		ViewTreeObserver vto = lessonsContainer.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(mLayoutObserver);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	private void pauseLayoutObserver() {
+		if (mLayoutObserver == null) {
+			return;
+		}
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			lessonsContainer.getViewTreeObserver().removeGlobalOnLayoutListener(mLayoutObserver);
+		} else {
+			lessonsContainer.getViewTreeObserver().removeOnGlobalLayoutListener(mLayoutObserver);
+		}
+	}
+	
 	public void setMeasures() {
 		int xOffset = activity.findViewById(dayIDs[0]).getLeft();
-		daysWidth = (containerRL.getWidth() - xOffset) / ((float) daysList.length);
+		daysWidth = (lessonsContainer.getWidth() - xOffset) / ((float) daysList.length);
 		for (int i = 0; i < dayIDs.length; i++) {
 			daysList[i] = activity.findViewById(dayIDs[i]);
 			dayXLoc[i] = daysList[i].getLeft();
 		}
 
 		int yOffset = activity.findViewById(sepIDs[0]).getTop();
-		hoursHeight = (containerRL.getHeight() - yOffset) / ((float) timeYLoc.length);
+		hoursHeight = (lessonsContainer.getHeight() - yOffset) / ((float) timeYLoc.length);
 		minHeight = hoursHeight / (float) 60;
 		for (int i = 0; i < sepIDs.length; i++) {
 			timesList[i] = activity.findViewById(sepIDs[i]);
@@ -201,10 +221,11 @@ public class FragmentTimetable extends MySimpleFragment {
 		params.setMargins(marginLeft, marginTop, 0, 0);
 		lessonView.setLayoutParams(params);
 
-		containerRL.addView(lessonView);
+		lessonsContainer.addView(lessonView);
 	}
 
 	private void loadLessons() {
+		lessonsContainer.removeAllViews();
 		lessonList = ttDB.getLessons();
 		for (int i = 0; i < lessonList.size(); i++) {
 			addLesson(lessonList.get(i), i);

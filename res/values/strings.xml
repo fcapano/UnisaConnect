@@ -182,7 +182,11 @@
     <string name="caricamento">Caricamento&#8230;</string>
     <string name="problema_di_connessione_generico">Si è verificato un errore nell\'eseguire la richiesta</string>
     <string name="cerca_staff_name">Cerca docente</string>
+    <string name="aggiornato_oggi">Aggiornato oggi</string>
+    <string name="aggiornato_ieri">Aggiornato ieri</string>
     <string name="aggiornato_il">Aggiornato il %1$s</string>
+    <string name="aggiornato_alle">Aggiornato alle %1$s</string>
+    <string name="aggiornato_ieri_alle">Aggiornato ieri alle %1$s</string>
     <string name="aggiornato_il_alle">Aggiornato il %1$s alle %2$s</string>
     <string name="card_list_empty">Nessun risultato</string>
     <string name="drawer_open">Apri il menu di navigazione</string>

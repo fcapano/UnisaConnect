@@ -3,12 +3,8 @@ package it.fdev.unisaconnect;
 import it.fdev.unisaconnect.data.WeatherData.ActualCondition;
 import it.fdev.utils.DrawableManager;
 import it.fdev.utils.DrawableManager.DrawableManagerListener;
+import it.fdev.utils.MyDateUtils;
 import it.fdev.utils.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -101,23 +97,16 @@ public class FragmentWeatherActualCondition extends Fragment {
 
 	public void showCondition() {
 		if (condition != null && lastUpdateTimeView != null && iconView != null && tempView != null && descriptionView != null && humidityView != null && windView != null) {
-
-			try {
-				SimpleDateFormat outputFormatterDay = new SimpleDateFormat("dd/MM", Locale.ITALY);
-				SimpleDateFormat outputFormatterTime = new SimpleDateFormat("HH:mm", Locale.ITALY);
-				Date date = new Date(Long.parseLong(condition.getLastUpdateMilliseconds()));
-				String day = outputFormatterDay.format(date);
-				String time = outputFormatterTime.format(date);
-				String updateText = activity.getString(R.string.aggiornato_il_alle, day, time);
+			long millis = Long.parseLong(condition.getLastUpdateMilliseconds());
+			String updateText = MyDateUtils.getLastUpdateString(activity, millis, false);
+			if (updateText != null && !updateText.isEmpty()) {
 				lastUpdateTimeView.setText(updateText);
 				lastUpdateTimeView.setVisibility(View.VISIBLE);
 				lastUpdateIconView.setVisibility(View.VISIBLE);
-			} catch (Exception e) {
+			} else {
 				lastUpdateTimeView.setVisibility(View.GONE);
 				lastUpdateIconView.setVisibility(View.GONE);
-				Log.w(Utils.TAG, e);
 			}
-
 			iconView.setImageDrawable(condition.getIconDrawable(activity));
 			tempView.setText(condition.getTemp());
 			descriptionView.setText(condition.getDescription());

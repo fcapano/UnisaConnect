@@ -22,9 +22,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
         <View
@@ -107,8 +107,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/timetable_margin_top_half_neg"
         android:layout_marginBottom="@dimen/timetable_margin_top_half"
+        android:layout_marginTop="@dimen/timetable_margin_top_half_neg"
         android:orientation="vertical" >
 
         <View
@@ -214,15 +214,14 @@
             android:gravity="center_vertical|right"
             android:paddingRight="5dp"
             android:text="@string/_18" />
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
         android:orientation="vertical" >
 
         <View
@@ -361,7 +360,7 @@
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1" />
-        
+
         <View
             android:id="@+id/sh19"
             android:layout_width="fill_parent"
@@ -369,5 +368,15 @@
             android:layout_marginLeft="@dimen/timetable_margin_left"
             android:background="@color/timetable_separator" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/lessons_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+    </RelativeLayout>
 
 </RelativeLayout>
