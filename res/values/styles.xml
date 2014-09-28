@@ -2,8 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="icon">@drawable/logo_actionbar</item>
-        <item name="android:icon">@drawable/logo_actionbar</item>
+        <item name="icon">@drawable/ic_action_logo</item>
+        <item name="android:icon">@drawable/ic_action_logo</item>
         <item name="background">@drawable/actionbar_orange</item>
         <item name="android:background">@drawable/actionbar_orange</item>
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
@@ -24,7 +24,21 @@
         <item name="android:focusableInTouchMode">true</item>
     </style>
 
-    <style name="verticalTextStyle" parent="android:Widget.TextView">
+    <style name="MyEditTextWhite" parent="@style/MyEditText">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColorHighlight">@android:color/black</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="verticalTextStyle" parent="android:Widget.TextView"></style>
+
+    <style name="bigBackgroundTextStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/medium_gray</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <!-- <item name="android:paddingBottom">40sp</item> -->
+        <item name="android:paddingRight">10sp</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

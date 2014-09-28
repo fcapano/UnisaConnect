@@ -67,10 +67,16 @@ public class DrawableManager {
 	   if (drawableMap.containsKey(urlString)) {
            listener.onLoadingComplete(drawableMap.get(urlString));
        }
-       final Handler handler = new Handler() {
+	   final Handler handler = new Handler() {
            @Override
            public void handleMessage(Message message) {
         	   listener.onLoadingComplete((Drawable) message.obj);
+           }
+       };
+       final Handler errorHandler = new Handler() {
+           @Override
+           public void handleMessage(Message message) {
+        	   listener.onLoadingError();
            }
        };
        Thread thread = new Thread() {
@@ -81,6 +87,9 @@ public class DrawableManager {
                if(drawable != null) {
 	               Message message = handler.obtainMessage(1, drawable);
 	               handler.sendMessage(message);
+               } else {
+            	   Message message = new Message();
+            	   errorHandler.sendMessage(message);
                }
            }
        };
@@ -120,6 +129,7 @@ public class DrawableManager {
    
    public static interface DrawableManagerListener {
 	   public void onLoadingComplete(Drawable image);
+	   public void onLoadingError();
    }
    
 }

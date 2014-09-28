@@ -1,23 +1,41 @@
 package it.fdev.unisaconnect.data;
 
-import it.fdev.unisaconnect.R;
-import it.fdev.utils.ListAdapter.ListItem;
 
-public class StaffMemberSummary extends ListItem {
+public class StaffMemberSummary {
+
+	public String iconURL = null;
 
 	private String matricola;
-
-	public StaffMemberSummary(String matricola, String fullname, String imgUrl) {
-		super(fullname, imgUrl, true, R.color.activity_background);
+	private String nome;
+//	private String ruolo;
+	private String email;
+	
+	public StaffMemberSummary(String matricola, String nome, /*String ruolo,*/ String email, String iconURL) {
 		this.matricola = matricola;
+		this.nome = nome;
+//		this.ruolo = ruolo;
+		this.email = email;
+		this.iconURL = iconURL;
 	}
 
 	public String getMatricola() {
 		return matricola;
 	}
+	
+	public String getIconURL() {
+		return iconURL;
+	}
 
-	public String getFullname() {
-		return super.text;
+	public String getNome() {
+		return nome;
+	}
+
+//	public String getRuolo() {
+//		return ruolo;
+//	}
+
+	public String getEmail() {
+		return email;
 	}
 
 }

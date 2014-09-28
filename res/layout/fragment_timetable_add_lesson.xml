@@ -6,143 +6,156 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal" >
-
-            <AutoCompleteTextView
-                android:id="@+id/subject_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:completionThreshold="1"
-                android:hint="@string/nome_corso" />
-
-            <View
-                android:id="@+id/choosen_color"
-                android:layout_width="@dimen/timetable_colopicker_square"
-                android:layout_height="@dimen/timetable_colopicker_square"
-                android:layout_weight="0"
-                android:background="@color/lesson_color_1"
-                android:focusable="true"
-                android:focusableInTouchMode="true" />
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp" >
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/color_list"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal" >
 
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_1" />
+                <AutoCompleteTextView
+                    android:id="@+id/subject_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:completionThreshold="1"
+                    android:hint="@string/nome_corso"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:singleLine="true" />
 
                 <View
+                    android:id="@+id/choosen_color"
                     android:layout_width="@dimen/timetable_colopicker_square"
                     android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_2" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_3" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_4" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_5" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_6" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_7" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/lesson_color_8" />
-
-                <View
-                    android:layout_width="@dimen/timetable_colopicker_square"
-                    android:layout_height="@dimen/timetable_colopicker_square"
-                    android:background="@color/lesson_color_9" />
+                    android:layout_weight="0"
+                    android:background="@color/lesson_color_1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" />
             </LinearLayout>
-        </HorizontalScrollView>
 
-        <LinearLayout
-            android:id="@+id/add_lesson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp" >
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="#00000000"
-                android:src="@drawable/ic_action_add" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="Aggiungi lezione"
-                android:textColor="@android:color/white" />
+                android:overScrollMode="never"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp" >
+
+                <LinearLayout
+                    android:id="@+id/color_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_1" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_2" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_3" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_4" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_5" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_6" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_7" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/lesson_color_8" />
+
+                    <View
+                        android:layout_width="@dimen/timetable_colopicker_square"
+                        android:layout_height="@dimen/timetable_colopicker_square"
+                        android:background="@color/lesson_color_9" />
+                </LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lesson_data_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/add_lesson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" >
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_small_add_dark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="Aggiungi lezione" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lesson_data_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <!-- <View -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="1dp" -->
+            <!-- android:layout_marginTop="5dp" -->
+            <!-- android:background="@color/timetable_separator"/> -->
+
         </LinearLayout>
-
-        <!-- <View -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="1dp" -->
-        <!-- android:layout_marginTop="5dp" -->
-        <!-- android:background="@color/timetable_separator"/> -->
-
     </LinearLayout>
 
 </ScrollView>

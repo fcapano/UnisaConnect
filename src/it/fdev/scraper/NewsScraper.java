@@ -121,14 +121,12 @@ public class NewsScraper extends AsyncTask<MainActivity, NewsScraper.loadStates,
 				callerFragment.showCards(new ArrayList<CardsAdapter.CardItem>());
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		case FINISHED:
 			if (callerFragment != null) {
 				callerFragment.showCards(itemsList);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		default:
 			break;

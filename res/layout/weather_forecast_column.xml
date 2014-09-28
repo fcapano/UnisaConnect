@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical|center_horizontal"
     android:layout_weight="1"
+    android:background="@android:color/white"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical" >
 
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="18dp"
         android:gravity="center"
-        android:textColor="@android:color/white" />
+        android:singleLine="true" />
 
     <View
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="0dp"
-        android:background="@android:color/white" />
+        android:background="@color/dark_gray" />
 
     <ImageView
         android:id="@+id/forecast_icon"
@@ -51,20 +52,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@android:color/white"
+            android:singleLine="true"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text=" / " />
+            android:singleLine="true"
+            android:text="/" />
 
         <TextView
             android:id="@+id/forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:gravity="center"
+            android:singleLine="true" />
     </LinearLayout>
 
     <View
@@ -81,7 +84,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_details_rain" />
+            android:src="@drawable/ic_small_umbrella" />
 
         <TextView
             android:id="@+id/forecast_precipitations"
@@ -89,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
             android:gravity="center"
-            android:textColor="@android:color/white" />
+            android:singleLine="true" />
     </LinearLayout>
 
 </LinearLayout>

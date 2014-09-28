@@ -36,6 +36,7 @@ public class SharedPrefDataManager {
 	// Login
 	private static final String PREF_USER 			= "user";
 	private static final String PREF_PASS 			= "pass";
+	private static final String PREF_TIPO_CORSO		= "tipoCorso";
 	private static final String PREF_AUTOLOGIN 		= "loginAutomatica";
 	private static final String PREF_NOME_COGNOME 	= "nomeCognome";
 	// Mensa
@@ -48,8 +49,11 @@ public class SharedPrefDataManager {
 	private static final String PREF_APPELLI = "appelli";
 	// Libretto
 	private static final String PREF_LIBRETTO_DATE = "libretto_date";
+	private static final String PREF_LIBRETTO_SORT_BY_NAME = "libretto_sort_by_name";
 	// Pagamenti
 	private static final String PREF_PAGAMENTI = "pagamenti";
+	// Biblioteca
+	private static final String PREF_BIBLIO_LAST_SEARCH = "biblio_last_search";
 	// Testing
 	private static final String PREF_TESTING_ENABLED = "testingEnabled";
 	// Crypto
@@ -141,6 +145,14 @@ public class SharedPrefDataManager {
 		secureEditor.putString(PREF_PASS, pass);
 		secureEditor.commit();
 	}
+	
+	public int getTipoCorso() {
+		return mPrefs.getInt(PREF_TIPO_CORSO, 1);
+	}
+	
+	public void setTipoCorso(int tipoCorso) {
+		saveField(PREF_TIPO_CORSO, tipoCorso);
+	}
 
 	public boolean isLoginAutomatica() {
 		return mPrefs.getBoolean(PREF_AUTOLOGIN, true);
@@ -198,6 +210,14 @@ public class SharedPrefDataManager {
 		saveField(PREF_LIBRETTO_DATE, librettoFetchDate.getTime());
 	}
 	
+	public boolean getLibrettoSortByName() {
+		return mPrefs.getBoolean(PREF_LIBRETTO_SORT_BY_NAME, true);
+	}
+	
+	public void setLibrettoSortByName(boolean librettoSortByName) {
+		saveField(PREF_LIBRETTO_SORT_BY_NAME, librettoSortByName);
+	}
+	
 	public Appelli getAppelli() {
 		return (Appelli) ObjectSerializer.deserialize(mPrefs.getString(PREF_APPELLI, null));
 	}
@@ -212,6 +232,14 @@ public class SharedPrefDataManager {
 
 	public void setPagamenti(Pagamenti pagamenti) {
 		saveField(PREF_PAGAMENTI, pagamenti);
+	}
+	
+	public String getBiblioLastSearch() {
+		return mPrefs.getString(PREF_BIBLIO_LAST_SEARCH, "");
+	}
+	
+	public void setBiblioLastSearch(String lastSearch) {
+		saveField(PREF_BIBLIO_LAST_SEARCH, lastSearch);
 	}
 	
 	public Class<? extends MyFragmentInterface> getBootFragmentClass() {

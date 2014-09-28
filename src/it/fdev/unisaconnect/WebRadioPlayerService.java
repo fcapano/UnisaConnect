@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.utils.DrawableManager;
 import it.fdev.utils.Utils;
 

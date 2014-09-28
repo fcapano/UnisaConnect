@@ -1,6 +1,7 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.scraper.PresenzeScraper;
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.Presenze;
 import it.fdev.unisaconnect.data.Presenze.Esame;
@@ -47,9 +48,9 @@ public class FragmentPresenze extends MySimpleFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
 		
@@ -99,26 +100,26 @@ public class FragmentPresenze extends MySimpleFragment {
 			return;
 		}
 		
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		if (!force && presenze != null) {
 			mostraPresenze(null);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, this);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, this);
 			return;
 		}
 //		if (force || !alreadyStarted) {
 			alreadyStarted = true;
 			if (presenzeScraper != null && presenzeScraper.isRunning) {
-				activity.setLoadingVisible(true);
+				mActivity.setLoadingVisible(true);
 				return;
 			}
 			presenzeScraper = new PresenzeScraper();
 			presenzeScraper.setCallerPresenzeFragment(this);
-			presenzeScraper.execute(activity);
+			presenzeScraper.execute(mActivity);
 			return;
 //		}
 //		mostraPresenze(null);
@@ -129,8 +130,8 @@ public class FragmentPresenze extends MySimpleFragment {
 			return;			
 		}
 		if (presenzeContainerView == null || presenzeNDView == null) { 	// Dai report di crash sembra succedere a volte, non ho idea del perchè
-			activity.setDrawerOpen(true);							   			// Quindi mostro lo slidingmenu per apparare
-			activity.setLoadingVisible(false, false);
+			mActivity.setDrawerOpen(true);							   			// Quindi mostro lo slidingmenu per apparare
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		if (presenze != null) {
@@ -142,7 +143,7 @@ public class FragmentPresenze extends MySimpleFragment {
 			lastUpdateView.setVisibility(View.GONE);
 			lastUpdateIconView.setVisibility(View.GONE);
 //			lastUpdateSepView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		} 
 		
@@ -162,8 +163,8 @@ public class FragmentPresenze extends MySimpleFragment {
 //			lastUpdateSepView.setVisibility(View.GONE);
 		}
 		
-		LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout presenzeListView = (LinearLayout) activity.findViewById(R.id.presenze_list);
+		LayoutInflater layoutInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout presenzeListView = (LinearLayout) mActivity.findViewById(R.id.presenze_list);
 		presenzeListView.removeAllViews();
 		
 		ArrayList<Esame> listaEsami = this.presenze.getListaEsami();
@@ -181,7 +182,7 @@ public class FragmentPresenze extends MySimpleFragment {
 //			pref.saveData();
 		}
 		
-		activity.setLoadingVisible(false, false);
+		mActivity.setLoadingVisible(false, false);
 
 	}
 

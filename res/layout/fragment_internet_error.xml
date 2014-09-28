@@ -13,20 +13,15 @@
         android:layout_marginBottom="2sp"
         android:layout_marginRight="10sp"
         android:scaleType="fitEnd"
-        android:src="@drawable/break_dance"
+        android:src="@drawable/robot_disconnected"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/error_internet_text"
+        style="@style/bigBackgroundTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_vertical"
-        android:gravity="center|right"
-        android:paddingBottom="40sp"
-        android:paddingRight="10sp"
-        android:text="@string/controlla_connessione"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:textStyle="bold" />
+        android:text="@string/controlla_connessione" />
 
 </FrameLayout>

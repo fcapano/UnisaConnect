@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
@@ -62,24 +63,24 @@ public class FragmentEsse3Web extends MySimpleFragment {
 		thisFragment = this;
 
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
 
 		// Se non c'è internet rimando al fragment di errore
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, this);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, this);
 			return;
 		}
 
 		// Mostro il dialog di caricamento
 //		Utils.createDialog(activity, getString(R.string.caricamento), false);
-		activity.setLoadingVisible(true, false);
+		mActivity.setLoadingVisible(true, false);
 
 		// Cancella i cookie in modo da evitare problemi vari di login
-		CookieSyncManager.createInstance(activity);
+		CookieSyncManager.createInstance(mActivity);
 		CookieManager cookieManager = CookieManager.getInstance();
 		cookieManager.removeAllCookie();
 		cookieManager.setAcceptCookie(true);
@@ -136,15 +137,14 @@ public class FragmentEsse3Web extends MySimpleFragment {
 					handler.proceed(mDataManager.getUser(), mDataManager.getPass());
 				} else {
 					Log.d(Utils.TAG, "MMM");
-					Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
-					Utils.dismissDialog();
+					Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 				}
 			}
 
 			// Si verifica un errore durante il caricamento della pagina
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-				Utils.goToInternetError(activity, thisFragment);
+				Utils.goToInternetError(mActivity, thisFragment);
 			}
 
 			// Non chiedere quale browser usare. Carica sempre la pagina nella webview
@@ -158,7 +158,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				progressBar.setVisibility(View.VISIBLE);
-				activity.setLoadingVisible(true, false);
+				mActivity.setLoadingVisible(true, false);
 			}
 
 			// Quando il caricamento si completa rimuovi il dialog
@@ -166,8 +166,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				progressBar.setVisibility(View.GONE);
-				activity.setLoadingVisible(false, false);
-				Utils.dismissDialog();
+				mActivity.setLoadingVisible(false, false);
 				didSendLoginData = false;
 			}
 		});
@@ -212,8 +211,8 @@ public class FragmentEsse3Web extends MySimpleFragment {
 			if (!isAdded() || webView == null) {
 				return;
 			}
-			if (!Utils.hasConnection(activity)) {
-				Utils.goToInternetError(activity, thisFragment);
+			if (!Utils.hasConnection(mActivity)) {
+				Utils.goToInternetError(mActivity, thisFragment);
 				return;
 			}
 			didSendLoginData = false;

@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
@@ -37,10 +38,10 @@ public class FragmentInternetError extends MySimpleFragment {
 		if (!isAdded()) {
 			return;
 		}
-		if(Utils.hasConnection(activity)) {
-			activity.getSupportFragmentManager().popBackStack();
+		if(Utils.hasConnection(mActivity)) {
+			mActivity.getSupportFragmentManager().popBackStack();
 			if(backFragment != null) {
-				activity.switchContent(backFragment);
+				mActivity.switchContent(backFragment);
 			}
 		}
 	}

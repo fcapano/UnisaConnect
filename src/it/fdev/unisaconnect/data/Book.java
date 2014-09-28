@@ -5,10 +5,10 @@ import android.os.Parcelable;
 
 public class Book implements Parcelable {
 
-	private String resultNumber, author, format, title, year;
-	private String detailsUrl, positionUrl;
+	private String resultNumber, author, format, title, year, position;
+	private String detailsUrl;
 
-	public Book(String resultNumber, String author, String format, String title, String year, String detailsUrl, String positionUrl) {
+	public Book(String resultNumber, String author, String format, String title, String year, String detailsUrl, String position) {
 		super();
 		this.resultNumber = resultNumber;
 		this.author = author;
@@ -16,7 +16,7 @@ public class Book implements Parcelable {
 		this.title = title;
 		this.year = year;
 		this.detailsUrl = detailsUrl;
-		this.positionUrl = positionUrl;
+		this.position = position;
 	}
 
 	public String getResultNumber() {
@@ -43,12 +43,18 @@ public class Book implements Parcelable {
 		return detailsUrl;
 	}
 
-	public String getPositionUrl() {
-		return positionUrl;
+	public String getPosition() {
+		return position;
 	}
 
 	public Book(Parcel in) {
-		readFromParcel(in);
+		resultNumber = in.readString();
+		author = in.readString();
+		format = in.readString();
+		title = in.readString();
+		year = in.readString();
+		detailsUrl = in.readString();
+		position = in.readString();
 	}
 
 	@Override
@@ -59,17 +65,7 @@ public class Book implements Parcelable {
 		dest.writeString(title);
 		dest.writeString(year);
 		dest.writeString(detailsUrl);
-		dest.writeString(positionUrl);
-	}
-
-	private void readFromParcel(Parcel in) {
-		resultNumber = in.readString();
-		author = in.readString();
-		format = in.readString();
-		title = in.readString();
-		year = in.readString();
-		detailsUrl = in.readString();
-		positionUrl = in.readString();
+		dest.writeString(position);
 	}
 
 	public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
@@ -86,5 +82,5 @@ public class Book implements Parcelable {
 	public int describeContents() {
 		return 0;
 	}
-
+	
 }

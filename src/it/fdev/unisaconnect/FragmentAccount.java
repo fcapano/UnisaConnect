@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.unisaconnect.wifilogin.AsyncLogin;
@@ -34,7 +35,7 @@ public class FragmentAccount extends MySimpleFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dataManager = new SharedPrefDataManager(activity);
+		dataManager = new SharedPrefDataManager(mActivity);
 	}
 	
     @Override
@@ -56,7 +57,7 @@ public class FragmentAccount extends MySimpleFragment {
 					Spanned dest, int dstart, int dend) {
 				for (int i = start; i < end; i++) {
 					if((source.charAt(i)+"").equals("@")) {
-						Toast.makeText(activity, getString(R.string.non_inserire_at), Toast.LENGTH_SHORT).show();
+						Toast.makeText(mActivity, getString(R.string.non_inserire_at), Toast.LENGTH_SHORT).show();
 						return "";
 					}
 					if((source.charAt(i)+"").equals(" "))
@@ -75,9 +76,9 @@ public class FragmentAccount extends MySimpleFragment {
 					editTextUser.setText("");
 					boolean testing = ! dataManager.isTestingingEnabled();
 					dataManager.setTestingEnabled(testing);
-		        	Toast.makeText(activity, "Testing enabled: " + testing, Toast.LENGTH_LONG).show();
-		        	activity.finish();
-		        	activity.startActivity(activity.getIntent());
+		        	Toast.makeText(mActivity, "Testing enabled: " + testing, Toast.LENGTH_LONG).show();
+		        	mActivity.finish();
+		        	mActivity.startActivity(mActivity.getIntent());
 				}
 			}
 			@Override
@@ -98,7 +99,7 @@ public class FragmentAccount extends MySimpleFragment {
 				if(user.length()>0 && pass.length()>0)
 					salvaDati(user, pass, loginAutomatica);
 				else
-					Toast.makeText(activity.getApplicationContext(), getString(R.string.dati_non_validi), Toast.LENGTH_SHORT).show();
+					Toast.makeText(mActivity.getApplicationContext(), getString(R.string.dati_non_validi), Toast.LENGTH_SHORT).show();
 			}
 		});
 		fillData();
@@ -107,11 +108,13 @@ public class FragmentAccount extends MySimpleFragment {
 	private void salvaDati(String user, String pass, boolean loginAutomatica) {
 		
 		try {
+			String oldUser = dataManager.getUser();
+
 			dataManager.setUser(user);
 			dataManager.setPass(pass);
 			dataManager.setLoginAutomatica(loginAutomatica);
 			
-			Context context = activity.getApplicationContext();
+			Context context = mActivity.getApplicationContext();
 			NetworkStateChanged.setEnableBroadcastReceiver(context, loginAutomatica);
 			Toast.makeText(context, getString(R.string.dati_salvati), Toast.LENGTH_LONG).show();
 			
@@ -123,11 +126,10 @@ public class FragmentAccount extends MySimpleFragment {
 //				activity.startService(new Intent(activity, Esse3ScraperService.class).setAction(Esse3ScraperService.BROADCAST_STATE_E3_LIBRETTO));
 //			}
 			
-			activity.switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
+			mActivity.switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
 		} catch(Exception e) {
 			Log.e(Utils.TAG, "Error saving data!", e);
 		}
-		fillData();
 	}
 	
 	public void fillData() {

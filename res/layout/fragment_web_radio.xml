@@ -14,13 +14,13 @@
         android:adjustViewBounds="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/unisound_background_dark_orange" />
+        android:src="@drawable/unisound_logo" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.4"
-        android:background="@color/dark_gray"
+        android:background="@drawable/card_background_simmetric"
         android:orientation="horizontal"
         android:weightSum="1" >
 
@@ -33,7 +33,7 @@
             android:adjustViewBounds="true"
             android:maxWidth="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/music_note" />
+            android:src="@drawable/music_note_dark" />
 
         <!-- <RelativeLayout -->
         <!-- android:layout_width="0dp" -->
@@ -65,7 +65,7 @@
                 android:singleLine="true"
                 android:text="@string/unisound"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@android:color/white"
+                android:textColor="@color/dark_gray"
                 android:textStyle="bold" />
 
             <TextView
@@ -80,39 +80,41 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/dark_gray" />
         </LinearLayout>
 
-<!--         <LinearLayout -->
-<!--             android:visibility="gone" -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:padding="0dp" -->
-<!--             android:layout_margin="0dp" -->
-<!--             android:layout_gravity="right|bottom" -->
-<!--             android:background="@color/transparent_white_50" -->
-<!--             android:gravity="right|bottom" -->
-<!--             android:orientation="horizontal" > -->
+        <!-- <LinearLayout -->
+        <!-- android:visibility="gone" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:padding="0dp" -->
+        <!-- android:layout_margin="0dp" -->
+        <!-- android:layout_gravity="right|bottom" -->
+        <!-- android:background="@color/transparent_white_50" -->
+        <!-- android:gravity="right|bottom" -->
+        <!-- android:orientation="horizontal" > -->
 
-<!--             <TextView -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_marginLeft="2dp" -->
-<!--                 android:layout_marginRight="1dp" -->
-<!--                 android:padding="0dp" -->
-<!--                 android:text="HD" -->
-<!--                 android:textColor="@android:color/white" -->
-<!--                 android:textStyle="bold" /> -->
 
-<!--             <TextView -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_marginLeft="1dp" -->
-<!--                 android:layout_marginRight="2dp" -->
-<!--                 android:padding="0dp" -->
-<!--                 android:text="LD" -->
-<!--                 android:textColor="@color/lighter_gray" /> -->
-<!--         </LinearLayout> -->
+        <!-- <TextView -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_marginLeft="2dp" -->
+        <!-- android:layout_marginRight="1dp" -->
+        <!-- android:padding="0dp" -->
+        <!-- android:text="HD" -->
+        <!-- android:textColor="@android:color/white" -->
+        <!-- android:textStyle="bold" /> -->
+
+
+        <!-- <TextView -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_marginLeft="1dp" -->
+        <!-- android:layout_marginRight="2dp" -->
+        <!-- android:padding="0dp" -->
+        <!-- android:text="LD" -->
+        <!-- android:textColor="@color/lighter_gray" /> -->
+        <!-- </LinearLayout> -->
     </LinearLayout>
 
     <RelativeLayout

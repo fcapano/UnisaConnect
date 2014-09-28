@@ -17,7 +17,7 @@ public abstract class Esse3BasicScraper {
 	protected SharedPrefDataManager mDataManager;
 	protected String base64login;
 	
-	private String broadcastID;
+	protected String broadcastID;
 	
 	public static enum LoadStates {
 		WRONG_DATA, NO_DATA, NO_INTERNET, UNKNOWN_PROBLEM, ESSE3_PROBLEM, FINISHED

@@ -1,8 +1,8 @@
 package it.fdev.scraper;
 
+import it.fdev.unisaconnect.FragmentWeather;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.R;
-import it.fdev.unisaconnect.FragmentWeather;
 import it.fdev.unisaconnect.data.WeatherData;
 import it.fdev.unisaconnect.data.WeatherData.ActualCondition;
 import it.fdev.unisaconnect.data.WeatherData.DailyForecast;
@@ -135,14 +135,12 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 				callerMeteoFragment.showWeather(null);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		case FINISHED:
 			if (callerMeteoFragment != null) {
 				callerMeteoFragment.showWeather(meteo);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		default:
 			break;

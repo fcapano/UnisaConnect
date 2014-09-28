@@ -6,53 +6,27 @@
 
     <TextView
         android:id="@+id/libretto_vuoto"
+        style="@style/bigBackgroundTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
-        android:gravity="right|center_vertical"
-        android:paddingBottom="40sp"
-        android:paddingRight="10sp"
         android:text="@string/libretto_vuoto"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/last_update_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/last_update_time"
-        android:layout_alignTop="@+id/last_update_time"
-        android:layout_gravity="center_vertical|right"
-        android:layout_toLeftOf="@+id/last_update_time"
-        android:scaleType="fitEnd"
-        android:src="@drawable/ic_action_refresh"
-        android:visibility="gone"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/last_update_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <include
+        android:id="@+id/last_update_container"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:visibility="gone" />
+        layout="@layout/update_text" />
 
     <LinearLayout
         android:id="@+id/riepilogo_libretto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/last_update_time"
+        android:layout_below="@+id/last_update_container"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
         android:background="@drawable/card_background"
         android:gravity="center"
         android:orientation="vertical"
@@ -71,13 +45,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:text="@string/media_aritmetica"
-                android:textColor="@android:color/secondary_text_light" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/avg_arithmetic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
                 tools:ignore="SelectableText" />
 
@@ -85,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/su_30"
-                android:textColor="@android:color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -106,13 +80,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:text="@string/media_ponderata"
-                android:textColor="@android:color/secondary_text_light" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/avg_weighted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
                 tools:ignore="SelectableText" />
 
@@ -120,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/su_30"
-                android:textColor="@android:color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -141,13 +115,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:text="@string/parti_da"
-                android:textColor="@android:color/secondary_text_light" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/base_mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
                 tools:ignore="SelectableText" />
 
@@ -155,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/su_110"
-                android:textColor="@android:color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
@@ -172,60 +146,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp" >
 
-            <!-- <LinearLayout -->
-            <!-- android:id="@+id/libretto_progressbar_container" -->
-            <!-- android:layout_width="fill_parent" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:layout_below="@+id/riepilogo_libretto" -->
-            <!-- android:layout_marginBottom="10dp" -->
-            <!-- android:layout_marginLeft="10dp" -->
-            <!-- android:layout_marginRight="10dp" -->
-            <!-- android:background="@drawable/card_background" -->
-            <!-- android:gravity="center_vertical" -->
-            <!-- android:orientation="horizontal" -->
-            <!-- android:visibility="gone" > -->
-
-
-            <!-- <TextView -->
-            <!-- android:layout_width="wrap_content" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:layout_marginRight="5dp" -->
-            <!-- android:text="30%" -->
-            <!-- android:textColor="@android:color/secondary_text_light" -->
-            <!-- android:textSize="30sp" /> -->
-
-
-            <!-- <LinearLayout -->
-            <!-- android:layout_width="fill_parent" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:gravity="center_vertical" -->
-            <!-- android:orientation="vertical" > -->
-
-
-            <!-- <ProgressBar -->
-            <!-- android:id="@+id/libretto_progressbar" -->
-            <!-- style="?android:attr/progressBarStyleHorizontal" -->
-            <!-- android:layout_width="fill_parent" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:layout_below="@+id/riepilogo_libretto" -->
-            <!-- android:indeterminate="false" -->
-            <!-- android:max="100" -->
-            <!-- android:progress="30" /> -->
-
-
-            <!-- <TextView -->
-            <!-- android:layout_width="wrap_content" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:text="Hai ottenuto 60 dei 150 CFU previsti" -->
-            <!-- android:textColor="@android:color/secondary_text_light" /> -->
-            <!-- </LinearLayout> -->
-            <!-- </LinearLayout> -->
-
             <RelativeLayout
                 android:id="@+id/libretto_line_graph_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/card_background"
@@ -237,7 +161,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:text="@string/andamenti_esami"
-                    android:textColor="@android:color/secondary_text_light" />
+                    android:textColor="?android:textColorSecondary" />
 
                 <com.echo.holographlibrary.LineGraph
                     android:id="@+id/libretto_line_graph"
@@ -262,13 +186,13 @@
                         android:id="@+id/libretto_graph_esame_nome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/secondary_text_light" />
+                        android:textColor="?android:textColorSecondary" />
 
                     <TextView
                         android:id="@+id/libretto_graph_esame_superato"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/secondary_text_light" />
+                        android:textColor="?android:textColorSecondary" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -278,13 +202,54 @@
             <!-- android:layout_height="200dp" /> -->
 
             <LinearLayout
+                android:id="@+id/sorter_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/libretto_line_graph_container"
+                android:gravity="center_vertical|right"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp" >
+
+                <ImageView
+                    android:id="@+id/sorter_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="3dp"
+                    android:padding="0dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_icon_sort" />
+
+                <ProgressBar
+                    android:id="@+id/sorter_loading"
+                    style="?android:attr/progressBarStyleSmallInverse"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/sorter_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:padding="0dp"
+                    android:text="@string/ordina_per_nome" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/lista_corsi"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/libretto_line_graph_container"
+                android:layout_below="@+id/sorter_button"
                 android:orientation="vertical" >
             </LinearLayout>
         </RelativeLayout>

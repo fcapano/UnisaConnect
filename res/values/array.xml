@@ -7,10 +7,10 @@
         <item>@string/meteo</item>
         <item>@string/orari_lezioni</item>
         <item>@string/news</item>
+        <item>@string/map</item>
         <item>@string/unisound</item>
         <item>@string/contattaci</item>
-        <item>map</item>
-        <item>biblio</item>
+        <item>Bus</item>
     </string-array>
     
     <string-array name="menu_icons">
@@ -20,10 +20,10 @@
         <item>@drawable/ic_drawer_weather</item>
         <item>@drawable/ic_drawer_timetable</item>
         <item>@drawable/ic_drawer_news</item>
+        <item>@drawable/ic_drawer_mapicon</item>
         <item>@drawable/ic_drawer_music</item>
         <item>@drawable/ic_drawer_comments</item>
-        <item>@drawable/ic_drawer_mapicon</item>
-        <item>@drawable/transparent</item>
+        <item>@drawable/ic_drawer_bus</item>
     </string-array>
     
     <string-array name="timetable_lesson_colors">

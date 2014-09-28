@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Appelli implements Serializable {
-	private static final long serialVersionUID = -8103729698218890556L;
+	private static final long serialVersionUID = -8103726698218890556L;
 	
 	private Date fetchDate;
 	private ArrayList<Appello> listaAppelliDisponibili, listaAppelliPrenotati;
@@ -13,7 +13,13 @@ public class Appelli implements Serializable {
 	public Appelli(ArrayList<Appello> listaAppelliDisponibili, ArrayList<Appello> listaAppelliPrenotati) {
 		this.fetchDate = new Date();
 		this.listaAppelliDisponibili = listaAppelliDisponibili;
+		if (this.listaAppelliDisponibili == null) {
+			this.listaAppelliDisponibili = new ArrayList<Appelli.Appello>();
+		}
 		this.listaAppelliPrenotati = listaAppelliPrenotati;
+		if (this.listaAppelliPrenotati == null) {
+			this.listaAppelliPrenotati = new ArrayList<Appelli.Appello>();
+		}
 	}
 	
 	public Date getFetchTime() {
@@ -37,7 +43,9 @@ public class Appelli implements Serializable {
 	}
 	
 	public boolean isEmpty(){
-		return listaAppelliDisponibili.isEmpty() && listaAppelliPrenotati.isEmpty();
+		boolean disponibilyEmpty = listaAppelliDisponibili == null && listaAppelliDisponibili.isEmpty() ;
+		boolean prenotatiEmpty = listaAppelliPrenotati == null && listaAppelliPrenotati.isEmpty();
+		return disponibilyEmpty && prenotatiEmpty;
 	}
 
 	public static class Appello implements Serializable  {

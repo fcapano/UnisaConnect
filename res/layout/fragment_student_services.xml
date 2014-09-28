@@ -13,6 +13,14 @@
         android:paddingRight="10dp"
         android:paddingTop="10dp" >
 
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/tipo_corso_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            custom:img="@drawable/ic_icon_check"
+            custom:text="@string/tipo_corso" />
+
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_action_person"
+                custom:img="@drawable/ic_icon_person"
                 custom:text="@string/account" />
 
             <it.fdev.utils.CustomButtonWithImg
@@ -31,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_drawer_link"
+                custom:img="@drawable/ic_icon_link"
                 custom:text="@string/esse3_pagina_web" />
         </TableRow>
 
@@ -45,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_drawer_libretto"
+                custom:img="@drawable/ic_icon_libretto"
                 custom:text="@string/libretto" />
 
             <it.fdev.utils.CustomButtonWithImg
@@ -53,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_drawer_calendar_full"
+                custom:img="@drawable/ic_icon_calendar"
                 custom:text="@string/appelli" />
         </TableRow>
 
@@ -67,7 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_drawer_money"
+                custom:img="@drawable/ic_icon_money"
                 custom:text="@string/pagamenti" />
 
             <it.fdev.utils.CustomButtonWithImg
@@ -75,8 +83,27 @@
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_drawer_mail"
+                custom:img="@drawable/ic_icon_mail"
                 custom:text="@string/webmail" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp" >
+
+            <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/biblioteca_btn"
+                android:layout_width="0dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                custom:img="@drawable/ic_icon_book"
+                custom:text="@string/biblioteca" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -86,20 +113,41 @@
             android:visibility="gone" >
 
             <it.fdev.utils.CustomButtonWithImg
+                android:id="@+id/tipo_corso_btn1"
+                android:layout_width="0dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                custom:img="@drawable/ic_icon_edit"
+                custom:text="@string/tipo_corso" />
+
+            <it.fdev.utils.CustomButtonWithImg
                 android:id="@+id/presenze_btn"
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                custom:img="@drawable/ic_drawer_presenze"
+                android:visibility="invisible"
+                custom:img="@drawable/ic_icon_presenze"
                 custom:text="@string/presenze" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:visibility="gone" >
 
             <it.fdev.utils.CustomButtonWithImg
                 android:id="@+id/autocertificazioni_btn"
                 android:layout_width="0dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 custom:img="@drawable/transparent"
                 custom:text="@string/autocertificazioni" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1" />
         </TableRow>
     </TableLayout>
 

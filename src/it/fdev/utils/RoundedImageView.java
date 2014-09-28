@@ -31,8 +31,8 @@ public class RoundedImageView extends ImageView {
     private int mCornerRadius = DEFAULT_RADIUS;
     private int mBorderWidth = DEFAULT_BORDER_WIDTH;
     private ColorStateList mBorderColor = ColorStateList.valueOf(RoundedDrawable.DEFAULT_BORDER_COLOR);
-    private boolean mOval = false;
-    private boolean mRoundBackground = false;
+    private boolean mOval = true;
+    private boolean mRoundBackground = true;
 
     private int mResource;
     private Drawable mDrawable;
@@ -77,8 +77,8 @@ public class RoundedImageView extends ImageView {
             mBorderColor = ColorStateList.valueOf(RoundedDrawable.DEFAULT_BORDER_COLOR);
         }
 
-        mRoundBackground = a.getBoolean(R.styleable.RoundedImageView_round_background, false);
-        mOval = a.getBoolean(R.styleable.RoundedImageView_is_oval, false);
+        mRoundBackground = a.getBoolean(R.styleable.RoundedImageView_round_background, true);
+        mOval = a.getBoolean(R.styleable.RoundedImageView_is_oval, true);
 
         updateDrawableAttrs();
         updateBackgroundDrawableAttrs();

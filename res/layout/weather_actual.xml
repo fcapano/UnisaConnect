@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:gravity="center" >
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/dark_gray" />
+
     <ImageView
         android:id="@+id/webcam_image"
         android:layout_width="match_parent"

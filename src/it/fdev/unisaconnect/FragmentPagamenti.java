@@ -1,18 +1,17 @@
 package it.fdev.unisaconnect;
 
-import it.fdev.scraper.esse3.Esse3ScraperService;
 import it.fdev.scraper.esse3.Esse3BasicScraper.LoadStates;
+import it.fdev.scraper.esse3.Esse3ScraperService;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.Pagamenti;
 import it.fdev.unisaconnect.data.Pagamenti.Pagamento;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
+import it.fdev.utils.MyDateUtils;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import android.content.BroadcastReceiver;
@@ -35,7 +34,7 @@ public class FragmentPagamenti extends MySimpleFragment {
 	
 	private TextView pagamentiVuotoView;
 	private LinearLayout pagamentiContainerView;
-	private TextView lastUpdateView;
+	private TextView lastUpdateTextView;
 	private View lastUpdateIconView;
 //	private View lastUpdateSepView;
 	
@@ -62,20 +61,20 @@ public class FragmentPagamenti extends MySimpleFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
 		
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		mIntentFilter.addAction(Esse3ScraperService.BROADCAST_STATE_E3_PAGAMENTI);
 		
 		pagamentiVuotoView = (TextView) view.findViewById(R.id.pagamenti_vuoto);
 		pagamentiContainerView = (LinearLayout) view.findViewById(R.id.pagamenti_list);
-		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
-		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
+		lastUpdateTextView = (TextView) view.findViewById(R.id.last_update_time);
+		lastUpdateTextView = (TextView) view.findViewById(R.id.last_update_time);
 		lastUpdateIconView = (View) view.findViewById(R.id.last_update_icon);
 //		lastUpdateSepView = (View) view.findViewById(R.id.last_update_sep);
 		
@@ -88,14 +87,14 @@ public class FragmentPagamenti extends MySimpleFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		activity.registerReceiver(mHandlerBroadcast, mIntentFilter);
+		mActivity.registerReceiver(mHandlerBroadcast, mIntentFilter);
 		getPagamenti(false);
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		activity.unregisterReceiver(mHandlerBroadcast);
+		mActivity.unregisterReceiver(mHandlerBroadcast);
 	}
 
 	@Override
@@ -114,11 +113,11 @@ public class FragmentPagamenti extends MySimpleFragment {
 					break;
 				case NO_DATA:
 				case WRONG_DATA:
-					Utils.createAlert(activity, activity.getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+					Utils.createAlert(mActivity, mActivity.getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 					break;
 				case UNKNOWN_PROBLEM:
 				default:
-					Utils.createAlert(activity, activity.getString(R.string.problema_di_connessione_generico), null, true);
+					Utils.createAlert(mActivity, mActivity.getString(R.string.problema_di_connessione_generico), null, true);
 					break;
 				}
 			}
@@ -152,7 +151,7 @@ public class FragmentPagamenti extends MySimpleFragment {
 			return;
 		}
 		
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		if (!force && mDataManager.getPagamenti()!=null) {
 			alreadyStarted = true;
@@ -161,20 +160,20 @@ public class FragmentPagamenti extends MySimpleFragment {
 		}
 		
 		// Se non c'è internet rimando al fragment di errore
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, this);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, this);
 			return;
 		}
 		
 		if (force || !alreadyStarted) {
 			alreadyStarted = true;
-			activity.startService(new Intent(activity, Esse3ScraperService.class).setAction(Esse3ScraperService.BROADCAST_STATE_E3_PAGAMENTI));
+			mActivity.startService(new Intent(mActivity, Esse3ScraperService.class).setAction(Esse3ScraperService.BROADCAST_STATE_E3_PAGAMENTI));
 		} else {
 			pagamentiVuotoView.setVisibility(View.VISIBLE);
 			pagamentiContainerView.setVisibility(View.GONE);
-			lastUpdateView.setVisibility(View.GONE);
+			lastUpdateTextView.setVisibility(View.GONE);
 			lastUpdateIconView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 	}
@@ -185,8 +184,8 @@ public class FragmentPagamenti extends MySimpleFragment {
 			return;			
 		}
 		if (pagamentiVuotoView == null || pagamentiContainerView == null) { 	// Dai report di crash sembra succedere a volte, non ho idea del perchè
-			activity.setDrawerOpen(true);							   			// Quindi mostro lo slidingmenu per apparare
-			activity.setLoadingVisible(false, false);
+			mActivity.setDrawerOpen(true);							   			// Quindi mostro lo slidingmenu per apparare
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 
@@ -201,32 +200,31 @@ public class FragmentPagamenti extends MySimpleFragment {
 //		Pagamenti pp = new Pagamenti(p);
 //		pagamenti = pp;
 		
+		String updateText = "";
+		if (pagamenti != null) {
+			updateText = MyDateUtils.getLastUpdateString(mActivity, pagamenti.getFetchTime().getTime(), false);
+		}
+		if (!updateText.isEmpty()) {
+			lastUpdateTextView.setText(updateText);
+			lastUpdateTextView.setVisibility(View.VISIBLE);
+			lastUpdateIconView.setVisibility(View.VISIBLE);
+		} else {
+			lastUpdateTextView.setVisibility(View.GONE);
+			lastUpdateIconView.setVisibility(View.GONE);
+		}
 		
 		if (pagamenti == null || pagamenti.getListaPagamenti().size() == 0) {				// Non ho pagamenti da mostrare
 			pagamentiVuotoView.setVisibility(View.VISIBLE);
 			pagamentiContainerView.setVisibility(View.GONE);
-			lastUpdateView.setVisibility(View.GONE);
-			lastUpdateIconView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		
 		pagamentiVuotoView.setVisibility(View.GONE);
 		pagamentiContainerView.setVisibility(View.VISIBLE);
-		if (pagamenti.getFetchTime().getTime() > 0) {
-			String dateFirstPart = new SimpleDateFormat("dd/MM", Locale.ITALY).format(pagamenti.getFetchTime());
-		    String dateSecondPart = new SimpleDateFormat("HH:mm", Locale.ITALY).format(pagamenti.getFetchTime());
-		    String updateText = getString(R.string.aggiornato_il_alle, dateFirstPart, dateSecondPart);
-			lastUpdateView.setText(updateText);
-			lastUpdateView.setVisibility(View.VISIBLE);
-			lastUpdateIconView.setVisibility(View.VISIBLE);
-		} else {
-			lastUpdateView.setVisibility(View.GONE);
-			lastUpdateIconView.setVisibility(View.GONE);
-		}
 		
-		LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout pagamentiListView = (LinearLayout) activity.findViewById(R.id.pagamenti_list);
+		LayoutInflater layoutInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout pagamentiListView = (LinearLayout) mActivity.findViewById(R.id.pagamenti_list);
 		pagamentiListView.removeAllViews();
 		
 		ArrayList<Pagamento> listaPagamenti = pagamenti.getListaPagamenti();
@@ -236,7 +234,7 @@ public class FragmentPagamenti extends MySimpleFragment {
 			View view = inflatePagamento(cPagamento, layoutInflater);
 			pagamentiListView.addView(view);
 		}
-		activity.setLoadingVisible(false, false);
+		mActivity.setLoadingVisible(false, false);
 	}
 	
 	public View inflatePagamento(Pagamento pagamento, LayoutInflater layoutInflater) {

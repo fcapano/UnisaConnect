@@ -22,24 +22,28 @@
 <!-- android:layout_height="wrap_content" -->
 <!-- android:src="@drawable/refresh" /> -->
 
+
 <!-- <ImageView xmlns:android="http://schemas.android.com/apk/res/android" -->
-<!--     style="?attr/actionButtonStyle" -->
-<!--     android:layout_width="wrap_content" -->
-<!--     android:layout_height="wrap_content" -->
-<!--     android:src="@drawable/refresh" /> -->
+<!-- style="?attr/actionButtonStyle" -->
+<!-- android:layout_width="wrap_content" -->
+<!-- android:layout_height="wrap_content" -->
+<!-- android:src="@drawable/refresh" /> -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:addStatesFromChildren="true"
-              android:focusable="true"
-              android:paddingLeft="4dp"
-              android:paddingRight="4dp"
-              android:gravity="center"
-              style="?attr/actionButtonStyle">
+    style="?attr/actionButtonStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:addStatesFromChildren="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp" >
+
     <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            style="@android:style/Widget.ProgressBar.Small"/>
-</LinearLayout> 
+        android:id="@+id/action_spinner"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true" />
+
+</LinearLayout>

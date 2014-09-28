@@ -1,18 +1,17 @@
 package it.fdev.unisaconnect;
 
-import it.fdev.scraper.esse3.Esse3ScraperService;
 import it.fdev.scraper.esse3.Esse3BasicScraper.LoadStates;
+import it.fdev.scraper.esse3.Esse3ScraperService;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.Appelli;
 import it.fdev.unisaconnect.data.Appelli.Appello;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
+import it.fdev.utils.MyDateUtils;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import android.content.BroadcastReceiver;
@@ -25,23 +24,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class FragmentAppelli extends MySimpleFragment {
 
 	private boolean alreadyStarted = false;
-	
+
 	private ArrayList<Appello> listaAppelliDisponibili;
 	private ArrayList<Appello> listaAppelliPrenotati;
 	private LayoutInflater layoutInflater;
 	private SharedPrefDataManager mDataManager;
-	
+
+	private ScrollView appelliListContainer;
 	private LinearLayout appelliDisponibiliContainer;
 	private LinearLayout appelliPrenotatiContainer;
 	private View appelliNDView;
-	private TextView lastUpdateView;
+	private TextView lastUpdateTextView;
 	private View lastUpdateIconView;
-//	private View lastUpdateSepView;
 
 	private IntentFilter mIntentFilter = new IntentFilter();
 	private final BroadcastReceiver mHandlerBroadcast = new BroadcastReceiver() {
@@ -64,45 +64,45 @@ public class FragmentAppelli extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
+
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
-		
-		activity.setLoadingVisible(true, true);
-		
+
+		mActivity.setLoadingVisible(true, true);
+
 		mIntentFilter.addAction(Esse3ScraperService.BROADCAST_STATE_E3_PAGAMENTI);
 
-		layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		layoutInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		appelliListContainer = (ScrollView) view.findViewById(R.id.appelli_list_container);
 		appelliDisponibiliContainer = (LinearLayout) view.findViewById(R.id.appelli_disponibili_list);
 		appelliPrenotatiContainer = (LinearLayout) view.findViewById(R.id.appelli_prenotati_list);
 		appelliNDView = view.findViewById(R.id.appelli_vuoto);
-		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
+		lastUpdateTextView = (TextView) view.findViewById(R.id.last_update_time);
 		lastUpdateIconView = (View) view.findViewById(R.id.last_update_icon);
-//		lastUpdateSepView = (View) view.findViewById(R.id.last_update_sep);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		activity.registerReceiver(mHandlerBroadcast, mIntentFilter);
+		mActivity.registerReceiver(mHandlerBroadcast, mIntentFilter);
 		getAppelli(false);
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
-		activity.unregisterReceiver(mHandlerBroadcast);
+		mActivity.unregisterReceiver(mHandlerBroadcast);
 	}
 
 	@Override
 	public void actionRefresh() {
 		getAppelli(true);
 	}
-	
+
 	public void onNewBroadcast(Context context, Intent intent) {
 		try {
 			Log.d(Utils.TAG, "BROADCAST RECEIVED: " + intent.getAction());
@@ -114,11 +114,11 @@ public class FragmentAppelli extends MySimpleFragment {
 					break;
 				case NO_DATA:
 				case WRONG_DATA:
-					Utils.createAlert(activity, activity.getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+					Utils.createAlert(mActivity, mActivity.getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 					break;
 				case UNKNOWN_PROBLEM:
 				default:
-					Utils.createAlert(activity, activity.getString(R.string.problema_di_connessione_generico), null, true);
+					Utils.createAlert(mActivity, mActivity.getString(R.string.problema_di_connessione_generico), null, true);
 					break;
 				}
 			}
@@ -126,7 +126,7 @@ public class FragmentAppelli extends MySimpleFragment {
 			Log.e(Utils.TAG, "onReceiveBroadcast exception", e);
 		}
 	}
-	
+
 	@Override
 	public Set<Integer> getActionsToShow() {
 		Set<Integer> actionsToShow = new HashSet<Integer>();
@@ -141,82 +141,77 @@ public class FragmentAppelli extends MySimpleFragment {
 		if (!isAdded()) {
 			return;
 		}
-		
+
 		// Lo scraper è in esecuzione
 		if (Esse3ScraperService.isRunning) {
 			return;
 		}
-		
-		activity.setLoadingVisible(true, true);
-		
-		if (!force && mDataManager.getAppelli()!=null) {
+
+		mActivity.setLoadingVisible(true, true);
+
+		if (!force && mDataManager.getAppelli() != null) {
 			alreadyStarted = true;
 			mostraAppelli();
 			return;
 		}
 		// Se non c'è internet rimando al fragment di errore
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, this);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, this);
 			return;
 		}
-		
+
 		if (force || !alreadyStarted) {
 			alreadyStarted = true;
-			activity.startService(new Intent(activity, Esse3ScraperService.class).setAction(Esse3ScraperService.BROADCAST_STATE_E3_APPELLI));
+			mActivity.startService(new Intent(mActivity, Esse3ScraperService.class).setAction(Esse3ScraperService.BROADCAST_STATE_E3_APPELLI));
 		} else {
 			appelliNDView.setVisibility(View.VISIBLE);
 			appelliDisponibiliContainer.setVisibility(View.GONE);
 			appelliPrenotatiContainer.setVisibility(View.GONE);
-			lastUpdateView.setVisibility(View.GONE);
+			lastUpdateTextView.setVisibility(View.GONE);
 			lastUpdateIconView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 	}
 
 	public void mostraAppelli() {
 		if (!isAdded()) {
-			return;			
-		}
-		if (appelliDisponibiliContainer == null || appelliPrenotatiContainer == null || appelliNDView == null) { 	// Dai report di crash sembra succedere a volte, non ho idea del perchè
-			activity.setDrawerOpen(true);							   			// Quindi mostro lo slidingmenu per apparare
-			activity.setLoadingVisible(false, false);
 			return;
 		}
-		
+		if (appelliDisponibiliContainer == null || appelliPrenotatiContainer == null || appelliNDView == null) { // Dai report di crash sembra succedere a volte, non ho idea del perchè
+			mActivity.setDrawerOpen(true); // Quindi mostro lo slidingmenu per apparare
+			mActivity.setLoadingVisible(false, false);
+			return;
+		}
+
 		Appelli appelli = mDataManager.getAppelli();
-		
+
+		String updateText = "";
+		if (appelli != null) {
+			updateText = MyDateUtils.getLastUpdateString(mActivity, appelli.getFetchTime().getTime(), false);
+		}
+		if (!updateText.isEmpty()) {
+			lastUpdateTextView.setText(updateText);
+			lastUpdateTextView.setVisibility(View.VISIBLE);
+			lastUpdateIconView.setVisibility(View.VISIBLE);
+		} else {
+			lastUpdateTextView.setVisibility(View.GONE);
+			lastUpdateIconView.setVisibility(View.GONE);
+		}
+
 		if (appelli == null || appelli.isEmpty()) {
 			// Non ho appelli da mostrare
 			appelliNDView.setVisibility(View.VISIBLE);
-			appelliDisponibiliContainer.setVisibility(View.GONE);
-			appelliPrenotatiContainer.setVisibility(View.GONE);
-			lastUpdateView.setVisibility(View.GONE);
-			lastUpdateIconView.setVisibility(View.GONE);
-//			lastUpdateSepView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			appelliListContainer.setVisibility(View.GONE);
+			mActivity.setLoadingVisible(false, false);
 			return;
-		} 
-		
-		appelliNDView.setVisibility(View.GONE);
-		if (appelli.getFetchTime().getTime() > 0) {
-			String dateFirstPart = new SimpleDateFormat("dd/MM", Locale.ITALY).format(appelli.getFetchTime());
-		    String dateSecondPart = new SimpleDateFormat("HH:mm", Locale.ITALY).format(appelli.getFetchTime());
-		    String updateText = getString(R.string.aggiornato_il_alle, dateFirstPart, dateSecondPart);
-			lastUpdateView.setText(updateText);
-			lastUpdateView.setVisibility(View.VISIBLE);
-			lastUpdateIconView.setVisibility(View.VISIBLE);
-//			lastUpdateSepView.setVisibility(View.VISIBLE);
-		} else {
-			lastUpdateView.setVisibility(View.GONE);
-			lastUpdateIconView.setVisibility(View.GONE);
-//			lastUpdateSepView.setVisibility(View.GONE);
 		}
-		
+
+		appelliNDView.setVisibility(View.GONE);
 		mostraAppelliDisponibili(appelli.getListaAppelliDisponibili());
 		mostraAppelliPrenotati(appelli.getListaAppelliPrenotati());
-		
-		activity.setLoadingVisible(false, false);
+
+		mActivity.setLoadingVisible(false, false);
 	}
 
 	private void mostraAppelliPrenotati(ArrayList<Appello> listaAppelli) {
@@ -231,7 +226,6 @@ public class FragmentAppelli extends MySimpleFragment {
 		if (listaAppelliPrenotati.size() == 0) {
 			if (listaAppelliDisponibili != null && listaAppelliDisponibili.size() == 0) {
 				appelliNDView.setVisibility(View.VISIBLE);
-				Utils.dismissDialog();
 			}
 			return;
 		} else {
@@ -260,7 +254,6 @@ public class FragmentAppelli extends MySimpleFragment {
 		if (listaAppelliDisponibili.size() == 0) {
 			if (listaAppelliPrenotati != null && listaAppelliPrenotati.size() == 0) {
 				appelliNDView.setVisibility(View.VISIBLE);
-				Utils.dismissDialog();
 			}
 			return;
 		} else {
@@ -295,7 +288,7 @@ public class FragmentAppelli extends MySimpleFragment {
 		}
 		return rowView;
 	}
-	
+
 	@Override
 	public int getTitleResId() {
 		return R.string.appelli;

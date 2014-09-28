@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/it.fdev.unisaconnect"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
+
+        <!-- <LinearLayout -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:orientation="horizontal" -->
+        <!-- android:weightSum="2" > -->
+
+
+        <!-- <it.fdev.utils.CustomButtonWithImg -->
+        <!-- android:id="@+id/bus_to_btn" -->
+        <!-- android:layout_width="0dp" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_marginRight="5dp" -->
+        <!-- android:layout_weight="1" -->
+        <!-- custom:img="@drawable/ic_icon_bus_to" -->
+        <!-- custom:text="Per l&apos;università" /> -->
+
+
+        <!-- <it.fdev.utils.CustomButtonWithImg -->
+        <!-- android:id="@+id/bus_from_btn" -->
+        <!-- android:layout_width="0dp" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_marginLeft="5dp" -->
+        <!-- android:layout_weight="1" -->
+        <!-- custom:img="@drawable/ic_icon_bus_from" -->
+        <!-- custom:text="Dall&apos;università" /> -->
+        <!-- </LinearLayout> -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/cerca_destinazione"
+                style="@style/MyEditTextWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_search_black"
+                android:gravity="left|center_vertical"
+                android:hint="Cerca fermata" />
+
+            <TextView
+                android:id="@+id/risultati_ricerca_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Risultati:"
+                android:textColor="@color/darker_gray"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/risultati_ricerca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical"
+                android:visibility="gone" >
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- DETTAGLI -->
+
+        <LinearLayout
+            android:id="@+id/tratte_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <!-- <include layout="@layout/card_bus_tratta" /> -->
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

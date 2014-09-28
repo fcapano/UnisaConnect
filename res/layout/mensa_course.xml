@@ -18,14 +18,15 @@
         android:paddingRight="10dp"
         android:paddingTop="5dp"
         android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
         tools:ignore="SelectableText" />
 
-<!--     <LinearLayout -->
-<!--         android:id="@+id/course_list" -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:orientation="vertical" > -->
-<!--     </LinearLayout> -->
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/course_list" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:orientation="vertical" > -->
+    <!-- </LinearLayout> -->
 
 </LinearLayout>

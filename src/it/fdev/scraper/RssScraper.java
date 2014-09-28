@@ -1,7 +1,7 @@
 package it.fdev.scraper;
 
-import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.FragmentNews;
+import it.fdev.unisaconnect.MainActivity;
 import it.fdev.utils.CardsAdapter;
 import it.fdev.utils.CardsAdapter.CardItem;
 import it.fdev.utils.Utils;
@@ -122,7 +122,6 @@ public class RssScraper extends AsyncTask<MainActivity, RssScraper.loadStates, I
 //				callerFragment.mostraMenu(null);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		case FINISHED:
 			Log.d(Utils.TAG, "Finished");
@@ -130,7 +129,6 @@ public class RssScraper extends AsyncTask<MainActivity, RssScraper.loadStates, I
 				((FragmentNews) callerFragment).showCards(itemsList);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		default:
 			break;

@@ -8,6 +8,7 @@ import it.fdev.unisaconnect.data.MenuMensa.PiattoMensa;
 import it.fdev.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -83,14 +84,14 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 		super.onProgressUpdate(values);
 		switch (values[0]) {
 		case START:
-			activity.setLoadingText(R.string.sincronizzazione_menu);			
+			activity.setLoadingText(R.string.sincronizzazione_menu);
 			break;
 		case MENU_NOT_AVAILABLE:
 			if (callerMenuFragment == null) {
 				return;
 			}
-			if (errorMessage!=null && errorMessage.toLowerCase().contains("sorpresa")) {
-				//Nel caso in cui ammensa-unisa non abbia il menu del giorno, verifico se unisamenu invece ne ha uno
+			if (errorMessage != null && errorMessage.toLowerCase(Locale.ITALIAN).contains("sorpresa")) {
+				// Nel caso in cui ammensa-unisa non abbia il menu del giorno, verifico se unisamenu invece ne ha uno
 				Log.d(Utils.TAG, "ammensa-unisa han no menu...trying with unisamenu");
 				mensaAlternativoScraper.setErrorMessage(errorMessage);
 				mensaAlternativoScraper.execute(activity);
@@ -107,7 +108,7 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 			if (callerMenuFragment == null) {
 				return;
 			}
-			//Nel caso in cui ammensa-unisa non abbia il menu del giorno, verifico se unisamenu invece ne ha uno
+			// Nel caso in cui ammensa-unisa non abbia il menu del giorno, verifico se unisamenu invece ne ha uno
 			Log.d(Utils.TAG, "ammensa-unisa han no menu...trying with unisamenu");
 			mensaAlternativoScraper.execute(activity);
 			break;
@@ -146,23 +147,23 @@ public class MenuMensaScraper extends AsyncTask<MainActivity, MenuMensaScraper.l
 
 	public ArrayList<PiattoMensa> getCourses(Element courses) {
 		ArrayList<PiattoMensa> coursesList = new ArrayList<PiattoMensa>();
-		
+
 		// Avoid Iterators: http://stackoverflow.com/questions/10291767/is-there-anything-faster-than-jsoup-for-html-scraping
 		Elements list = courses.getElementsByTag("course");
 		Element cCourse;
-		for (int i=0; i<list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			cCourse = list.get(i);
-			String name = cCourse.getElementsByTag("name").first().text();
+			String name = cCourse.getElementsByTag("name").first().text().trim();
 			String ingredientsIt, ingredientsEn;
 			Elements ingredientsTags = cCourse.getElementsByTag("ingredients");
 			if (ingredientsTags.size() == 0) {
 				coursesList.add(new PiattoMensa(name));
 			} else if (ingredientsTags.size() == 1) {
-				ingredientsIt = ingredientsTags.first().text();
+				ingredientsIt = ingredientsTags.first().text().trim();
 				coursesList.add(new PiattoMensa(name, ingredientsIt));
 			} else {
-				ingredientsEn = ingredientsTags.get(0).text();
-				ingredientsIt = ingredientsTags.get(1).text();
+				ingredientsEn = ingredientsTags.get(0).text().trim();
+				ingredientsIt = ingredientsTags.get(1).text().trim();
 				coursesList.add(new PiattoMensa(name, ingredientsIt, ingredientsEn));
 			}
 		}

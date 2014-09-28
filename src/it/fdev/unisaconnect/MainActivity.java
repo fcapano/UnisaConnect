@@ -2,8 +2,8 @@ package it.fdev.unisaconnect;
 
 import it.fdev.scraper.esse3.Esse3BasicScraper.LoadStates;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
-import it.fdev.utils.ListAdapter;
-import it.fdev.utils.ListAdapter.ListItem;
+import it.fdev.utils.ListAdapterDrawer;
+import it.fdev.utils.ListAdapterDrawer.ListItemDrawer;
 import it.fdev.utils.MyFragmentInterface;
 import it.fdev.utils.UpdateChecker;
 import it.fdev.utils.Utils;
@@ -25,6 +25,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +47,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.crittercism.app.Crittercism;
@@ -53,7 +55,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -61,15 +63,14 @@ public class MainActivity extends ActionBarActivity {
 	public static final String INTENT_LAUNCH_FRAGMENT = "it.fdev.launch_fragment";
 	public final static String BROADCAST_LOADING_MESSAGE = "it.fdev.loading_message";
 	public final static String BROADCAST_ERROR = "it.fdev.error";
-	
+
 	// Fragments which can be started at application startup (do not require special configuration to start)
 	public static enum BootableFragmentsEnum {
-		ACCOUNT, MENSA, WEBMAIL, STUDENT_SERVICES, STAFF_SEARCH, TIMETABLE, MAP, WEATHER, LIBRETTO, ESSE3_WEB, APPELLI, PRESENZE, PAGAMENTI, PREFERENCES, NEWS_ALL, WEB_RADIO, BIBLIO_SEARCH
+		ACCOUNT, MENSA, WEBMAIL, STUDENT_SERVICES, STAFF_SEARCH, TIMETABLE, MAP, WEATHER, LIBRETTO, ESSE3_WEB, APPELLI, PRESENZE, PAGAMENTI, PREFERENCES, NEWS_ALL, WEB_RADIO, BIBLIO_SEARCH, TIPO_CORSO, BUS
 	}
-	
+
 	// References to fragments used to save the fragment to boot in the preferences
-	public static HashMap<BootableFragmentsEnum, Class<? extends MyFragmentInterface>> fragmentsIDs = 
-			new HashMap<MainActivity.BootableFragmentsEnum, Class<? extends MyFragmentInterface>>();
+	public static HashMap<BootableFragmentsEnum, Class<? extends MyFragmentInterface>> fragmentsIDs = new HashMap<MainActivity.BootableFragmentsEnum, Class<? extends MyFragmentInterface>>();
 	static {
 		fragmentsIDs.put(BootableFragmentsEnum.ACCOUNT, FragmentAccount.class);
 		fragmentsIDs.put(BootableFragmentsEnum.MENSA, FragmentMensa.class);
@@ -88,8 +89,10 @@ public class MainActivity extends ActionBarActivity {
 		fragmentsIDs.put(BootableFragmentsEnum.WEB_RADIO, FragmentWebRadio.class);
 		fragmentsIDs.put(BootableFragmentsEnum.BIBLIO_SEARCH, FragmentBiblioPrepareSearch.class);
 		fragmentsIDs.put(BootableFragmentsEnum.PREFERENCES, FragmentPreferences.class);
+		fragmentsIDs.put(BootableFragmentsEnum.TIPO_CORSO, FragmentTipoCorso.class);
+		fragmentsIDs.put(BootableFragmentsEnum.BUS, FragmentBus.class);
 	}
-	
+
 	public static final HashSet<Integer> actions = new HashSet<Integer>();
 	static {
 		actions.add(R.id.action_search_button);
@@ -100,13 +103,13 @@ public class MainActivity extends ActionBarActivity {
 		actions.add(R.id.action_refresh_button);
 		actions.add(R.id.action_twitter_button);
 	}
-	
+
 	private String mAppName;
-	
-	private static final int VALID_NAVIGATION_DRAWER_ELEMENTS_NUM = 8;	// When testing is disabled only these elements are shown
-																		// To enable testing in the account preferences as username enter
-																	 	// the string in Utils.TOGGLE_TESTING_STRING ("testing!")
-	
+
+	private static final int VALID_NAVIGATION_DRAWER_ELEMENTS_NUM = 9;  // When testing is disabled only these elements are shown
+																		// To enable testing, in the account preferences as username enter
+																		// the string in Utils.TOGGLE_TESTING_STRING ("testing!")
+
 	private IntentFilter mIntentFilter = new IntentFilter();
 	private final BroadcastReceiver mHandlerBroadcast = new BroadcastReceiver() {
 		@Override
@@ -114,22 +117,23 @@ public class MainActivity extends ActionBarActivity {
 			onNewBroadcast(context, intent);
 		}
 	};
-	
+
 	private static Set<Integer> mActionsToShow = new HashSet<Integer>();
 	private boolean menuAlreadyToggled = false; // After the first time in onPostCreate the menu shouldn't be toggled automatically
-	private boolean showMenuOnStartup = true;	// Show the sliding menu on startup
+	private boolean showMenuOnStartup = true; // Show the sliding menu on startup
+	private FragmentManager mFragmentManager; 
 	private Menu mOptionsMenu;
 	private ActionBar mActionBar;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private String mActionbarTitle;
 	private View loadingAnimationContainer;
+	private ProgressBar loadingAnimationSpinner;
 	private TextView loadingAnimationText;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private SharedPrefDataManager mDataManager;
 	private List<WeakReference<Fragment>> mFragments = new ArrayList<WeakReference<Fragment>>();
 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -153,6 +157,8 @@ public class MainActivity extends ActionBarActivity {
 		EasyTracker.getInstance().setContext(this);
 		EasyTracker.getInstance().activityStart(this);
 		
+		mFragmentManager = getSupportFragmentManager();
+		
 		mIntentFilter.addAction(BROADCAST_LOADING_MESSAGE);
 		mIntentFilter.addAction(BROADCAST_ERROR);
 		
@@ -164,9 +170,13 @@ public class MainActivity extends ActionBarActivity {
 		// set the Above View
 		setContentView(R.layout.activity_main);
 		loadingAnimationContainer = findViewById(R.id.content_loading_container);
+		loadingAnimationSpinner = (ProgressBar) findViewById(R.id.content_loading_spinner);
 		loadingAnimationText = (TextView) findViewById(R.id.content_loading_text);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		
+		// Set spinner color
+		loadingAnimationSpinner.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
 		
 		// set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.ic_drawer_shadow, GravityCompat.START);
@@ -176,11 +186,16 @@ public class MainActivity extends ActionBarActivity {
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 		mActionBar.setHomeButtonEnabled(true);
 		
+		SystemBarTintManager tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.orange_actionbar);
+//		tintManager.setNavigationBarTintEnabled(true);
+		
 		//Initialize Drawer
         initializeDrawer();
 		
 		// Initialize image downloader used by fragments
-		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheOnDisc(true).build();
+		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheOnDisk(true).build();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
 												.defaultDisplayImageOptions(defaultOptions)
 												.memoryCacheExtraOptions(100, 100)
@@ -199,10 +214,9 @@ public class MainActivity extends ActionBarActivity {
 //			} catch (Exception e) {
 //				fragmentToBoot = new WifiPreferencesFragment();
 //			}
-	    	switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
+			switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
 	    }
 	    
-//	    showTnd();
 //	    setupUpxAppBanner();
 		new UpdateChecker(this).start();
 	    
@@ -210,31 +224,31 @@ public class MainActivity extends ActionBarActivity {
 //	    versionManager.setVersionContentUrl("http://fdev.eu/unisaconnect/version"); // your update content url, see the response format below
 //	    versionManager.checkVersion();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		registerReceiver(mHandlerBroadcast, mIntentFilter);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(mHandlerBroadcast);
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
 		EasyTracker.getInstance().activityStop(this);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		mActionsToShow = new HashSet<Integer>();
 	}
-	
+
 	public void onNewBroadcast(Context context, Intent intent) {
 		try {
 			Log.d(Utils.TAG, "BROADCAST RECEIVED: " + intent.getAction());
@@ -253,7 +267,7 @@ public class MainActivity extends ActionBarActivity {
 					break;
 				case ESSE3_PROBLEM:
 					String message = null;
-					if(intent.hasExtra("message")) {
+					if (intent.hasExtra("message")) {
 						message = intent.getStringExtra("message");
 					} else {
 						message = getString(R.string.problema_di_connessione_generico);
@@ -273,9 +287,9 @@ public class MainActivity extends ActionBarActivity {
 			Log.e(Utils.TAG, "onReceiveBroadcast exception", e);
 		}
 	}
-	
+
 	@Override
-	public void onNewIntent(Intent intent){
+	public void onNewIntent(Intent intent) {
 		try {
 			setIntent(intent);
 			Log.d(Utils.TAG, "Intent received");
@@ -289,20 +303,20 @@ public class MainActivity extends ActionBarActivity {
 				return;
 			} else if (INTENT_LAUNCH_FRAGMENT.equals(intent.getAction())) {
 				Bundle extras = intent.getExtras();
-			    if(extras != null){
-			    	if(extras != null){
-				        BootableFragmentsEnum fragmentToBootEnum = (BootableFragmentsEnum) extras.getSerializable("launch_fragment");
+				if (extras != null) {
+					if (extras != null) {
+						BootableFragmentsEnum fragmentToBootEnum = (BootableFragmentsEnum) extras.getSerializable("launch_fragment");
 						switchContent(fragmentToBootEnum, true);
 						showMenuOnStartup = false;
-				    }
-			    }
+					}
+				}
 			}
 		} catch (Exception e) {
 			Log.e(Utils.TAG, "onNewIntent exception", e);
 		}
 	}
 
-	//Actionbar items
+	// Actionbar items
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		try {
@@ -342,40 +356,40 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void goToLastFrame() {
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		if (fragmentManager.getBackStackEntryCount() == 1) {
+		if (mFragmentManager.getBackStackEntryCount() == 1) {
 			setDrawerOpen(true);
 		} else {
-			fragmentManager.popBackStack();
+			mFragmentManager.popBackStack();
 		}
 	}
-	
+
 	/**
-	 * http://stackoverflow.com/questions/9984089/memory-issues-fragments
-	 * Memory management
+	 * http://stackoverflow.com/questions/9984089/memory-issues-fragments Memory management
 	 */
 	@Override
 	public void onAttachFragment(Fragment fragment) {
-	    mFragments.add(new WeakReference<Fragment>(fragment));
+		mFragments.add(new WeakReference<Fragment>(fragment));
 	}
-	
+
 	private void recycleFragments() {
-	    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-	    for (WeakReference<Fragment> ref : mFragments) {
-	        Fragment fragment = ref.get();
-	        if (fragment != null) {
-	            ft.remove(fragment);
-	        }
-	    }
-	    ft.commit();
-	    mFragments.clear();
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		for (WeakReference<Fragment> ref : mFragments) {
+			Fragment fragment = ref.get();
+			if (fragment != null) {
+				ft.remove(fragment);
+			}
+		}
+		ft.commit();
+		mFragments.clear();
 	}
-	
+
 	/**
-	 * Changes the fragment shown. Using Enum to avoid creation of duplicate fragments which would be deferenced 
-	 * if similar fragment already exists as switchsContent(Fragment newFragment) does
-	 * @param newFragmentEnum fragment enum to show
-	 * @param emptyBackStack if true all existing fragments are removed from the backstack
+	 * Changes the fragment shown. Using Enum to avoid creation of duplicate fragments which would be deferenced if similar fragment already exists as switchsContent(Fragment newFragment) does
+	 * 
+	 * @param newFragmentEnum
+	 *            fragment enum to show
+	 * @param emptyBackStack
+	 *            if true all existing fragments are removed from the backstack
 	 */
 	public void switchContent(BootableFragmentsEnum newFragmentEnum, boolean emptyBackStack) {
 		if (newFragmentEnum == null)
@@ -384,26 +398,25 @@ public class MainActivity extends ActionBarActivity {
 			return;
 		}
 		try {
-			FragmentManager fragmentManager = getSupportFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//			fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-			Fragment currFrag = fragmentManager.findFragmentById(R.id.content_frame);
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			// fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+			Fragment currFrag = mFragmentManager.findFragmentById(R.id.content_frame);
 			Class<? extends Fragment> currClass = null;
 			if (currFrag != null) {
-				currClass = fragmentManager.findFragmentById(R.id.content_frame).getClass();						// Classe del fragment attualmente visualizzato
+				currClass = mFragmentManager.findFragmentById(R.id.content_frame).getClass(); // Classe del fragment attualmente visualizzato
 			}
-			Class<? extends MyFragmentInterface> newClass = fragmentsIDs.get(newFragmentEnum);						// Classe del fragment da visualizzare
-			if (currFrag==null || !newClass.equals(currClass)) {													// I fragment sono diversi
+			Class<? extends MyFragmentInterface> newClass = fragmentsIDs.get(newFragmentEnum); // Classe del fragment da visualizzare
+			if (currFrag == null || !newClass.equals(currClass)) { // I fragment sono diversi
 				Fragment fragmentToShow = (Fragment) newClass.newInstance();
 				if (emptyBackStack) {
-					fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+					mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 					recycleFragments();
 				}
 				fragmentTransaction.replace(R.id.content_frame, fragmentToShow, fragmentToShow.getClass().toString());
 				fragmentTransaction.addToBackStack(null);
 				fragmentTransaction.commit();
 				mDataManager.setBootFragmentClass(newClass);
-//				mDataManager.saveData();
+				// mDataManager.saveData();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -416,25 +429,26 @@ public class MainActivity extends ActionBarActivity {
 	/**
 	 * Changes the fragment shown
 	 * 
-	 * @param newFragment fragment frame to show
+	 * @param newFragment
+	 *            fragment frame to show
 	 */
 	public void switchContent(Fragment newFragment) {
 		if (newFragment == null)
 			return;
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//		fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out); 
+		
+		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+		// fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 		boolean isSameFragment;
 		String currentFragmentClass;
 		try {
-			currentFragmentClass = fragmentManager.findFragmentById(R.id.content_frame).getClass().toString();
-		} catch(Exception e) {
+			currentFragmentClass = mFragmentManager.findFragmentById(R.id.content_frame).getClass().toString();
+		} catch (Exception e) {
 			currentFragmentClass = null;
 		}
 		String newFragmentClass = newFragment.getClass().toString();
 		isSameFragment = newFragmentClass.equals(currentFragmentClass);
 		if (!isSameFragment) {
-			Fragment fragmentToReplace = fragmentManager.findFragmentByTag(newFragmentClass);
+			Fragment fragmentToReplace = mFragmentManager.findFragmentByTag(newFragmentClass);
 			if (fragmentToReplace != null) {
 				newFragment = fragmentToReplace;
 			}
@@ -448,14 +462,12 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Versioni recenti di Android hanno un bug sull'actionbar
-	 * una volta impostata come nascosta un action, il menu dev'essere invalidado
-	 * affinchè venga mostrata nuovamente 
+	 * Versioni recenti di Android hanno un bug sull'actionbar una volta impostata come nascosta un action, il menu dev'essere invalidado affinchè venga mostrata nuovamente
 	 */
-	public void reloadActionButtons(Fragment newFragment) {
+	public void reloadActionButtons(MyFragmentInterface newFragment) {
 		if (mOptionsMenu != null && newFragment != null) {
 			try {
-				mActionsToShow = ((MyFragmentInterface) newFragment).getActionsToShow();
+				mActionsToShow = newFragment.getActionsToShow();
 				if (mActionsToShow == null) {
 					mActionsToShow = new HashSet<Integer>();
 				}
@@ -465,7 +477,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 	}
-	
+
 	public void setLoadingVisible(final boolean showActionbarAnimation) {
 		if (mOptionsMenu != null) {
 			if (mActionsToShow == null) {
@@ -479,7 +491,7 @@ public class MainActivity extends ActionBarActivity {
 			supportInvalidateOptionsMenu();
 		}
 	}
-	
+
 	public void setLoadingVisible(boolean showActionbarAnimation, boolean showContentFrameAnimation) {
 		setLoadingVisible(showActionbarAnimation);
 		if (showContentFrameAnimation) {
@@ -490,19 +502,19 @@ public class MainActivity extends ActionBarActivity {
 			loadingAnimationText.setVisibility(View.GONE);
 		}
 	}
-	
+
 	public void setLoadingText(int resId) {
 		try {
 			setLoadingText(getString(resId));
-		} catch(Exception e) {
+		} catch (Exception e) {
 			// Trying to display an error that is not present in the strings
 			Log.w(Utils.TAG, "Trying to display an error that is not present in the strings", e);
 		}
 	}
-	
+
 	public void setLoadingText(String text) {
 		Log.d(Utils.TAG, "TXT: " + text);
-		if (text==null || text.isEmpty()) {
+		if (text == null || text.isEmpty()) {
 			loadingAnimationText.setText("");
 			loadingAnimationText.setVisibility(View.GONE);
 		} else {
@@ -510,17 +522,17 @@ public class MainActivity extends ActionBarActivity {
 			loadingAnimationText.setVisibility(View.VISIBLE);
 		}
 	}
-	
+
 	public void executeSearch(String query) {
 		MyFragmentInterface fragment = getContentFrame();
-		if (fragment!=null) {
+		if (fragment != null) {
 			fragment.executeSearch(query);
 		}
 	}
-	
+
 	public void updateActionbarTitle() {
 		String title;
-		if (!isDrawerOpen() && mActionbarTitle!=null && menuAlreadyToggled) {
+		if (!isDrawerOpen() && mActionbarTitle != null && menuAlreadyToggled) {
 			title = mActionbarTitle;
 		} else {
 			title = mAppName;
@@ -529,7 +541,7 @@ public class MainActivity extends ActionBarActivity {
 			mActionBar.setTitle(title);
 		}
 	}
-	
+
 	public void setActionbarTitle(int titleResId) {
 		if (titleResId <= 0) {
 			titleResId = R.string.app_name;
@@ -541,7 +553,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		updateActionbarTitle();
 	}
-	
+
 	@Override
 	public void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -558,7 +570,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}, 0);
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
@@ -568,14 +580,14 @@ public class MainActivity extends ActionBarActivity {
 			}
 			return true;
 		}
-		
+
 		if (mActionsToShow == null || mActionsToShow.isEmpty()) {
 			MyFragmentInterface fragment = getContentFrame();
 			if (fragment != null) {
 				mActionsToShow = fragment.getActionsToShow();
 			}
 		}
-		
+
 		if (mActionsToShow == null) {
 			mActionsToShow = new HashSet<Integer>();
 		}
@@ -587,7 +599,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		MenuItem refrButton = mOptionsMenu.findItem(R.id.action_refresh_button);
 		if (mActionsToShow.contains(R.id.action_loading_animation)) {
-//			refrButton.setActionView(R.layout.refresh_action_view);
+			// refrButton.setActionView(R.layout.refresh_action_view);
 			MenuItemCompat.setActionView(refrButton, R.layout.refresh_action_view);
 		}
 		return true;
@@ -597,18 +609,18 @@ public class MainActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.actionbar_menu, menu);
 		mOptionsMenu = menu;
-		
+
 		// Get the SearchView and set the searchable configuration
-	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-	    SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search_button));
-	    // Assumes current activity is the searchable activity
-	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-	    searchView.setIconifiedByDefault(true); // Iconify the widget; do not expand it by default
-		
-//		SearchView searchWidget = (SearchView) menu.findItem(R.id.action_search_button).getActionView();
-//		searchWidget.setOnQueryTextListener(this);
-//		return super.onCreateOptionsMenu(menu);
-	    return true;
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search_button));
+		// Assumes current activity is the searchable activity
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		searchView.setIconifiedByDefault(true); // Iconify the widget; do not expand it by default
+
+		// SearchView searchWidget = (SearchView) menu.findItem(R.id.action_search_button).getActionView();
+		// searchWidget.setOnQueryTextListener(this);
+		// return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -620,13 +632,12 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			
+
 			MyFragmentInterface fragment = getContentFrame();
-			if (fragment!=null && !fragment.goBack())
+			if (fragment != null && !fragment.goBack())
 				return true;
-			
-			FragmentManager fragmentManager = getSupportFragmentManager();
-			if (fragmentManager.getBackStackEntryCount() == 1) {
+
+			if (mFragmentManager.getBackStackEntryCount() == 1) {
 				if (isDrawerOpen())
 					finish();
 				else
@@ -638,7 +649,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	private void clearKeyboardFocus() {
 		try {
 			View focus = getCurrentFocus();
@@ -652,20 +663,13 @@ public class MainActivity extends ActionBarActivity {
 			// Non è un'eccezione importante
 		}
 	}
-	
-	
+
 	/**
 	 * DRAWER METHODS
 	 */
 	private void initializeDrawer() {
-		mDrawerToggle = new ActionBarDrawerToggle(
-				this, 
-				mDrawerLayout, 
-				R.drawable.ic_drawer, 
-				R.string.drawer_open, 
-				R.string.drawer_close
-				) {
-			
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
 				MainActivity.this.onDrawerClosed();
@@ -678,41 +682,38 @@ public class MainActivity extends ActionBarActivity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-		mDrawerLayout.setFocusableInTouchMode(false); //http://stackoverflow.com/questions/18293726/android-onbackpressed-not-being-called-when-navigation-drawer-open
-		
+		mDrawerLayout.setFocusableInTouchMode(false); // http://stackoverflow.com/questions/18293726/android-onbackpressed-not-being-called-when-navigation-drawer-open
+
 		Resources resources = getResources();
 		String[] menuText = resources.getStringArray(R.array.menu_items);
 		TypedArray imgs = resources.obtainTypedArray(R.array.menu_icons);
-		ArrayList<ListItem> listItem = new ArrayList<ListItem>();
+		ArrayList<ListItemDrawer> listItem = new ArrayList<ListItemDrawer>();
 		for (int i = 0; i < VALID_NAVIGATION_DRAWER_ELEMENTS_NUM; i++) {
 			// On Gingerbread if no background is pecified it becomes black on scroll
-			listItem.add(new ListItem(menuText[i], imgs.getResourceId(i, -1), R.color.menu_background));
-			// listItem.add(new ListItem(menuText[i], imgs.getResourceId(i, -1), -1));
+			listItem.add(new ListItemDrawer(menuText[i], imgs.getResourceId(i, -1)));
 		}
 		if (mDataManager.isTestingingEnabled()) {
 			for (int i = VALID_NAVIGATION_DRAWER_ELEMENTS_NUM; i < menuText.length; i++) {
 				// On Gingerbread if no background is specified it becomes black on scroll
-				listItem.add(new ListItem(menuText[i], imgs.getResourceId(i, -1), true, R.color.menu_background));
-				// listItem.add(new ListItem(menuText[i], imgs.getResourceId(i, -1), true, -1));
+				listItem.add(new ListItemDrawer(menuText[i], imgs.getResourceId(i, -1), true));
 			}
 		}
-		ListAdapter adapter = new ListAdapter(this, R.layout.drawer_row, listItem);
+		ListAdapterDrawer adapter = new ListAdapterDrawer(this, listItem);
 		imgs.recycle();
 		mDrawerList.setAdapter(adapter);
 	}
-	
+
 	private MyFragmentInterface getContentFrame() {
 		try {
-			FragmentManager fragmentManager = getSupportFragmentManager();
-			return (MyFragmentInterface) fragmentManager.findFragmentById(R.id.content_frame);
+			return (MyFragmentInterface) mFragmentManager.findFragmentById(R.id.content_frame);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.w(Utils.TAG, "Cannot cast frame to MyFrame");
 		}
 		return null;
 	}
-	
-    private void selectItem(int position) {
+
+	private void selectItem(int position) {
 		BootableFragmentsEnum newContent = null;
 		switch (position) {
 		case 0:
@@ -734,70 +735,66 @@ public class MainActivity extends ActionBarActivity {
 			newContent = BootableFragmentsEnum.NEWS_ALL;
 			break;
 		case 6:
-			newContent = BootableFragmentsEnum.WEB_RADIO;
+			newContent = BootableFragmentsEnum.MAP;
 			break;
 		case 7:
+			newContent = BootableFragmentsEnum.WEB_RADIO;
+			break;
+		case 8:
 			int curVersion;
 			try {
 				curVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
 			} catch (NameNotFoundException e) {
 				e.printStackTrace();
-				curVersion = -1; 
+				curVersion = -1;
 			}
-			Utils.sendSupportMail(this, "Riguardo \"Unisa Connect\"...",
-										"------------------------\n" +
-										"Versione Android: " + Build.VERSION.SDK_INT + "\n" +
-										"Versione Unisa Connect: " + curVersion + "\n" +
-										"------------------------\n");
-			break;
-		case 8:
-			newContent = BootableFragmentsEnum.MAP;
+			Utils.sendSupportMail(this, "Riguardo \"Unisa Connect\"...", "------------------------\n" + "Versione Android: " + Build.VERSION.SDK_INT + "\n" + "Versione Unisa Connect: " + curVersion + "\n" + "------------------------\n");
 			break;
 		case 9:
-			newContent = BootableFragmentsEnum.BIBLIO_SEARCH;
+			newContent = BootableFragmentsEnum.BUS;
 			break;
 		default:
 			newContent = null;
-    	}
+		}
 		if (newContent != null) {
 			switchContent(newContent, true);
 		}
-    }
-    
-	//Events
-    /* The click listner for ListView in the navigation drawer */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        	view.setSelected(true);
-            selectItem(position);
-        }
-    }
-    
+	}
+
+	// Events
+	/* The click listner for ListView in the navigation drawer */
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			view.setSelected(true);
+			selectItem(position);
+		}
+	}
+
 	public void onDrawerOpened() {
-		updateActionbarTitle(); 		// Update title to Unisa Connect
+		updateActionbarTitle(); // Update title to Unisa Connect
 		supportInvalidateOptionsMenu(); // Hide action buttons
 		clearKeyboardFocus();
 	}
 
 	public void onDrawerClosed() {
-		updateActionbarTitle();			// Update title to fragment's title
+		updateActionbarTitle(); // Update title to fragment's title
 		supportInvalidateOptionsMenu(); // Show action buttons
 		clearKeyboardFocus();
 	}
-	
+
 	@Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggle
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-	
-	//Utils
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// Pass any configuration change to the drawer toggle
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	// Utils
 	public void toggleDrawer() {
 		setDrawerOpen(!isDrawerOpen());
 	}
-	
+
 	public void setDrawerOpen(boolean open) {
 		if (mDrawerLayout == null)
 			return;
@@ -807,83 +804,67 @@ public class MainActivity extends ActionBarActivity {
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 	}
-	
+
 	public boolean isDrawerOpen() {
 		if (mDrawerLayout == null)
 			return false;
 		return mDrawerLayout.isDrawerOpen(mDrawerList);
 	}
-	
-//	private void setupUpxAppBanner() {
-//		final String voteURL = "http://www.agoratelematica.it/upperapp/#vota";
-//		final View banner = findViewById(R.id.banner);
-//		
-//		View logo = banner.findViewById(R.id.banner_logo);
-//		View text = banner.findViewById(R.id.banner_text);
-//		View close = banner.findViewById(R.id.banner_close_button);
-//		
-//		// 8 DIC 2013
-//		final long expirationMillis = 1386543599L * 1000L;
-//		Calendar lastVoteDay = new GregorianCalendar();
-//		lastVoteDay.setTime(new Date(expirationMillis));
-//		Calendar now = new GregorianCalendar();
-//		now.setTime(new Date());
-//		// Se non si può più votare
-//		if (now.after(lastVoteDay)) {
-//			banner.setVisibility(View.GONE);
-//			return;
-//		}
-//		
-//		final Animation hideBannerFadeOutAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
-//		hideBannerFadeOutAnimation.setAnimationListener(new AnimationListener() {
-//			@Override
-//            public void onAnimationEnd(Animation animation) {
-//				banner.setVisibility(View.GONE);
-//            }
-//			@Override
-//			public void onAnimationRepeat(Animation animation) {
-//			}
-//			@Override
-//			public void onAnimationStart(Animation animation) {
-//			}
-//        });
-//		
-//		OnClickListener startBrowserListener = new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				EasyTracker.getTracker().sendEvent("ui_action", "button_press", "upxapp_vote", 1L);
-//				Intent i = new Intent(Intent.ACTION_VIEW);
-//				i.setData(Uri.parse(voteURL));
-//				startActivity(i);
-//			}
-//		};
-//		
-//		logo.setOnClickListener(startBrowserListener);
-//		text.setOnClickListener(startBrowserListener);
-//		
-//		close.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				EasyTracker.getTracker().sendEvent("ui_action", "button_press", "upxapp_close", 1L);
-//				banner.startAnimation(hideBannerFadeOutAnimation);
-//			}
-//		});
-//	}
-	
-//	private void showTnd() {
-//		try {
-//			if (!"g.c****3".equals(mDataManager.getUser())) {
-//				return;
-//			}
-//			SharedPreferences mPrefs = getApplicationContext().getSharedPreferences("tnd_pref", Context.MODE_PRIVATE);
-//			boolean shown = mPrefs.getBoolean("tnd_already_shown", false);
-//			if (!shown) {
-//				showMenuOnStartup = false;
-//				switchContent(new FragmentTnd());
-//			}
-//			mPrefs.edit().putBoolean("tnd_already_shown", true).commit();
-//		} catch(Exception e) {
-//			//Ignore error
-//		}
-//	}
+
+	// private void setupUpxAppBanner() {
+	// final String voteURL = "http://www.agoratelematica.it/upperapp/#vota";
+	// final View banner = findViewById(R.id.banner);
+	//
+	// View logo = banner.findViewById(R.id.banner_logo);
+	// View text = banner.findViewById(R.id.banner_text);
+	// View close = banner.findViewById(R.id.banner_close_button);
+	//
+	// // 8 DIC 2013
+	// final long expirationMillis = 1386543599L * 1000L;
+	// Calendar lastVoteDay = new GregorianCalendar();
+	// lastVoteDay.setTime(new Date(expirationMillis));
+	// Calendar now = new GregorianCalendar();
+	// now.setTime(new Date());
+	// // Se non si può più votare
+	// if (now.after(lastVoteDay)) {
+	// banner.setVisibility(View.GONE);
+	// return;
+	// }
+	//
+	// final Animation hideBannerFadeOutAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+	// hideBannerFadeOutAnimation.setAnimationListener(new AnimationListener() {
+	// @Override
+	// public void onAnimationEnd(Animation animation) {
+	// banner.setVisibility(View.GONE);
+	// }
+	// @Override
+	// public void onAnimationRepeat(Animation animation) {
+	// }
+	// @Override
+	// public void onAnimationStart(Animation animation) {
+	// }
+	// });
+	//
+	// OnClickListener startBrowserListener = new OnClickListener() {
+	// @Override
+	// public void onClick(View v) {
+	// EasyTracker.getTracker().sendEvent("ui_action", "button_press", "upxapp_vote", 1L);
+	// Intent i = new Intent(Intent.ACTION_VIEW);
+	// i.setData(Uri.parse(voteURL));
+	// startActivity(i);
+	// }
+	// };
+	//
+	// logo.setOnClickListener(startBrowserListener);
+	// text.setOnClickListener(startBrowserListener);
+	//
+	// close.setOnClickListener(new OnClickListener() {
+	// @Override
+	// public void onClick(View v) {
+	// EasyTracker.getTracker().sendEvent("ui_action", "button_press", "upxapp_close", 1L);
+	// banner.startAnimation(hideBannerFadeOutAnimation);
+	// }
+	// });
+	// }
+
 }

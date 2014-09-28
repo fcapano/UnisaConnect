@@ -242,7 +242,6 @@ public class PresenzeScraper extends AsyncTask<MainActivity, PresenzeScraper.loa
 				callerPresenzeFragment.mostraPresenze(null);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		case NO_DATA:
 			Utils.createAlert(activity, activity.getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
@@ -253,7 +252,6 @@ public class PresenzeScraper extends AsyncTask<MainActivity, PresenzeScraper.loa
 				callerPresenzeFragment.mostraPresenze(presenze);
 			}
 			Utils.dismissAlert();
-			Utils.dismissDialog();
 			break;
 		default:
 			break;

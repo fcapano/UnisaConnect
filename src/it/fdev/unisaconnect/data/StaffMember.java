@@ -2,7 +2,10 @@ package it.fdev.unisaconnect.data;
 
 import java.util.ArrayList;
 
-public class StaffMember {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class StaffMember implements Parcelable {
 
 	private String matricola;
 	private String fullname;
@@ -16,18 +19,15 @@ public class StaffMember {
 	private String email;
 	private String website;
 	private String ricevimento;
+	private double ufficioLatitudine;
+	private double ufficioLongitudine;
 
-//	private final static String IMG_DATE = "2013.06.03-15.54.30";
-//	private final static String RESIZED_PATH = "http://idw.altervista.org/img_prof/" + IMG_DATE + "/RES/";
-//	private final static String ORIGINAL_PATH = "http://idw.altervista.org/img_prof/" + IMG_DATE + "/ORIG/";
-
-	public StaffMember(String matricola, String fullname, String imgBigUrl, String imgSmallUrl, String role, String department, 
-			String mapInfo, ArrayList<String> phoneList, ArrayList<String> faxList, String email, String website, String ricevimento) {
+	public StaffMember(String matricola, String fullname, String imgBigUrl, String imgSmallUrl, 
+						String role, String department,	String mapInfo, ArrayList<String> phoneList, 
+						ArrayList<String> faxList, String email, String website, String ricevimento, 
+						double ufficioLatitudine, double ufficioLongitudine) {
 		this.matricola = matricola;
 		this.fullname = fullname;
-		// this.imgUrl = imgUrl;
-//		this.imgUrl = getOrigImgUrl(matricola, imgUrl);
-//		this.smallImgUrl = getSmallImgUrl(matricola, imgUrl);
 		this.imgBigUrl = imgBigUrl;
 		this.imgSmallUrl = imgSmallUrl;
 		this.role = role;
@@ -38,6 +38,8 @@ public class StaffMember {
 		this.email = email;
 		this.website = website;
 		this.ricevimento = ricevimento;
+		this.ufficioLatitudine = ufficioLatitudine;
+		this.ufficioLongitudine = ufficioLongitudine;
 	}
 
 	public String getWebsite() {
@@ -87,28 +89,72 @@ public class StaffMember {
 	public String getImgSmallURL() {
 		return imgSmallUrl;
 	}
-
-//	public static String getOrigImgUrl(String matricola, String fullImgUrl) {
-////		if (fullImgUrl.contains("foto_default"))
-//		if (fullImgUrl == null) {
-//			return null;
-//		}
-//		return ORIGINAL_PATH + matricola + ".png";
-//	}
-
-//	public static String getSmallImgUrl(String matricola, String fullImgUrl) {
-////		if (fullImgUrl.contains("foto_default"))
-//		if (fullImgUrl == null) {
-//			return null;
-//		}
-//		return RESIZED_PATH + matricola + ".png";
-//	}
+	
+	public double getLatitudine() {
+		return ufficioLatitudine;
+	}
+	
+	public double getLongitudine() {
+		return ufficioLongitudine;
+	}
 
 	@Override
 	public String toString() {
-		return "fullname: " + fullname + "   matricola: " + matricola + "   img_url: " + imgBigUrl + 
-			   "   role: " + role + "   department: " + department + "   mapInfo: " + mapInfo + 
-			   "   phoneList: " + phoneList + "   faxList: " + faxList + "   email: " + email;
+		return 	   "fullname: " 	+ fullname 			+
+				"   matricola: " 	+ matricola 		+
+				"   img_url: " 		+ imgBigUrl 		+
+				"   role: " 		+ role 				+
+				"   department: " 	+ department 		+
+				"   mapInfo: " 		+ mapInfo 			+
+				"   phoneList: " 	+ phoneList 		+
+				"   faxList: " 		+ faxList 			+
+				"   email: " 		+ email 			+ 
+				"   website"		+ website 			+ 
+				"   ricevimento"	+ ricevimento 		+
+				"	latitudine"		+ ufficioLatitudine +
+				"	longitudine"	+ ufficioLongitudine;
+	}
+	
+	public StaffMember(Parcel in) {
+		this.matricola = in.readString();
+		this.fullname = in.readString();
+		this.imgBigUrl = in.readString();
+		this.imgSmallUrl = in.readString();
+		this.role = in.readString();
+		this.department = in.readString();
+		this.mapInfo = in.readString();
+		phoneList = new ArrayList<String>();
+		in.readList(phoneList, null);
+		faxList = new ArrayList<String>();
+		in.readList(faxList, null);
+		this.email = in.readString();
+		this.website = in.readString();
+		this.ricevimento = in.readString();
+		this.ufficioLatitudine = in.readDouble();
+		this.ufficioLongitudine = in.readDouble();
+	}
+
+	@Override
+	public int describeContents() {
+		return this.hashCode();
+	}
+	
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(matricola);
+		dest.writeString(fullname);
+		dest.writeString(imgBigUrl);
+		dest.writeString(imgSmallUrl);
+		dest.writeString(role);
+		dest.writeString(department);
+		dest.writeString(mapInfo);
+		dest.writeList(phoneList);
+		dest.writeList(faxList);
+		dest.writeString(email);
+		dest.writeString(website);
+		dest.writeString(ricevimento);
+		dest.writeDouble(ufficioLatitudine);
+		dest.writeDouble(ufficioLongitudine);
 	}
 
 }

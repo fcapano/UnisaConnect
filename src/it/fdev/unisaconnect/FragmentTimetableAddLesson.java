@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.TimetableDB;
 import it.fdev.unisaconnect.data.TimetableSubject.Lesson;
@@ -34,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class FragmentTimetableAddLesson extends MySimpleFragment {
 
@@ -70,7 +72,7 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		ttDB = new TimetableDB(activity);
+		ttDB = new TimetableDB(mActivity);
 		ttDB.open();
 
 		subjectName = (AutoCompleteTextView) view.findViewById(R.id.subject_name);
@@ -79,7 +81,7 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 		addLesson = (LinearLayout) view.findViewById(R.id.add_lesson);
 		lessonsParent = (LinearLayout) view.findViewById(R.id.lesson_data_container);
 
-		lInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		lInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		subjectName.requestFocus();
 
@@ -112,8 +114,8 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 			}
 		});
 
-		roomsAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, ttDB.getRoomNames());
-		ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, ttDB.getSubjectsNames());
+		roomsAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_dropdown_item_1line, ttDB.getRoomNames());
+		ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_dropdown_item_1line, ttDB.getSubjectsNames());
 		subjectName.setAdapter(subjectsAdapter);
 
 		if (lessonToEdit != null) {
@@ -147,10 +149,10 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 	}
 	
 	private LessonEntry addLessonLayout(boolean animate) {
-		LinearLayout newLesson = (LinearLayout) lInflater.inflate(R.layout.timetable_lesson_data, null);
+		LinearLayout newLesson = (LinearLayout) lInflater.inflate(R.layout.timetable_lesson_data, lessonsParent, false);
 		if (animate) {
 			// newLesson.startAnimation(AnimationUtils.loadAnimation(activity, android.R.anim.slide_in_left));
-			newLesson.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.slide_down));
+			newLesson.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.slide_down));
 		}
 		lessonsParent.addView(newLesson);
 		LessonEntry le = new LessonEntry(newLesson);
@@ -164,7 +166,8 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 		String name = subjectName.getText().toString().trim();
 		if (name.isEmpty()) {
 			subjectName.requestFocus();
-			Utils.createAlert(activity, resources.getString(R.string.nome_corso_non_vuoto), null, false);
+//			Utils.createAlert(activity, resources.getString(R.string.nome_corso_non_vuoto), null, false);
+			Toast.makeText(mActivity, R.string.nome_corso_non_vuoto, Toast.LENGTH_LONG).show();
 			return;
 		}
 		
@@ -188,11 +191,12 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 			ttDB.insertLesson(newLesson);
 		}
 		if (!atLeastOneLession) {
-			Utils.createAlert(activity, resources.getString(R.string.almeno_una_lezione), null, false);
+//			Utils.createAlert(activity, resources.getString(R.string.almeno_una_lezione), null, false);
+			Toast.makeText(mActivity, R.string.almeno_una_lezione, Toast.LENGTH_LONG).show();
 			return;
 		}
 		ttDB.insertSubject(name, color);
-		activity.switchContent(BootableFragmentsEnum.TIMETABLE, true);
+		mActivity.switchContent(BootableFragmentsEnum.TIMETABLE, true);
 	}
 
 	@Override
@@ -200,7 +204,7 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 		if (lessonToEdit != null) {
 			ttDB.deleteSubject(lessonToEdit);
 		}
-		activity.switchContent(BootableFragmentsEnum.TIMETABLE, true);
+		mActivity.switchContent(BootableFragmentsEnum.TIMETABLE, true);
 	}
 	
 	@Override
@@ -301,7 +305,7 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 						return false;
 					}
 					menuShown = true;
-					TimePickerDialog tp = new TimePickerDialog(activity, onStartTimeChanged, startHour, startMin, true);
+					TimePickerDialog tp = new TimePickerDialog(mActivity, onStartTimeChanged, startHour, startMin, true);
 					tp.setOnDismissListener(new OnDismissListener() {
 						@Override
 						public void onDismiss(DialogInterface dialog) {
@@ -327,7 +331,7 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 						return false;
 					}
 					menuShown = true;
-					TimePickerDialog tp = new TimePickerDialog(activity, onEndTimeChanged, endHour, endMin, true);
+					TimePickerDialog tp = new TimePickerDialog(mActivity, onEndTimeChanged, endHour, endMin, true);
 					tp.setOnDismissListener(new OnDismissListener() {
 						@Override
 						public void onDismiss(DialogInterface dialog) {
@@ -341,9 +345,9 @@ public class FragmentTimetableAddLesson extends MySimpleFragment {
 			cancelButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					thisView.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.slide_up));
+					thisView.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.slide_up));
 					lessonList.remove(thisLesson);
-					Animation slideUp = AnimationUtils.loadAnimation(activity, R.anim.slide_up);
+					Animation slideUp = AnimationUtils.loadAnimation(mActivity, R.anim.slide_up);
 					slideUp.setAnimationListener(new AnimationListener() {
 						@Override
 						public void onAnimationEnd(Animation animation) {

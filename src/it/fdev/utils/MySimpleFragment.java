@@ -11,7 +11,7 @@ import android.support.v4.app.Fragment;
 import com.google.analytics.tracking.android.EasyTracker;
 
 public abstract class MySimpleFragment extends Fragment implements MyFragmentInterface {
-	protected MainActivity activity;
+	protected MainActivity mActivity;
 	protected Resources resources;
 	
 	private boolean firstRun = true;
@@ -19,10 +19,10 @@ public abstract class MySimpleFragment extends Fragment implements MyFragmentInt
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		activity = (MainActivity) getActivity();
+		mActivity = (MainActivity) getActivity();
 		resources = getResources();
-		activity.setActionbarTitle(getTitleResId());
-		activity.reloadActionButtons(this);
+		mActivity.setActionbarTitle(getTitleResId());
+		mActivity.reloadActionButtons(this);
 		try {
 			EasyTracker.getTracker().sendView(this.getClass().toString());
 		} catch (Exception e) {
@@ -34,8 +34,8 @@ public abstract class MySimpleFragment extends Fragment implements MyFragmentInt
 	public void onResume() {
 		super.onResume();
 		if (!firstRun) {
-			activity.setActionbarTitle(getTitleResId());
-			activity.reloadActionButtons(this);
+			mActivity.setActionbarTitle(getTitleResId());
+			mActivity.reloadActionButtons(this);
 		} else {
 			firstRun = false;
 		}

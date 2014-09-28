@@ -1,8 +1,9 @@
 package it.fdev.utils;
 
+import it.fdev.unisaconnect.R;
+
 import java.util.Locale;
 
-import it.fdev.unisaconnect.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -30,6 +31,7 @@ public class CustomButtonWithImg extends RelativeLayout {
 
 		imgView.setImageDrawable(img);
 		textView.setText(text.toUpperCase(Locale.ITALY));
+//		textView.setText(text);
 	}
 	
 	public CustomButtonWithImg(Context context, int iconID, int textID) {
@@ -43,9 +45,10 @@ public class CustomButtonWithImg extends RelativeLayout {
 
 		ImageView imgView = (ImageView) findViewById(R.id.btn_icon);
 		TextView textView = (TextView) findViewById(R.id.btn_text);
-
+		
 		imgView.setImageDrawable(img);
 		textView.setText(text.toUpperCase(Locale.ITALY));
+//		textView.setText(text);
 	}
 
 	public CustomButtonWithImg(Context context) {

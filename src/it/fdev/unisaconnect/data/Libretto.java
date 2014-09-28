@@ -62,7 +62,7 @@ public class Libretto {
 				}
 			} catch (NumberFormatException e) {
 				// Esami con ideneità. Compaiono come "SUP" e non influiscono sulla media
-				Log.w(Utils.TAG, "Voto o cfu non numerico: '" + corso.getCFU() + "' | '" + corso.getMark() + "'", e);
+//				Log.w(Utils.TAG, "Voto o cfu non numerico: '" + corso.getCFU() + "' | '" + corso.getMark() + "'", e);
 			}
 			if (corso.getMark().isEmpty()) // Esame non ancora fatto
 				continue;

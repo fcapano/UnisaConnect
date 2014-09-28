@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Unisa Connect</string>
 
-    <!-- SlidingMenu -->
+    <!-- Drawer -->
     <string name="dev_email">fdev.developers@gmail.com</string>
     <string name="login_wifi">Login \'Studenti\'</string>
     <string name="menu_mensa">Menu mensa</string>
@@ -12,10 +13,11 @@
     <string name="meteo">Meteo</string>
     <string name="orari_lezioni">Orari lezioni</string>
     <string name="news">News</string>
+    <string name="map">Mappa</string>
     <string name="recensione">Lascia una recensione</string>
     <string name="contattaci">Problemi? Idee?</string>
     <string name="preferenze">Preferenze</string>
-    <!-- end of SlidingMenu -->
+    <!-- end of Drawer -->
 
 
     <!-- Esse3 Services -->
@@ -25,6 +27,7 @@
     <string name="libretto">Libretto</string>
     <string name="pagamenti">Pagamenti</string>
     <string name="appelli">Appelli</string>
+    <string name="biblioteca">Bibioteca</string>
     <string name="presenze">Presenze</string>
     <string name="autocertificazioni">Autocertificazioni</string>
     <!-- end of Esse3 Services -->
@@ -40,6 +43,7 @@
     <string name="save">Salva</string>
     <string name="data_management_info">Per utilizzare i servizi dedicati agli studenti (webmail, libretto, appelli, &#8230;) è necessario inserire la propria username e password. Questi dati vengono memorizzati cifrati su questo dispositivo ed utilizzati unicamente per accedere ai servizi dell\'università.</string>
     <!-- end of Wifi Preferenze -->
+
 
     <!-- Dettagli -->
     <string name="dettagli">Dettagli</string>
@@ -60,8 +64,8 @@
     <string name="wensday">mer</string>
     <string name="thursday">gio</string>
     <string name="friday">ven</string>
-    <string name="_8">8</string>
-    <string name="_9">9</string>
+    <string name="_8">08</string>
+    <string name="_9">09</string>
     <string name="_10">10</string>
     <string name="_11">11</string>
     <string name="_12">12</string>
@@ -72,10 +76,11 @@
     <string name="_17">17</string>
     <string name="_18">18</string>
     <string name="_19">19</string>
-    <string name="nome_corso">Nome corso</string>
+    <string name="nome_corso">Nome del corso</string>
     <string name="aula_corso">Aula</string>
     <!-- End of Timetable -->
-    
+
+
     <!-- Timetable Aggiungi Corso -->
     <string name="aggiungi_corso">Aggiungi un corso</string>
     <string name="il">Il</string>
@@ -99,9 +104,11 @@
     <string name="esame">Esame</string>
     <string name="cfu">CFU</string>
     <string name="voto">Voto</string>
+    <string name="ordina_per_nome">Ordina per nome</string>
+    <string name="ordina_per_data">Ordina per data</string>
     <!-- end of Libretto -->
-    
-    
+
+
     <!-- Pagamenti -->
     <string name="pagamenti_vuoto">Non risultano pagamenti non pervenuti</string>
     <string name="pagamenti_non_disponibili">Impossibile riperire i pagamenti</string>
@@ -121,12 +128,12 @@
 
     <!-- Appelli -->
     <string name="appelli_vuoto">Non sono presenti appelli prenotati o disponibili</string>
-    <string name="appelli_disponibili">APPELLI DISPONIBILI</string>
-    <string name="appelli_prenotati">APPELLI PRENOTATI</string>
+    <string name="appelli_disponibili">Appelli disponibili</string>
+    <string name="appelli_prenotati">Appelli prenotati</string>
     <string name="iscritti">Iscritti: </string>
     <!-- end of Esse3Scraper -->
-    
-    
+
+
     <!-- Presenze -->
     <string name="presenze_non_disponibili">Nessun registro presenze trovato</string>
     <!-- end of Presenze -->
@@ -142,22 +149,63 @@
     <string name="mensa_centino">Cestino</string>
     <string name="mensa_altro">Altro</string>
     <!-- end of Mensa -->
-    
+
+
     <!-- Meteo -->
     <string name="sincronizzazione_meteo">Sincronizzazione meteo&#8230;</string>
     <string name="vento">Vento</string>
     <string name="umidita">Umidità</string>
     <string name="meteo_non_disponibile">Si è verificato un errore nel reperire il meteo</string>
     <!-- end of Meteo -->
-    
-    <!--  News -->
+
+
+    <!-- News -->
     <string name="sync_news">Carico le news&#8230;</string>
-    <!--  end of News -->
+    <!-- end of News -->
     
+    <!-- Map -->
+    <!-- end of Map -->
+
+
     <!-- WebRadio -->
     <string name="unisound">Unis@und Radio</string>
     <!-- end of WebRadio -->
     
+    <!-- Biblioteca -->
+    <string name="cerca_testo_non_vuoto">Il testo da cercare non può essere vuoto</string>
+    <string name="libro_non_trovato">Impossibile ottenere i dettagli del libro</string>
+    <string name="cerco_libri">Cerco i libri&#8230;</string>
+    <string name="cerco_libro">Ottengo dettagli libro&#8230;</string>
+    <string name="pagina_web_libro">Pagina Web</string>
+    <string name="cerca_libro">Cerca libro</string>
+    <string name="risultati_ricerca">Risultati della ricerca</string>
+    <string name="dettagli_libro">Dettagli libro</string>
+    <string name="ricerca_avanzata">Ricerca avanzata</string>
+    <string name="cerca_parole_adiacenti">Cerca solo parole adiacenti</string>
+    <string name="campo_da_ricercare">Campo da ricercare</string>
+    <string name="lingua">Lingua</string>
+    <string name="formato">Formato</string>
+    <string name="area_disciplinare">Area disciplinare</string>
+    <string name="da_anno">Dall\' anno</string>
+    <string name="a_anno">all\' anno</string>
+    <string name="titolo">Titolo</string>
+    <string name="autore">Autore</string>
+    <string name="posizione">Posizione</string>
+    <string name="edizione">Edizione</string>
+    <string name="pubblicazione">Pubblicazione</string>
+    <string name="cdd">CDD</string>
+    <string name="isbn">ISBN</string>
+    <string name="serie">Serie</string>
+    <string name="soggetto">Soggetto</string>
+    <!-- end of Biblioteca -->
+    
+    <!-- TipoCorso -->
+    <string name="tipo_corso">Seleziona corso di laurea</string>
+    <string name="tipo_corso_title">Corso di laurea</string>
+    <string name="tipo_corso_cambiato">Hai cambiato il corso di laurea da visualizzare</string>
+    <!-- end of TipoCorso -->
+
+
     <!-- ActionBar -->
     <string name="cerca">Cerca</string>
     <string name="aggiorna">Aggiorna</string>
@@ -167,9 +215,10 @@
     <string name="accetta">Accetta</string>
     <string name="twitter">Twitter</string>
     <!-- end of ActionBar -->
-    
-    
+
+
     <!-- Da ordinare / Generale -->
+    <string name="problema_aprire_link">Impossibile aprire la pagina</string>
     <string name="email_chooser_titolo">Invia la mail con</string>
     <string name="controlla_connessione">Controlla la\nconnessione\nad internet</string>
     <string name="dati_errati">I dati di accesso non sono corretti</string>

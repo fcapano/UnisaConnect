@@ -4,8 +4,12 @@
     <color name="orange_light">#FFBD59</color>
     <color name="orange_dark">#E38800</color>
     
+    <color name="orange_actionbar_transparent_50">#80F4842D</color>
+   	<color name="orange_actionbar_transparent_40">#66F4842D</color>
+    
     <color name="dark_gray">#333333</color>
     <color name="darker_gray">#171717</color>
+    <color name="medium_gray">#404040</color>
     <color name="light_gray">#757575</color>
     <color name="lighter_gray">#B5B5B5</color>
     
@@ -17,25 +21,28 @@
    	<color name="transparent_black_50">#80000000</color>
    	<color name="transparent_black_60">#990000</color>
    	<color name="transparent_black_70">#B3000000</color>
+   	<color name="transparent_black_80">#CC000000</color>
+   	<color name="transparent_black_90">#E6000000</color>
    	
    	<color name="transparent_white_50">#80FFFFFF</color>
    	
-   	<color name="orange_actionbar_transparent_40">#66F4842D</color>
-   	
-   	
-   	<color name="activity_background">#1C1C1C</color>
-   	<color name="menu_background">#333333</color>
+   	<color name="activity_background">#e2e2e2</color>
+   	<color name="activity_background1">#1C1C1C</color>
    	<color name="activity_background_lighter">#E6E6E6</color>
    	<color name="activity_background_darker">#171717</color>
    	<color name="activity_background_darker_lighter">#2B2B2B</color>
+   	
+   	<color name="drawer_background">#333333</color>
+   	<color name="drawer_text_color">#FFFFFF</color>
    	
    	<color name="testing_red">#FF0000</color>
    	
    	
 	<!-- Timetable Colors -->
-	<color name="timetable_background">#444444</color>
-	<color name="timetable_header_background">#2B2B2B</color>
-	<color name="timetable_separator">#363636</color>
+	<color name="timetable_background">#fff</color>
+	<color name="timetable_header_background">#eeeeee</color>
+	<color name="timetable_separator">#cccccc</color>
+	<color name="timetable_header_text_color">#666666</color>
 	<!-- End of Timetable Colors -->
 	
 	<!-- Timetable Lessons Colors -->

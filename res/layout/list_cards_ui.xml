@@ -3,19 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <TextView
         android:id="@+id/card_list_empty"
+        style="@style/bigBackgroundTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
-        android:gravity="right|center_vertical"
-        android:paddingBottom="40sp"
-        android:paddingRight="10sp"
         android:text="@string/card_list_empty"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:visibility="gone" />
 
     <ListView
@@ -23,10 +18,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginLeft="5dp"
-        android:fastScrollEnabled="true"
         android:layout_marginRight="5dp"
         android:divider="@null"
-        android:dividerHeight="0dp" >
+        android:dividerHeight="0dp"
+        android:fastScrollEnabled="true" >
     </ListView>
 
 </LinearLayout>

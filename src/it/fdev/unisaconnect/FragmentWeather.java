@@ -1,6 +1,7 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.scraper.WeatherScraper;
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.unisaconnect.data.WeatherData;
 import it.fdev.utils.MySimpleFragment;
@@ -56,7 +57,7 @@ public class FragmentWeather extends MySimpleFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = (View) inflater.inflate(R.layout.fragment_weather, container, false);
 		
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		meteoNDView = (TextView) view.findViewById(R.id.meteo_non_disponibile);
 		pager = (ViewPager) view.findViewById(R.id.meteo_pager);
@@ -71,7 +72,7 @@ public class FragmentWeather extends MySimpleFragment {
 		weatherActualContainerView = (RelativeLayout) view.findViewById(R.id.weather_actual_container);
 		weatherForecastGridview = (GridView) view.findViewById(R.id.weather_forecast_gridview);
 		
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		meteo = mDataManager.getWeather();
 		if (meteo != null) {
 			Log.d(Utils.TAG, "Meteo salvato!");
@@ -114,22 +115,22 @@ public class FragmentWeather extends MySimpleFragment {
 				long minutesPassedLastUpdate = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - lastUpdateTime);
 				if (minutesPassedLastUpdate <= MIN_UPDATE_MINUTES_INTERVAL) {
 					alreadyStarted = true;
-					activity.setLoadingVisible(false, false);
+					mActivity.setLoadingVisible(false, false);
 					return;
 				}
 			}
 			// devo aggiornarlo
-			activity.setLoadingVisible(true, false);
+			mActivity.setLoadingVisible(true, false);
 		} else {
 			// Nessun meteo scaricato memorizzato
-			activity.setLoadingVisible(true, true);
+			mActivity.setLoadingVisible(true, true);
 		}
 		
-		if (!Utils.hasConnection(activity)) {
+		if (!Utils.hasConnection(mActivity)) {
 			if (meteo == null) {
-				Utils.goToInternetError(activity, this);
+				Utils.goToInternetError(mActivity, this);
 			} else {
-				activity.setLoadingVisible(false, false);
+				mActivity.setLoadingVisible(false, false);
 			}
 			alreadyStarted = true;
 			return;
@@ -140,7 +141,7 @@ public class FragmentWeather extends MySimpleFragment {
 		}
 		meteoScraper = new WeatherScraper();
 		meteoScraper.setCallerMeteoFragment(this);
-		meteoScraper.execute(activity);
+		meteoScraper.execute(mActivity);
 		return;
 	}
 
@@ -152,7 +153,7 @@ public class FragmentWeather extends MySimpleFragment {
 			weatherActualContainerView.setVisibility(View.GONE);
 			weatherForecastGridview.setVisibility(View.GONE);
 			meteoNDView.setVisibility(View.VISIBLE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		weatherActualContainerView.setVisibility(View.VISIBLE);
@@ -163,7 +164,7 @@ public class FragmentWeather extends MySimpleFragment {
 			this.meteo = newWeatherData;
 		}
 		
-		currentWeatherAdapter = new CurrentWeatherAdapter(activity.getSupportFragmentManager());
+		currentWeatherAdapter = new CurrentWeatherAdapter(mActivity.getSupportFragmentManager());
 		pager.setAdapter(currentWeatherAdapter);
 		pager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
@@ -179,7 +180,7 @@ public class FragmentWeather extends MySimpleFragment {
 		});
 		pager.setCurrentItem(1);
 		
-		weatherForecastGridview.setAdapter(new WeatherForecastAdapter(activity, this.meteo.getDailyForecastList()));
+		weatherForecastGridview.setAdapter(new WeatherForecastAdapter(mActivity, this.meteo.getDailyForecastList()));
 		
 		if (meteo.getFetchTime().getTime() > 0) {
 		    String dateFirstPart = new SimpleDateFormat("dd/MM", Locale.ITALY).format(meteo.getFetchTime());
@@ -195,7 +196,7 @@ public class FragmentWeather extends MySimpleFragment {
 		
 		if (newWeatherData != null) {
 			// Il metodo è stato chiamato con il meteo aggiornato da salvare
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			Log.d(Utils.TAG, "saving weather data");
 			mDataManager.setWeather(newWeatherData);
 //			pref.saveData();
@@ -224,7 +225,7 @@ public class FragmentWeather extends MySimpleFragment {
 			FragmentWeatherActualCondition cFragment;
 			if (fragmentsList[position] == null) {
 				cFragment = new FragmentWeatherActualCondition();
-				cFragment.setActivity(activity);
+				cFragment.setActivity(mActivity);
 				cFragment.setCondition(meteo.getActualCondition(position));
 				cFragment.setViews(lastUpdateView, lastUpdateIconView, iconView, tempView, descriptionView, humidityView, windView, windDirView);
 				fragmentsList[position] = cFragment;

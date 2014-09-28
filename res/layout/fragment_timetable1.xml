@@ -32,13 +32,23 @@
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="@dimen/timetable_margin_top" />
 
+        <View
+            android:id="@+id/sd0"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/timetable_margin_top"
+            android:background="@color/timetable_separator" />
+
         <TextView
             android:id="@+id/d1"
             android:layout_width="0dp"
             android:layout_height="@dimen/timetable_margin_top"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/monday" />
+            android:text="@string/monday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <View
             android:id="@+id/sd1"
@@ -53,7 +63,10 @@
             android:layout_height="@dimen/timetable_margin_top"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/thusday" />
+            android:text="@string/thusday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <View
             android:id="@+id/sd2"
@@ -68,7 +81,10 @@
             android:layout_height="@dimen/timetable_margin_top"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/wensday" />
+            android:text="@string/wensday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <View
             android:id="@+id/sd3"
@@ -83,14 +99,18 @@
             android:layout_height="@dimen/timetable_margin_top"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/thursday" />
+            android:text="@string/thursday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <View
             android:id="@+id/sd4"
             android:layout_width="1dp"
             android:layout_height="fill_parent"
             android:layout_marginTop="@dimen/timetable_margin_top"
-            android:background="@color/timetable_separator" />
+            android:background="@color/timetable_separator"
+            android:textColor="@color/timetable_header_text_color" />
 
         <TextView
             android:id="@+id/d5"
@@ -98,7 +118,10 @@
             android:layout_height="@dimen/timetable_margin_top"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/friday" />
+            android:text="@string/friday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -107,8 +130,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="@dimen/timetable_margin_top_half"
-        android:layout_marginTop="@dimen/timetable_margin_top_half_neg"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
         android:orientation="vertical" >
 
         <View
@@ -121,99 +144,121 @@
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_8" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_8"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h9"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_9" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_9"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h10"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_10" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_10"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h11"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_11" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_11"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h12"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_12" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_12"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h13"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_13" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_13"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h14"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_14" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_14"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h15"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_15" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_15"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h16"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_16" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_16"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h17"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_17" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_17"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/h18"
             android:layout_width="@dimen/timetable_margin_left"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="5dp"
-            android:text="@string/_18" />
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_18"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout

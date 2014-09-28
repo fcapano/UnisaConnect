@@ -1,6 +1,7 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.scraper.NewsScraper;
+import it.fdev.unisaconnect.R;
 import it.fdev.utils.CardsAdapter;
 import it.fdev.utils.CardsAdapter.CardItem;
 import it.fdev.utils.MyListFragment;
@@ -21,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FragmentNews extends MyListFragment {
 
@@ -36,7 +38,7 @@ public class FragmentNews extends MyListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new CardsAdapter(activity, R.layout.card_news, new ArrayList<CardItem>());
+		adapter = new CardsAdapter(mActivity, R.layout.card_news, new ArrayList<CardItem>());
 		setListAdapter(adapter);
 	}
 	
@@ -77,6 +79,7 @@ public class FragmentNews extends MyListFragment {
 			Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 	        startActivity(webIntent);
 		} catch(Exception e) {
+			Toast.makeText(mActivity, R.string.problema_aprire_link, Toast.LENGTH_SHORT).show();
 			Log.w(Utils.TAG, e);
 		}
 	}
@@ -117,29 +120,29 @@ public class FragmentNews extends MyListFragment {
 		if (!isAdded()) {
 			return;
 		}
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		listCardsView.setSelectionAfterHeaderView();
 		if (!force && cardsList != null) {
 			showCards(null);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, this);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, this);
 			return;
 		}
 		
 		alreadyStarted = true;
 		if (rssScraper != null && rssScraper.isRunning) {
-			activity.setLoadingVisible(true);
+			mActivity.setLoadingVisible(true);
 			return;
 		}
 		rssScraper = new NewsScraper(NEWS_URL_NEW);
 //		rssScraper.setMaxItems(MAX_NEWS_NUMBER);
 //		rssScraper.setMaxTextLength(MAX_TEXT_LENGTH);
 		rssScraper.setCallerFragment(this);
-		rssScraper.execute(activity);
+		rssScraper.execute(mActivity);
 		return;
 	}
 	
@@ -149,8 +152,8 @@ public class FragmentNews extends MyListFragment {
 		}
 		
 		if (listEmptyView == null || listCardsView == null) { 			// Dai report di crash sembra succedere a volte, non ho idea del perchè
-			activity.setDrawerOpen(true);							   	// Quindi mostro lo slidingmenu per apparare
-			activity.setLoadingVisible(false, false);
+			mActivity.setDrawerOpen(true);							   	// Quindi mostro lo slidingmenu per apparare
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		
@@ -161,12 +164,12 @@ public class FragmentNews extends MyListFragment {
 		if (this.cardsList == null) {				// Non ho un menu da mostrare
 			listEmptyView.setVisibility(View.GONE);
 			listCardsView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		} else if (this.cardsList.size() == 0) {
 			listEmptyView.setVisibility(View.VISIBLE);
 			listCardsView.setVisibility(View.GONE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		} else {
 			listEmptyView.setVisibility(View.GONE);
@@ -177,7 +180,7 @@ public class FragmentNews extends MyListFragment {
 		adapter.addAll(cardsList);
 		adapter.notifyDataSetChanged();
 		
-		activity.setLoadingVisible(false, false);
+		mActivity.setLoadingVisible(false, false);
 	}
 
 }

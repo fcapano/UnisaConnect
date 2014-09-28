@@ -1,8 +1,11 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
+import it.fdev.utils.Utils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,17 +14,20 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FragmentBiblioPrepareSearch extends MySimpleFragment {
 	
 	public static final String BIBLIO_BASE_URL = "http://biblio-aleph.unisa.it/F/";
 	public static final String BIBLIO_SET_SETTINGS_URL = BIBLIO_BASE_URL + "?file_name=find-b&func=option-update&SHORT_NO_LINES=20&AUTO_FULL=15&SHORT_FORMAT=000&SCAN_INCLUDE_AUT=N&x=0&y=0";
 
+	View advancedSearchToggleCard, advancedSearchCard;
 	EditText testoView, annoDaView, annoAView;
 	CheckBox adjacentCheckbox;
 	Spinner campoSpinner, linguaSpinner, formatoSpinner, areaDisciplinareSpinner;
 	TextView cercaView;
-	
+
+	SharedPrefDataManager mDataManager;
 	CharSequence[] campoValuesArray, linguaValuesArray, formatoValuesArray, areaDisciplinareValuesArray;
 
 	@Override
@@ -33,6 +39,8 @@ public class FragmentBiblioPrepareSearch extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		advancedSearchToggleCard = view.findViewById(R.id.advanced_search_toggle_card);
+		advancedSearchCard = view.findViewById(R.id.advanced_search_card);
 		testoView = (EditText) view.findViewById(R.id.testo);
 		annoDaView = (EditText) view.findViewById(R.id.anno_da);
 		annoAView = (EditText) view.findViewById(R.id.anno_a);
@@ -50,14 +58,35 @@ public class FragmentBiblioPrepareSearch extends MySimpleFragment {
 			}
 		});
 		
+		advancedSearchToggleCard.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Utils.expand(advancedSearchCard, 2);
+				advancedSearchToggleCard.setVisibility(View.GONE);
+//				Utils.collapse(advancedSearchToggleCard, 1);
+			}
+		});
+		
 		campoValuesArray = resources.getTextArray(R.array.biblio_search_campo_VALUES);
 		linguaValuesArray = resources.getTextArray(R.array.biblio_search_lingua_VALUES);
 		formatoValuesArray = resources.getTextArray(R.array.biblio_search_formato_VALUES);
 		areaDisciplinareValuesArray = resources.getTextArray(R.array.biblio_search_area_disciplinare_VALUES);
+		
+		mDataManager = new SharedPrefDataManager(mActivity);
+		testoView.setText(mDataManager.getBiblioLastSearch());
+		
 	}
 	
 	private void rimandaARicerca() {
-		String testo = testoView.getText().toString();
+		String testo = testoView.getText().toString().trim();
+		
+		if (testo.length() < 1) {
+			Toast.makeText(mActivity, R.string.cerca_testo_non_vuoto, Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		mDataManager.setBiblioLastSearch(testo);
+		
 		String annoDa = annoDaView.getText().toString();
 		String annoA = annoAView.getText().toString();
 		boolean adjacent = adjacentCheckbox.isChecked();
@@ -113,13 +142,13 @@ public class FragmentBiblioPrepareSearch extends MySimpleFragment {
 		
 		FragmentBiblioDoSearch fragmentDoSearch = new FragmentBiblioDoSearch();
 		fragmentDoSearch.setURL(uri);
-		activity.switchContent(fragmentDoSearch);
+		mActivity.switchContent(fragmentDoSearch);
 		
 	}
 	
 	@Override
 	public int getTitleResId() {
-		return R.string.servizi_esse3;
+		return R.string.cerca_libro;
 	}
 	
 }

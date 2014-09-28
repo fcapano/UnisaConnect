@@ -1,9 +1,9 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.unisaconnect.data.StaffDB;
+import it.fdev.unisaconnect.data.StaffMember;
 import it.fdev.unisaconnect.data.StaffMemberSummary;
-import it.fdev.utils.ListAdapter;
-import it.fdev.utils.ListAdapter.ListItem;
+import it.fdev.utils.ListAdapterStaff;
 import it.fdev.utils.MyListFragment;
 
 import java.util.ArrayList;
@@ -24,20 +24,20 @@ public class FragmentStaffSearch extends MyListFragment {
 	private EditText editTextStaffName;
 	private ImageView imgClearName;
 	private StaffDB db = null;
-	private ListAdapter adapter;
+	private ListAdapterStaff adapter;
 	private ArrayList<StaffMemberSummary> listaRisultati = new ArrayList<StaffMemberSummary>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
-			db = new StaffDB(activity);
+			db = new StaffDB(mActivity);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
 		
-		adapter = new ListAdapter(activity, R.layout.staff_search_row, new ArrayList<ListItem>());
+		adapter = new ListAdapterStaff(mActivity, R.layout.staff_search_row1, new ArrayList<StaffMemberSummary>());
 		setListAdapter(adapter);
 	}
 
@@ -106,9 +106,12 @@ public class FragmentStaffSearch extends MyListFragment {
 			return;
 		}
 		StaffMemberSummary choosenMember = listaRisultati.get(position);
+		StaffMember memberDetails = db.getStaffMember(choosenMember.getMatricola());
 		FragmentStaffDetails staffDetailsFrag = new FragmentStaffDetails();
-		staffDetailsFrag.setMemberDetails(db.getStaffMember(choosenMember.getMatricola()));
-		activity.switchContent(staffDetailsFrag);
+		Bundle args = new Bundle();
+		args.putParcelable(FragmentStaffDetails.ARG_DETAILS, memberDetails);
+        staffDetailsFrag.setArguments(args);
+		mActivity.switchContent(staffDetailsFrag);
 	}
 	
 	@Override
@@ -117,9 +120,8 @@ public class FragmentStaffSearch extends MyListFragment {
 			return false;
 		}
 		listaRisultati = db.searchStaffNameByWords(query);
-		ArrayList<ListItem> itemList = new ArrayList<ListItem>(listaRisultati);
 		adapter.clear();
-		adapter.addAll(itemList);
+		adapter.addAll(listaRisultati);
 		adapter.notifyDataSetChanged();
 		this.setSelection(0);
 		return false;
@@ -134,20 +136,12 @@ public class FragmentStaffSearch extends MyListFragment {
 		}
 		String name = editTextStaffName.getText().toString();
 		listaRisultati = db.searchStaffNameByWords(name);
-		ArrayList<ListItem> itemList = new ArrayList<ListItem>(listaRisultati);
 		adapter.clear();
-		adapter.addAll(itemList);
+		adapter.addAll(listaRisultati);
 		adapter.notifyDataSetChanged();
 		this.setSelection(0);
 	}
 	
-//	@Override
-//	public Set<Integer> getActionsToShow() {
-//		Set<Integer> actionsToShow = new HashSet<Integer>();
-//		actionsToShow.add(R.id.action_search_button);
-//		return actionsToShow;
-//	}
-
 	@Override
 	public void onDestroy() {
 		if (db != null) {

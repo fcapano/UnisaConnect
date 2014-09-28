@@ -42,7 +42,7 @@ public class UpdateChecker {
 	private String dialogMessage = "E' disponibile una nuova versione di Unisa Connect. Vuoi aggiornare l'app adesso?";
 	private String okButtonText = "Aggiorna";
 	private String laterButtonText = "Più tardi";
-	private String nextVersionButtonText = "No, grazie.";
+	private String nextVersionButtonText = "No, grazie";
 
 	private int newVersionCode;
 	// private String newVersionName;
@@ -63,8 +63,7 @@ public class UpdateChecker {
 		this.mContext = c;
 
 		try {
-			isBetaVersion = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0)
-					.versionName.toLowerCase(Locale.ENGLISH).contains("beta");
+			isBetaVersion = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName.toLowerCase(Locale.ENGLISH).contains("beta");
 		} catch (NameNotFoundException e) {
 			isBetaVersion = false;
 		}
@@ -107,35 +106,35 @@ public class UpdateChecker {
 
 	private Runnable showUpdate = new Runnable() {
 		public void run() {
-			QustomDialogBuilder builder = new QustomDialogBuilder(mContext);
-
-			builder.setTitle(dialogTitle);
-			builder.setMessage(dialogMessage);
-			builder.setIcon(R.drawable.logo_actionbar);
-			builder.setDividerColor(mContext.getResources().getColor(R.color.orange_actionbar));
-
-			builder.setPositiveButton(okButtonText, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + mContext.getPackageName()));
-					mContext.startActivity(intent);
-				}
-			});
-
-			builder.setNeutralButton(laterButtonText, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-				}
-			});
-
-			builder.setNegativeButton(nextVersionButtonText, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					versionToIgnore = newVersionCode;
-					SharedPreferences.Editor editor = mPref.edit();
-					editor.putInt("versionToIgnore", versionToIgnore);
-					editor.commit();
-				}
-			});
-			
 			try {
+				QustomDialogBuilder builder = new QustomDialogBuilder(mContext);
+
+				builder.setTitle(dialogTitle);
+				builder.setMessage(dialogMessage);
+				builder.setIcon(R.drawable.ic_action_logo_dark);
+				builder.setDividerColor(mContext.getResources().getColor(R.color.orange_actionbar));
+
+				builder.setPositiveButton(okButtonText, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + mContext.getPackageName()));
+						mContext.startActivity(intent);
+					}
+				});
+
+				builder.setNeutralButton(laterButtonText, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+
+				builder.setNegativeButton(nextVersionButtonText, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						versionToIgnore = newVersionCode;
+						SharedPreferences.Editor editor = mPref.edit();
+						editor.putInt("versionToIgnore", versionToIgnore);
+						editor.commit();
+					}
+				});
+
 				builder.show();
 			} catch (BadTokenException e) {
 				// Activity not running anymore

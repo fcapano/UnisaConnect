@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.WeatherData.ActualCondition;
 import it.fdev.utils.DrawableManager;
 import it.fdev.utils.DrawableManager.DrawableManagerListener;
@@ -67,6 +68,9 @@ public class FragmentWeatherActualCondition extends Fragment {
 							Log.w(Utils.TAG, e);
 						}
 						webcamView.setImageDrawable(downloadedWebcamImg);
+					}
+					@Override
+					public void onLoadingError() {
 					}
 				});
 			} else {

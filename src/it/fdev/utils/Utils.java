@@ -4,31 +4,31 @@ import it.fdev.unisaconnect.FragmentInternetError;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.R;
+
+import java.io.Serializable;
+
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.LinearLayout.LayoutParams;
 
 public class Utils {
 
 	public final static String TAG = "UnisaConnect";
 	public final static String TOGGLE_TESTING_STRING = "testing!";
 
-	private static ProgressDialog dialog = null;
-	private static boolean dialogOnCancelBoBack = false;
 	private static AlertDialog alert = null;
-
-//	private static Bitmap mBitmap;
-//	private static Canvas mCanvas;
-//	private static Rect mBounds;
 
 	public static void goToInternetError(MainActivity activity, Fragment goBackFragment) {
 		try {
@@ -36,7 +36,6 @@ public class Utils {
 			errorFrag.setBackFragment(goBackFragment);
 			activity.getSupportFragmentManager().popBackStack();
 			((MainActivity) activity).switchContent(errorFrag);
-			dismissDialog();
 			dismissAlert();
 		} catch (Exception e) {
 			Log.e(TAG, "Error loading interneterror frame");
@@ -44,16 +43,6 @@ public class Utils {
 			return;
 		}
 	}
-
-//	public static void openPlayStore(MainActivity activity) {
-//		Uri uri = Uri.parse("market://details?id=" + activity.getPackageName());
-//		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-//		try {
-//			activity.startActivity(goToMarket);
-//		} catch (ActivityNotFoundException e) {
-//			Toast.makeText(activity, "Impossibile aprire il Play Store", Toast.LENGTH_LONG).show();
-//		}
-//	}
 
 	public static void startDial(FragmentActivity fragmentActivity, String number) {
 		try {
@@ -66,66 +55,21 @@ public class Utils {
 			// Tablet? La chiamata non partirà. Ignora l'errore
 		}
 	}
-	
+
 	public static void sendSupportMail(MainActivity activity, String title, String subject) {
 		String email = activity.getString(R.string.dev_email);
 		sendMail(activity, email, title, subject);
 	}
 
 	public static void sendMail(MainActivity activity, String recipient, String title, String subject) {
-//		Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
 		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", recipient, null));
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-//		emailIntent.setType("plain/text");
 		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, subject);
 		activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.email_chooser_titolo)));
 	}
 
-	public static void createDialog(final MainActivity activity, String message, final boolean onCancelGoBack) {
-		try {
-			dismissAlert();
-			if (onCancelGoBack == dialogOnCancelBoBack && dialog != null && dialog.isShowing()) {
-				dialog.setMessage(message);
-			} else {
-				dismissDialog();
-				dialogOnCancelBoBack = onCancelGoBack;
-				dialog = new ProgressDialog(activity);
-				dialog.setMessage(message);
-				dialog.setIndeterminate(true);
-				dialog.setCancelable(true);
-				dialog.setCanceledOnTouchOutside(false);
-				dialog.setOnCancelListener(new OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialog) {
-//						activity.setLoadingVisible(true);
-						if (onCancelGoBack) {
-							((MainActivity) activity).goToLastFrame();
-						}
-					}
-				});
-				dialog.show();
-//				activity.setLoadingVisible(true);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return;
-	}
-
-	public static void dismissDialog() {
-		try {
-			if (dialog != null && dialog.isShowing()) {
-				dialog.dismiss();
-				dialog = null;
-			}
-		} catch (Exception e) {
-		}
-		return;
-	}
-	
 	public static void createAlert(final MainActivity activity, String message, final BootableFragmentsEnum goToFragmentEnum, final boolean shouldReturnToMenu) {
 		try {
-			dismissDialog();
 			dismissAlert();
 			alert = new AlertDialog.Builder(activity).create();
 			alert.setCancelable(true);
@@ -190,73 +134,95 @@ public class Utils {
 		}
 	}
 	
-//	/**
-//	 * This method convets dp unit to equivalent device specific value in
-//	 * pixels.
-//	 * http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
-//	 * -in-android#
-//	 * 
-//	 * @param dp
-//	 *            A value in dp(Device independent pixels) unit. Which we need
-//	 *            to convert into pixels
-//	 * @param context
-//	 *            Context to get resources and device specific display metrics
-//	 * @return A float value to represent Pixels equivalent to dp according to
-//	 *         device
-//	 */
-//	public static float convertDpToPixel(float dp, Context context) {
-//		Resources resources = context.getResources();
-//		DisplayMetrics metrics = resources.getDisplayMetrics();
-//		float px = dp * (metrics.densityDpi / 160f);
-//		return px;
-//	}
+	/*
+	 * General send message through app/broadcasts
+	 */
+	public static boolean broadcastStatus(Context ctx, String action, String name, Object object) {
+		Intent localIntent = new Intent(action);
+		if (object != null) {
+			if (object instanceof Parcelable) {
+				localIntent.putExtra(name, (Parcelable) object);
+			} else if (object instanceof Serializable) {
+				localIntent.putExtra(name, (Serializable) object);
+			} else {
+				Log.w(TAG, "Object not serializable/parcelable: " + name);
+				return false;
+			}
+		}
+		ctx.sendBroadcast(localIntent);
+		return true;
+	}
 
-//	/**
-//	 * http://stackoverflow.com/questions/8089054/get-the-background-color-of-a-
-//	 * button-in-android
-//	 */
-//	private static void initIfNeeded() {
-//		if (mBitmap == null) {
-//			mBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-//			mCanvas = new Canvas(mBitmap);
-//			mBounds = new Rect();
-//		}
-//	}
-//
-//	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//	public static int getBackgroundColor(View view) {
-//		// The actual color, not the id.
-//		int color = Color.BLACK;
-//
-//		if (view.getBackground() instanceof ColorDrawable) {
-//			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-//				initIfNeeded();
-//
-//				// If the ColorDrawable makes use of its bounds in the draw
-//				// method,
-//				// we may not be able to get the color we want. This is not the
-//				// usual
-//				// case before Ice Cream Sandwich (4.0.1 r1).
-//				// Yet, we change the bounds temporarily, just to be sure that
-//				// we are
-//				// successful.
-//				ColorDrawable colorDrawable = (ColorDrawable) view.getBackground();
-//
-//				mBounds.set(colorDrawable.getBounds()); // Save the original
-//														// bounds.
-//				colorDrawable.setBounds(0, 0, 1, 1); // Change the bounds.
-//
-//				colorDrawable.draw(mCanvas);
-//				color = mBitmap.getPixel(0, 0);
-//
-//				colorDrawable.setBounds(mBounds); // Restore the original
-//													// bounds.
-//			} else {
-//				color = ((ColorDrawable) view.getBackground()).getColor();
-//			}
-//		}
-//
-//		return color;
-//	}
+	public static void sendLoadingMessage(Context ctx, int messageRes) {
+		Intent localIntent = new Intent(MainActivity.BROADCAST_LOADING_MESSAGE);
+		localIntent.putExtra("message_res", messageRes);
+		ctx.sendBroadcast(localIntent);
+	}
+	
+	/////// Expand / Collapse animations ///////////
+	public static void expand(final View v) {
+		expand(v, 3);
+	}
+	
+	public static void expand(final View v, int slowness) {
+		if (v.getVisibility() == View.VISIBLE) {
+			return;
+		}
+		slowness = Math.max(Math.min(slowness, 10), 0);
+		v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		final int targettHeight = v.getMeasuredHeight();
+
+		v.getLayoutParams().height = 0;
+		v.setVisibility(View.VISIBLE);
+		Animation a = new Animation() {
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				v.getLayoutParams().height = interpolatedTime == 1 ? LayoutParams.WRAP_CONTENT : (int) (targettHeight * interpolatedTime);
+				v.requestLayout();
+			}
+
+			@Override
+			public boolean willChangeBounds() {
+				return true;
+			}
+		};
+
+		// 1dp/slowness*ms
+		a.setDuration((int) (targettHeight / v.getContext().getResources().getDisplayMetrics().density) * slowness);
+		v.startAnimation(a);
+	}
+	
+	public static void collapse(final View v) {
+		collapse(v, 3);
+	}
+
+	public static void collapse(final View v, int slowness) {
+		if (v.getVisibility() == View.GONE) {
+			return;
+		}
+		slowness = Math.max(Math.min(slowness, 10), 0);
+		final int initialHeight = v.getMeasuredHeight();
+
+		Animation a = new Animation() {
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				if (interpolatedTime == 1) {
+					v.setVisibility(View.GONE);
+				} else {
+					v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+					v.requestLayout();
+				}
+			}
+
+			@Override
+			public boolean willChangeBounds() {
+				return true;
+			}
+		};
+
+		// 1dp/slowness*ms
+		a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density) * slowness);
+		v.startAnimation(a);
+	}
 
 }

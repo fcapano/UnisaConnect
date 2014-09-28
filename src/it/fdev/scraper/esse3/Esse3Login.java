@@ -20,11 +20,14 @@ import android.util.Log;
 public class Esse3Login extends Esse3BasicScraper {
 
 	private final String startUrl = "https://esse3web.unisa.it/unisa/auth/Logon.do";
-	private final String homeUrl = "http://esse3web.unisa.it/unisa/Home.do";
-	private final String baseURL = "https://esse3web.unisa.it/unisa/";
 	
-	public Esse3Login(Context context, SharedPrefDataManager dataManager, String base64login, String broadcastID) {
+	private boolean chooseCareer;
+	private SharedPrefDataManager mDataManager;
+	
+	public Esse3Login(Context context, SharedPrefDataManager dataManager, String base64login, String broadcastID, boolean chooseCareer) {
 		super(context, dataManager, base64login, broadcastID);
+		this.chooseCareer = chooseCareer;
+		mDataManager = new SharedPrefDataManager(context);
 	}
 
 	@Override
@@ -42,7 +45,10 @@ public class Esse3Login extends Esse3BasicScraper {
 				Log.d(Utils.TAG, "I'm lost 0");
 				return LoadStates.NO_INTERNET;
 			}
-			String nextUrl = scraperStepLogin(result);
+			if (!chooseCareer) {
+				return LoadStates.FINISHED;
+			}
+			String nextUrl = chooseCareer(result);
 			if (nextUrl == null) {
 				Log.d(Utils.TAG, "I'm lost 1");
 				return LoadStates.NO_INTERNET;
@@ -54,7 +60,7 @@ public class Esse3Login extends Esse3BasicScraper {
 					return LoadStates.NO_INTERNET;
 				}
 			}
-			nextUrl = scraperStepLogin(result);
+			nextUrl = chooseCareer(result);
 			if (nextUrl == null) {
 				Log.d(Utils.TAG, "I'm lost 3");
 				return LoadStates.NO_INTERNET;
@@ -78,13 +84,18 @@ public class Esse3Login extends Esse3BasicScraper {
 		return LoadStates.UNKNOWN_PROBLEM;
 	}
 	
-	private String scraperStepLogin(Document document) {
+	private String chooseCareer(Document document) {
 		if (document == null) {
 			return null;
 		}
 		Elements detailsTables = document.getElementsByClass("detail_table");
 		if (detailsTables.size() > 0) {
-			Element firstRow = detailsTables.get(0).getElementsByTag("tr").get(1);
+			int tipoCorso = mDataManager.getTipoCorso();
+			if (detailsTables.size() < tipoCorso || tipoCorso < 1) {
+				mDataManager.setTipoCorso(1);
+				tipoCorso = 1;
+			}
+			Element firstRow = detailsTables.get(0).getElementsByTag("tr").get(tipoCorso);
 			Elements anchors = firstRow.getElementsByTag("a");
 			if (anchors.size() == 0) {
 				return "";

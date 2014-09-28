@@ -4,6 +4,7 @@ import it.fdev.scraper.MenuMensaScraper;
 import it.fdev.unisaconnect.data.MenuMensa;
 import it.fdev.unisaconnect.data.MenuMensa.PiattoMensa;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
+import it.fdev.utils.ExpandablePanel;
 import it.fdev.utils.MyDateUtils;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
@@ -50,9 +51,9 @@ public class FragmentMensa extends MySimpleFragment {
 		lastUpdateIconView =  view.findViewById(R.id.last_update_icon);
 		menuContainerView = view.findViewById(R.id.menu_list_container);
 		menuNDView = (TextView) view.findViewById(R.id.menu_non_disponibile);
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		menu = mDataManager.getMenuMensa();
 		if (menu != null) {
@@ -82,7 +83,7 @@ public class FragmentMensa extends MySimpleFragment {
 			return;
 		}
 
-		activity.setLoadingVisible(true, true);
+		mActivity.setLoadingVisible(true, true);
 		
 		if (force) {
 			menu = null;
@@ -108,8 +109,8 @@ public class FragmentMensa extends MySimpleFragment {
 			}
 		}
 		
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, this);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, this);
 			return;
 		}
 		
@@ -122,7 +123,7 @@ public class FragmentMensa extends MySimpleFragment {
 			mDataManager.setMenuMensa(null);
 			mensaScraper = new MenuMensaScraper();
 			mensaScraper.setCallerMenuMensaFragment(this);
-			mensaScraper.execute(activity);
+			mensaScraper.execute(mActivity);
 			return;
 		} else {
 			mostraMenu(null);
@@ -134,14 +135,14 @@ public class FragmentMensa extends MySimpleFragment {
 			return;			
 		}
 		if (menuContainerView == null || menuNDView == null) { // Dai report di crash sembra succedere a volte, non ho idea del perchè
-			activity.setDrawerOpen(true);							   // Quindi mostro lo slidingmenu per apparare
-			activity.setLoadingVisible(false, false);
+			mActivity.setDrawerOpen(true);							   // Quindi mostro lo slidingmenu per apparare
+			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		if (menu == null && this.menu == null) {
 			menuContainerView.setVisibility(View.GONE);
 			menuNDView.setVisibility(View.VISIBLE);
-			activity.setLoadingVisible(false, false);
+			mActivity.setLoadingVisible(false, false);
 			return;
 		} else {
 			menuContainerView.setVisibility(View.VISIBLE);
@@ -156,7 +157,7 @@ public class FragmentMensa extends MySimpleFragment {
 			SimpleDateFormat inputFormatterTime = new SimpleDateFormat("dd/MM/yy", Locale.ITALY);
 			Date date = inputFormatterTime.parse(this.menu.getDate());
 //			long millis = Long.parseLong(this.menu.getDateMillis());
-			updateText = MyDateUtils.getLastUpdateString(activity, date.getTime(), true);
+			updateText = MyDateUtils.getLastUpdateString(mActivity, date.getTime(), true);
 		} catch (Exception e) {
 			updateText = this.menu.getDate();
 		}
@@ -169,8 +170,8 @@ public class FragmentMensa extends MySimpleFragment {
 			lastUpdateIconView.setVisibility(View.GONE);
 		}
 		
-		LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout menuListView = (LinearLayout) activity.findViewById(R.id.menu_list);
+		LayoutInflater layoutInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout menuListView = (LinearLayout) mActivity.findViewById(R.id.menu_list);
 		menuListView.removeAllViews();
 
 		ArrayList<PiattoMensa> firstCourses = this.menu.getFirstCourses();
@@ -215,7 +216,7 @@ public class FragmentMensa extends MySimpleFragment {
 			mDataManager.setMenuMensa(menu);
 		}
 		
-		activity.setLoadingVisible(false, false);
+		mActivity.setLoadingVisible(false, false);
 
 	}
 	
@@ -223,7 +224,7 @@ public class FragmentMensa extends MySimpleFragment {
 		menuContainerView.setVisibility(View.GONE);
 		menuNDView.setText(errore);
 		menuNDView.setVisibility(View.VISIBLE);
-		activity.setLoadingVisible(false, false);
+		mActivity.setLoadingVisible(false, false);
 		return;
 	}
 
@@ -239,19 +240,23 @@ public class FragmentMensa extends MySimpleFragment {
 			String ingredientiEN = cCourse.getIngradientiEn();
 			if (nome != null) {
 				LinearLayout detailsView = (LinearLayout) layoutInflater.inflate(R.layout.mensa_course_details, null);
+				ExpandablePanel expPanel = (ExpandablePanel) detailsView.findViewById(R.id.exp_panel);
 				TextView nameView = (TextView) detailsView.findViewById(R.id.course_name);
 				TextView ingredientsITView = (TextView) detailsView.findViewById(R.id.course_ingredients_it);
 				TextView ingredientsENView = (TextView) detailsView.findViewById(R.id.course_ingredients_en);
 				nameView.setText(nome);
-				if (ingredientiIT == null) {
+				if (ingredientiIT == null || ingredientiIT.isEmpty()) {
 					ingredientsITView.setVisibility(TextView.GONE);
 				} else {
 					ingredientsITView.setText(ingredientiIT);
 				}
-				if (ingredientiEN == null) {
+				if (ingredientiEN == null || ingredientiEN.isEmpty()) {
 					ingredientsENView.setVisibility(TextView.GONE);
 				} else {
 					ingredientsENView.setText(ingredientiEN);
+				}
+				if ((ingredientiIT == null || ingredientiIT.isEmpty()) && (ingredientiEN == null || ingredientiEN.isEmpty())) {
+					expPanel.hideHandle();
 				}
 				courseView.addView(detailsView);
 			}

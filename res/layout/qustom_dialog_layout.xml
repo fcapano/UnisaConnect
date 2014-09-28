@@ -28,6 +28,7 @@ I should have probably just rewritten similar code, but i was feeling lazy. Mayb
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dip"
     android:layout_marginStart="8dip"
+    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <LinearLayout

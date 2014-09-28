@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class StaffDB {
 //	private static final String DB_UPDATE_URL = "http://idw.altervista.org/img_prof/latest.xml";
-	private static final String DB_STAFF_DATE = "2014.05.23-20.45.17";	//First used: V19
+	private static final String DB_STAFF_DATE = "2014.09.17-14.25.11";	//First used: V40
 	private static final String DB_STAFF_NAME = "uc_staff-" + DB_STAFF_DATE + ".db";
 	
 	private SQLiteDatabase dbStaff;
@@ -46,7 +46,7 @@ public class StaffDB {
 		}
 		
 		String staffTableName = "staff";
-		String[] cols = new String[]{"matricola", "fullname", "img_small_url"};
+		String[] cols = new String[]{"matricola", "fullname", "email", "img_small_url"};
 		
 		String where = "fullname LIKE ";
 		String[] args = new String[wordsArray.length];
@@ -64,8 +64,10 @@ public class StaffDB {
 		while(!results.isAfterLast()) {
 			String matricola 	= results.getString(0);
 			String fullname 	= results.getString(1);
-			String imgSmallUrl 	= results.getString(2);
-			StaffMemberSummary member = new StaffMemberSummary(matricola, fullname, imgSmallUrl);
+//			String role			= results.getString(2);
+			String email	= results.getString(2);
+			String imgSmallUrl 	= results.getString(3);
+			StaffMemberSummary member = new StaffMemberSummary(matricola, fullname, email, imgSmallUrl);
 			staffList.add(member);
 			results.moveToNext();
 		}
@@ -76,7 +78,7 @@ public class StaffDB {
 	public StaffMember getStaffMember(String id) {
 		String staffTableName = "staff";
 		String[] cols = new String[]{"matricola", "fullname", "img_big_url", "img_small_url", "role", 
-				"department", "map_info", "email", "website", "ricevimento"};
+				"department", "map_info", "email", "website", "ricevimento", "latitudine", "longitudine"};
 		String where = "matricola=?";
 		String[] args = new String[]{id};
 		String orderBy = "fullname";
@@ -88,7 +90,7 @@ public class StaffDB {
 			return null;
 		}
 		results.moveToFirst();
-		
+
 		String matricola 	= results.getString(0);
 		String fullname 	= results.getString(1);
 		String imgBigUrl 	= results.getString(2);
@@ -99,11 +101,13 @@ public class StaffDB {
 		String email 		= results.getString(7);
 		String website 		= results.getString(8);
 		String ricevimento 	= results.getString(9);
+		Double latitudine 	= results.getDouble(10);
+		Double longitudine 	= results.getDouble(11);
 		ArrayList<String> phoneList =  getPhone(matricola);
 		ArrayList<String> faxList	= getFax(matricola);
 		
 		StaffMember member = new StaffMember(matricola, fullname, imgBigUrl, imgSmallUrl, role, 
-				department, mapInfo, phoneList, faxList, email, website, ricevimento);
+				department, mapInfo, phoneList, faxList, email, website, ricevimento, latitudine, longitudine);
 		results.close();
 		return member;
 	}

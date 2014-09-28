@@ -9,23 +9,21 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/activity_background_darker"
         android:paddingBottom="7dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="7dp" >
 
         <EditText
             android:id="@+id/staff_name"
-            style="@style/MyEditText"
+            style="@style/MyEditTextWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:drawableLeft="@drawable/ic_action_search"
+            android:drawableLeft="@drawable/ic_action_search_black"
             android:gravity="left|center_vertical"
             android:hint="@string/cerca_staff_name"
-            android:inputType="textNoSuggestions|textVisiblePassword"
-            android:paddingRight="27dp" />
+            android:inputType="textNoSuggestions|textVisiblePassword" />
 
         <ImageView
             android:id="@+id/staff_name_clear"
@@ -35,18 +33,13 @@
             android:layout_alignRight="@+id/staff_name"
             android:layout_alignTop="@+id/staff_name"
             android:layout_gravity="right|center_vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="5dp"
+            android:paddingBottom="0dp"
+            android:paddingLeft="10dp"
             android:paddingRight="5dp"
-            android:paddingTop="10dp"
+            android:paddingTop="0dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_action_cancel" />
+            android:src="@drawable/ic_small_cancel_dark" />
     </RelativeLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@color/activity_background_darker_lighter" />
 
     <ListView
         android:id="@android:id/list"

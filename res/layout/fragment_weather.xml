@@ -7,6 +7,7 @@
 
     <TextView
         android:id="@+id/meteo_non_disponibile"
+        style="@style/bigBackgroundTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
@@ -14,13 +15,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="right|center_vertical"
-        android:gravity="right|center_vertical"
-        android:paddingBottom="40sp"
-        android:paddingRight="10sp"
         android:text="@string/meteo_non_disponibile"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:visibility="gone" />
 
     <GridView
@@ -63,7 +58,7 @@
                 android:background="@color/activity_background"
                 android:paddingBottom="4dp"
                 android:paddingTop="4dp"
-                android:textColor="#fff" />
+                android:textColor="@color/dark_gray" />
         </android.support.v4.view.ViewPager>
 
         <LinearLayout
@@ -104,7 +99,7 @@
                     android:shadowDy="0"
                     android:shadowRadius="10"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
+                    android:textColor="?android:textColorPrimaryInverse"
                     android:textSize="55sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -119,21 +114,14 @@
                 android:shadowDy="0"
                 android:shadowRadius="10"
                 android:singleLine="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimaryInverse"
                 android:textSize="25sp" />
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal" >
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_thermometer"
-                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,7 +131,8 @@
                     android:padding="0dp"
                     android:singleLine="true"
                     android:text="@string/umidita"
-                    android:textColor="@android:color/white" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:textColorPrimaryInverse" />
 
                 <TextView
                     android:id="@+id/weather_humidity"
@@ -152,24 +141,17 @@
                     android:layout_margin="0dp"
                     android:gravity="center_vertical"
                     android:padding="0dp"
-                    android:shadowColor="@android:color/black"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:textColorPrimaryInverse"
                     android:textStyle="bold" />
+            </LinearLayout>
 
-                <View
-                    android:layout_width="30dp"
-                    android:layout_height="0dp" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_wind"
-                    tools:ignore="ContentDescription" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -179,7 +161,7 @@
                     android:padding="0dp"
                     android:singleLine="true"
                     android:text="@string/vento"
-                    android:textColor="@android:color/white" />
+                    android:textColor="?android:textColorPrimaryInverse" />
 
                 <TextView
                     android:id="@+id/weather_wind"
@@ -188,12 +170,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical"
                     android:padding="0dp"
-                    android:shadowColor="@android:color/black"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
+                    android:textColor="?android:textColorPrimaryInverse"
                     android:textStyle="bold" />
 
                 <TextView
@@ -208,7 +186,7 @@
                     android:shadowDy="0"
                     android:shadowRadius="5"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
+                    android:textColor="?android:textColorPrimaryInverse"
                     tools:ignore="SelectableText" />
             </LinearLayout>
         </LinearLayout>
@@ -222,7 +200,7 @@
             android:layout_gravity="center_vertical|right"
             android:layout_toLeftOf="@+id/last_update_time"
             android:scaleType="fitEnd"
-            android:src="@drawable/ic_action_refresh"
+            android:src="@drawable/ic_small_refresh"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -233,14 +211,9 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
             android:layout_marginTop="37dp"
-            android:shadowColor="@android:color/black"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="4"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/white"
-            tools:ignore="SelectableText" />
+            android:textColor="?android:textColorPrimaryInverse" />
     </RelativeLayout>
 
 </RelativeLayout>

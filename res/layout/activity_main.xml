@@ -1,78 +1,90 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true" > 
+    <!-- android:clipToPadding="false" -->
+    <!-- android:clipChildren="false" --> >
 
-    <!-- The main content view -->
-
-    <RelativeLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="True"
-        android:layout_alignParentLeft="True"
-        android:layout_alignParentRight="True"
-        android:layout_alignParentTop="True"
-        android:orientation="vertical" >
+        android:layout_height="match_parent" >
 
-        <include
-            android:visibility="gone"
-            android:id="@+id/banner"
-            layout="@layout/banner" />
+        <!-- The main content view -->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/banner"
-            android:layout_alignParentBottom="False"
+            android:layout_alignParentBottom="True"
             android:layout_alignParentLeft="True"
             android:layout_alignParentRight="True"
             android:layout_alignParentTop="True"
-            android:background="@color/activity_background" >
+            android:fitsSystemWindows="true"
+            android:orientation="vertical" >
 
-            <FrameLayout
-                android:id="@+id/content_frame"
+            <include
+                android:id="@+id/banner"
+                layout="@layout/banner"
+                android:visibility="gone" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="match_parent"
+                android:layout_above="@id/banner"
+                android:layout_alignParentBottom="False"
+                android:layout_alignParentLeft="True"
+                android:layout_alignParentRight="True"
+                android:layout_alignParentTop="True"
+                android:background="@color/activity_background" >
 
-            <LinearLayout
-                android:id="@+id/content_loading_container"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:background="@color/activity_background"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone" >
+                <FrameLayout
+                    android:id="@+id/content_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent" />
 
-                <ProgressBar
-                    android:id="@+id/content_loading_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:id="@+id/content_loading_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
                     android:layout_gravity="center"
+                    android:background="@color/activity_background"
                     android:gravity="center"
-                    android:indeterminate="true" />
+                    android:orientation="vertical"
+                    android:visibility="gone" >
 
-                <TextView
-                    android:id="@+id/content_loading_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:visibility="gone" />
-            </LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/content_loading_spinner"
+                        style="?android:attr/progressBarStyleInverse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:indeterminate="true" />
+
+                    <TextView
+                        android:id="@+id/content_loading_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
 
-    <!-- The navigation drawer -->
+        <!-- The navigation drawer -->
 
-    <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/menu_background"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/drawer_background"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+    </android.support.v4.widget.DrawerLayout>
 
-</android.support.v4.widget.DrawerLayout>
+</FrameLayout>

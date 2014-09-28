@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
@@ -58,13 +59,13 @@ public class FragmentWebmail extends MySimpleFragment {
 		mWebView.requestFocus();					//
 		thisFragment = this;
 		
-		mDataManager = new SharedPrefDataManager(activity);
+		mDataManager = new SharedPrefDataManager(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
-			Utils.createAlert(activity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
+			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
 		
-		CookieSyncManager.createInstance(activity);
+		CookieSyncManager.createInstance(mActivity);
 		CookieManager cookieManager = CookieManager.getInstance();
 		cookieManager.removeAllCookie();
 		cookieManager.setAcceptCookie(true);
@@ -74,8 +75,8 @@ public class FragmentWebmail extends MySimpleFragment {
 	
 	@SuppressWarnings("deprecation")
 	private void startWebView() {
-		if(!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, thisFragment);
+		if(!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, thisFragment);
 			return;
 		}
 		
@@ -119,7 +120,7 @@ public class FragmentWebmail extends MySimpleFragment {
 			}
 	        @Override
 	        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-	        	Utils.goToInternetError(activity, thisFragment);
+	        	Utils.goToInternetError(mActivity, thisFragment);
 			}
 
 			@Override
@@ -187,7 +188,7 @@ public class FragmentWebmail extends MySimpleFragment {
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				progressBar.setVisibility(View.VISIBLE);
-				activity.setLoadingVisible(true, false);
+				mActivity.setLoadingVisible(true, false);
 			}
 	     
 			// Quando il caricamento si completa rimuovi il dialog
@@ -208,7 +209,7 @@ public class FragmentWebmail extends MySimpleFragment {
 					view.loadUrl(handleGingerbreadStupidity);
 				}
 				progressBar.setVisibility(View.GONE);
-				activity.setLoadingVisible(false, false);
+				mActivity.setLoadingVisible(false, false);
 			}
 	    });
 		mWebView.loadUrl(URL_STRING);
@@ -248,10 +249,9 @@ public class FragmentWebmail extends MySimpleFragment {
 			if (!isAdded()) {
 				return;
 			}
-			activity.runOnUiThread(new Runnable() {
+			mActivity.runOnUiThread(new Runnable() {
 			    public void run() {
 			    	progressBar.setVisibility(View.GONE);
-			    	Utils.dismissDialog();
 			    }
 		    });
         }
@@ -260,12 +260,11 @@ public class FragmentWebmail extends MySimpleFragment {
 			if (!isAdded()) {
 				return;
 			}
-			activity.runOnUiThread(new Runnable() {
+			mActivity.runOnUiThread(new Runnable() {
 			    public void run() {
 			    	progressBar.setVisibility(View.GONE);
 					try {
-						Utils.createAlert(activity, getString(R.string.dati_errati), null, false);
-//						dismissDialog();
+						Utils.createAlert(mActivity, getString(R.string.dati_errati), null, false);
 					} catch(Exception e) {
 						Log.w(Utils.TAG, "Exception in JavascriptBridge wrongDataDialog");
 						e.printStackTrace();
@@ -302,8 +301,8 @@ public class FragmentWebmail extends MySimpleFragment {
 		if (!isAdded() || mWebView == null) {
 			return;
 		}
-		if (!Utils.hasConnection(activity)) {
-			Utils.goToInternetError(activity, thisFragment);
+		if (!Utils.hasConnection(mActivity)) {
+			Utils.goToInternetError(mActivity, thisFragment);
 			return;
 		}
 		mWebView.reload();

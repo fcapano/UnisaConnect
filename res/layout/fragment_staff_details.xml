@@ -8,48 +8,82 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="10dp" >
 
         <RelativeLayout
-            android:id="@+id/relativelayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
-            <ImageView
-                android:id="@+id/picture"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginBottom="15dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/transparent" />
+            <RelativeLayout
+                android:id="@+id/image_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/picture_small"
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:paddingBottom="40dp"
+                        android:paddingTop="10dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="invisible" />
+
+                <VideoView
+                    android:id="@+id/video"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/fullname"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/picture"
-                android:layout_alignLeft="@+id/picture"
-                android:layout_alignRight="@+id/picture"
-                android:layout_margin="0dp"
-                android:background="@color/transparent_black_30"
-                android:clickable="true"
-                android:gravity="bottom|left"
-                android:paddingLeft="15dp"
-                android:paddingRight="5dp"
+                android:layout_alignBottom="@+id/image_container"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/orange_actionbar"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:paddingTop="5dp"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@android:color/white"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?android:textColorPrimaryInverse"
                 android:textStyle="bold" />
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/info_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
             android:orientation="vertical" >
 
             <TextView
@@ -58,54 +92,104 @@
                 android:layout_height="wrap_content"
                 android:text="@string/informazioni"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
-
-            <View
-                android:id="@+id/infoSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
 
             <TextView
                 android:id="@+id/roleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/departmentText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/mapTitle"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/map_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:weightSum="1" >
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/ufficio"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:layout_weight="0.8"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/mapTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ufficio"
+                    android:textAllCaps="true"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mapText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:textColor="?android:textColorPrimary" />
+            </LinearLayout>
 
             <View
-                android:id="@+id/mapSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
+                android:id="@+id/map_separator"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/lighter_gray" />
 
-            <TextView
-                android:id="@+id/mapText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp" />
+            <RelativeLayout
+                android:id="@+id/map_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/map_button_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:text="Mappa"
+                    android:textColor="#f3791b"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/map_button_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/map_button_text"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_icon_navigator" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/email_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/emailTitle"
@@ -113,23 +197,26 @@
                 android:layout_height="wrap_content"
                 android:text="@string/email"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
-
-            <View
-                android:id="@+id/emailSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
 
             <TextView
                 android:id="@+id/emailText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ricevimento_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/ricevimentoTitle"
@@ -137,23 +224,26 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ricevimento"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
-
-            <View
-                android:id="@+id/ricevimentoSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
 
             <TextView
                 android:id="@+id/ricevimentoText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/website_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/websiteTitle"
@@ -161,23 +251,26 @@
                 android:layout_height="wrap_content"
                 android:text="@string/website"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
-
-            <View
-                android:id="@+id/websiteSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
 
             <TextView
                 android:id="@+id/websiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/phone_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/phoneTitle"
@@ -185,36 +278,29 @@
                 android:layout_height="wrap_content"
                 android:text="@string/telefono"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
-
-            <View
-                android:id="@+id/phoneSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
 
             <TextView
                 android:id="@+id/phone1Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/phone2Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/phone3Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/phone4Text"
@@ -222,7 +308,18 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:paddingBottom="10dp"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fax_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/faxTitle"
@@ -230,43 +327,36 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fax"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
-
-            <View
-                android:id="@+id/faxSep"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/list_divider" />
 
             <TextView
                 android:id="@+id/fax1Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/fax2Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/fax3Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/fax4Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingLeft="10dp" />
+                android:textColor="?android:textColorPrimary" />
         </LinearLayout>
     </LinearLayout>
 

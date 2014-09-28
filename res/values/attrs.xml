@@ -18,5 +18,14 @@
         <attr name="is_oval" format="boolean" />
         <attr name="android:scaleType" />
     </declare-styleable>
+    
+    <declare-styleable name="ExpandablePanel">
+       <attr name="handle" format="reference" />
+        <attr name="expandable_title" format="reference" />
+        <attr name="expandable_content1" format="reference" />
+        <attr name="expandable_content2" format="reference" />
+        <attr name="collapsedHeight" format="dimension"/>
+        <attr name="animationDuration" format="integer"/>
+    </declare-styleable>
 
 </resources>
