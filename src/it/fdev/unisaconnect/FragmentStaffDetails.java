@@ -264,7 +264,7 @@ public class FragmentStaffDetails extends MySimpleFragment {
 
 		if (mStaffMember.getImgSmallURL() == null || mStaffMember.getImgSmallURL().isEmpty()) {
 			imageContainer.setVisibility(View.GONE);
-		} if(mStaffMember.getMatricola().equals("028309")) {
+		} else if(mStaffMember.getMatricola().equals("028309")) {
 			videoView.setVisibility(View.VISIBLE);
 			imageContainer.setVisibility(View.VISIBLE);
 			picture.setVisibility(View.INVISIBLE);
