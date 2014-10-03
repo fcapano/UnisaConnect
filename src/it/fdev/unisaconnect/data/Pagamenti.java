@@ -3,6 +3,7 @@ package it.fdev.unisaconnect.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Pagamenti implements Serializable {
 	private static final long serialVersionUID = 6160894386810849426L;
@@ -24,27 +25,33 @@ public class Pagamenti implements Serializable {
 	}
 
 	public static class Pagamento implements Serializable {
-		private static final long serialVersionUID = 3611873865319239521L;
+		private static final long serialVersionUID = 3611873865319239522L;
 		
-		private String titolo;
-		private String descrizione;
+		private List<String> causali;
 		private String importo;
 		private String scadenza;
 		
-		public Pagamento(String titolo, String descrizione, String importo, String scadenza) {
+		public Pagamento(String causale, String importo, String scadenza) {
 			super();
-			this.titolo = titolo;
-			this.descrizione = descrizione;
+			this.causali = new ArrayList<String>(1);
+			causali.add(causale);
 			this.importo = importo;
 			this.scadenza = scadenza;
 		}
 		
-		public String getTitolo() {
-			return titolo;
+		public Pagamento(List<String> causali, String importo, String scadenza) {
+			super();
+			this.causali = causali;
+			this.importo = importo;
+			this.scadenza = scadenza;
 		}
-
-		public String getDescrizione() {
-			return descrizione;
+		
+		public List<String> getCausali() {
+			return causali;
+		}
+		
+		public void addCausale(String causale) {
+			this.causali.add(causale);
 		}
 
 		public String getImporto() {

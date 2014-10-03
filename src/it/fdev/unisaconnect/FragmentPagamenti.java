@@ -239,13 +239,16 @@ public class FragmentPagamenti extends MySimpleFragment {
 	
 	public View inflatePagamento(Pagamento pagamento, LayoutInflater layoutInflater) {
 		View rowView = layoutInflater.inflate(R.layout.pagamento_row, null);
-		TextView nameView = (TextView) rowView.findViewById(R.id.pagamento_name);
 		TextView descriptionView = (TextView) rowView.findViewById(R.id.pagamento_description);
 		TextView expirationView = (TextView) rowView.findViewById(R.id.pagamento_expiration);
 		TextView amountView = (TextView) rowView.findViewById(R.id.pagamento_amount);
 		
-		nameView.setText(pagamento.getTitolo());
-		descriptionView.setText(pagamento.getDescrizione());
+		String description = "";
+		for (String cCause : pagamento.getCausali()) {
+			description += "• " + cCause + "\n";
+		}
+		
+		descriptionView.setText(description.trim());
 		expirationView.setText(getString(R.string.scadenza) + ": " + pagamento.getScadenza());
 		amountView.setText(pagamento.getImporto());
 		return rowView;
