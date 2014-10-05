@@ -1,6 +1,7 @@
 package it.fdev.unisaconnect;
 
 import it.fdev.unisaconnect.data.StaffMember;
+import it.fdev.unisaconnect.map.MapFocusPoint;
 import it.fdev.utils.DrawableManager;
 import it.fdev.utils.DrawableManager.DrawableManagerListener;
 import it.fdev.utils.MySimpleFragment;
@@ -41,7 +42,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class FragmentStaffDetails extends MySimpleFragment {
-	
+
 	public static final String ARG_DETAILS = "details";
 
 	private StaffMember mStaffMember;
@@ -77,7 +78,7 @@ public class FragmentStaffDetails extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
+
 		mStaffMember = getArguments().getParcelable(ARG_DETAILS);
 		if (mStaffMember == null || !(mStaffMember instanceof StaffMember)) {
 			mActivity.goToLastFrame();
@@ -115,10 +116,10 @@ public class FragmentStaffDetails extends MySimpleFragment {
 		fax2Text = (TextView) view.findViewById(R.id.fax2Text);
 		fax3Text = (TextView) view.findViewById(R.id.fax3Text);
 		fax4Text = (TextView) view.findViewById(R.id.fax4Text);
-		
+
 		mapSeparator = view.findViewById(R.id.map_separator);
 		mapButton = view.findViewById(R.id.map_button);
-		
+
 		// Scelgo l'altezza dell'immagine in base alla grandezza del display
 		Display display = mActivity.getWindowManager().getDefaultDisplay();
 		int totalHeight;
@@ -130,7 +131,8 @@ public class FragmentStaffDetails extends MySimpleFragment {
 			display.getSize(size);
 			totalHeight = size.y;
 		}
-		picture.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, (int) (totalHeight * imageScreenPercentageHeight)));
+		picture.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				(int) (totalHeight * imageScreenPercentageHeight)));
 
 		attachLongpressCopy(R.string.informazioni, fullnameText);
 		attachLongpressCopy(R.string.informazioni, roleText);
@@ -169,20 +171,23 @@ public class FragmentStaffDetails extends MySimpleFragment {
 				startActivity(i);
 			}
 		});
-		
+
 		mapButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (mStaffMember.getLatitudine() <= 0 || mStaffMember.getLongitudine() <= 0) {
 					return;
 				}
-				FragmentMap fragmentMap = new FragmentMap();
+				FragmentMap fragmentMap = FragmentMap.newInstance();
 				Bundle args = new Bundle();
-				args.putDouble("", mStaffMember.getLatitudine());
-				args.putDouble("", mStaffMember.getLongitudine());
+
+				MapFocusPoint mapFocusPoint = createMapFocusPoint();
+				args.putSerializable(FragmentMap.MAP_FOCUS_POINT_ARG, mapFocusPoint);
+
 				fragmentMap.setArguments(args);
 				mActivity.switchContent(fragmentMap);
 			}
+
 		});
 
 		phone1Text.setOnClickListener(new OnClickListener() {
@@ -227,10 +232,12 @@ public class FragmentStaffDetails extends MySimpleFragment {
 	private void copyText(String titolo, TextView textView) {
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) mActivity
+					.getSystemService(Context.CLIPBOARD_SERVICE);
 			clipboard.setText(textView.getText());
 		} else {
-			android.content.ClipboardManager clipboard = (android.content.ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+			android.content.ClipboardManager clipboard = (android.content.ClipboardManager) mActivity
+					.getSystemService(Context.CLIPBOARD_SERVICE);
 			android.content.ClipData clip = android.content.ClipData.newPlainText(titolo, textView.getText());
 			clipboard.setPrimaryClip(clip);
 		}
@@ -264,12 +271,12 @@ public class FragmentStaffDetails extends MySimpleFragment {
 
 		if (mStaffMember.getImgSmallURL() == null || mStaffMember.getImgSmallURL().isEmpty()) {
 			imageContainer.setVisibility(View.GONE);
-		} else if(mStaffMember.getMatricola().equals("028309")) {
+		} else if (mStaffMember.getMatricola().equals("028309")) {
 			videoView.setVisibility(View.VISIBLE);
 			imageContainer.setVisibility(View.VISIBLE);
 			picture.setVisibility(View.INVISIBLE);
 			pictureSmall.setVisibility(View.INVISIBLE);
-			Uri videoURI = Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.v028309 );
+			Uri videoURI = Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.v028309);
 			videoView.setVideoURI(videoURI);
 			videoView.start();
 			videoView.setOnTouchListener(new OnTouchListener() {
@@ -300,37 +307,45 @@ public class FragmentStaffDetails extends MySimpleFragment {
 					// loadingContainer.setVisibility(View.GONE);
 					if (Utils.hasConnection(mActivity)) {
 						// loadingContainer.setVisibility(View.VISIBLE);
-						mDrawableManager.fetchDrawableOnThread(mStaffMember.getImgBigURL(), new DrawableManagerListener() {
-							@Override
-							public void onLoadingComplete(Drawable image) {
-								Animation fadeIn = new AlphaAnimation(0, 1);
-								fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
-								fadeIn.setDuration(300);
-								AnimationSet animation = new AnimationSet(false); //change to false
-								animation.addAnimation(fadeIn);
-								picture.setAnimation(animation);
+						mDrawableManager.fetchDrawableOnThread(mStaffMember.getImgBigURL(),
+								new DrawableManagerListener() {
+									@Override
+									public void onLoadingComplete(Drawable image) {
+										Animation fadeIn = new AlphaAnimation(0, 1);
+										fadeIn.setInterpolator(new DecelerateInterpolator()); // add
+																								// this
+										fadeIn.setDuration(300);
+										AnimationSet animation = new AnimationSet(false); // change
+																							// to
+																							// false
+										animation.addAnimation(fadeIn);
+										picture.setAnimation(animation);
 
-//								Animation fadeOut = new AlphaAnimation(1, 0);
-//								fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
-//								fadeOut.setStartOffset(1000);
-//								fadeOut.setDuration(500);
-//								AnimationSet animation1 = new AnimationSet(false); //change to false
-//								animation1.addAnimation(fadeOut);
-//								pictureSmall.setAnimation(animation1);
-								
-								picture.setImageDrawable(image);
-//								pictureSmall.setVisibility(View.GONE);
-								picture.setVisibility(View.VISIBLE);
-								// loadingContainer.setVisibility(View.GONE);
-							}
+										// Animation fadeOut = new
+										// AlphaAnimation(1, 0);
+										// fadeOut.setInterpolator(new
+										// AccelerateInterpolator()); //and this
+										// fadeOut.setStartOffset(1000);
+										// fadeOut.setDuration(500);
+										// AnimationSet animation1 = new
+										// AnimationSet(false); //change to
+										// false
+										// animation1.addAnimation(fadeOut);
+										// pictureSmall.setAnimation(animation1);
 
-							@Override
-							public void onLoadingError() {
-								// loadingContainer.setVisibility(View.GONE);
-								 picture.setVisibility(View.GONE);
-								// pictureSmall.setVisibility(View.VISIBLE);
-							}
-						});
+										picture.setImageDrawable(image);
+										// pictureSmall.setVisibility(View.GONE);
+										picture.setVisibility(View.VISIBLE);
+										// loadingContainer.setVisibility(View.GONE);
+									}
+
+									@Override
+									public void onLoadingError() {
+										// loadingContainer.setVisibility(View.GONE);
+										picture.setVisibility(View.GONE);
+										// pictureSmall.setVisibility(View.VISIBLE);
+									}
+								});
 					} else {
 						// loadingContainer.setVisibility(View.GONE);
 						picture.setVisibility(View.GONE);
@@ -382,7 +397,7 @@ public class FragmentStaffDetails extends MySimpleFragment {
 		} else {
 			websiteText.setText(website);
 		}
-		
+
 		if (latitudine > 0 && longitudine > 0) {
 			mapSeparator.setVisibility(View.VISIBLE);
 			mapButton.setVisibility(View.VISIBLE);
@@ -431,7 +446,6 @@ public class FragmentStaffDetails extends MySimpleFragment {
 			fax4Text.setText(faxes.get(3));
 		else
 			fax4Text.setVisibility(View.GONE);
-		
 	}
 
 	@Override
@@ -439,4 +453,22 @@ public class FragmentStaffDetails extends MySimpleFragment {
 		return R.string.rubrica;
 	}
 
+	private MapFocusPoint createMapFocusPoint() {
+		MapFocusPoint mapFocusPoint = new MapFocusPoint();
+		mapFocusPoint.setTitle(mStaffMember.getFullname());
+		mapFocusPoint.setSubtitle(formatMapInfo(mStaffMember.getMapInfo()));
+		mapFocusPoint.setLatitude(mStaffMember.getLatitudine());
+		mapFocusPoint.setLongitude(mStaffMember.getLongitudine());
+		return mapFocusPoint;
+	}
+
+	private String formatMapInfo(String mapInfo) {
+
+		String[] splittedMapInfo = mapInfo.split(",\\s*");
+
+		StringBuilder formattedMapInfo = new StringBuilder();
+		formattedMapInfo.append(splittedMapInfo[1]).append(", ").append(splittedMapInfo[2]).append(", ")
+				.append(splittedMapInfo[3]);
+		return formattedMapInfo.toString();
+	}
 }
