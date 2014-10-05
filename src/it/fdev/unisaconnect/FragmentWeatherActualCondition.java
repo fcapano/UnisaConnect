@@ -61,12 +61,7 @@ public class FragmentWeatherActualCondition extends Fragment {
 				dm.fetchDrawableOnThread(condition.getStationWebcamOptimizedUrl(), new DrawableManagerListener() {
 					@Override
 					public void onLoadingComplete(Drawable image) {
-						try {
-							downloadedWebcamImg = cropDrawable(image, 0, 10, 0, 0);
-						} catch (Exception e) {
-							downloadedWebcamImg = image;
-							Log.w(Utils.TAG, e);
-						}
+						downloadedWebcamImg = image;
 						webcamView.setImageDrawable(downloadedWebcamImg);
 					}
 					@Override
@@ -118,20 +113,6 @@ public class FragmentWeatherActualCondition extends Fragment {
 			windView.setText(condition.getWindSpeed());
 			windDirView.setText(condition.getWindDir());
 		}
-	}
-
-	public Drawable cropDrawable(Drawable drawable, int left, int top, int right, int bottom) {
-		int originalWidth = drawable.getIntrinsicWidth();
-		int originalHeight = drawable.getIntrinsicHeight();
-		int resizedWidth = originalWidth - left - right;
-		int resizedHeight = originalHeight - top - bottom;
-
-		Bitmap mutableBitmap = Bitmap.createBitmap(originalWidth, originalHeight, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(mutableBitmap);
-		drawable.setBounds(0, 0, originalWidth, originalHeight);
-		drawable.draw(canvas);
-		Bitmap resizedbitmap = Bitmap.createBitmap(mutableBitmap, left, top, resizedWidth, resizedHeight);
-		return new BitmapDrawable(getResources(), resizedbitmap);
 	}
 
 }
