@@ -57,8 +57,6 @@ public class Esse3PagamentiScraper extends Esse3BasicScraper {
 		}
 
 		ArrayList<Pagamento> pagamentiList = new ArrayList<Pagamento>();
-//		Elements detailsTables = document.getElementsByClass("detail_table");
-//		Log.d(Utils.TAG, "#DET_TAB: " + detailsTables.size());
 
 		Elements pnpElement = document.getElementsMatchingOwnText("Pagamento non pervenuto");
 		Log.d(Utils.TAG, "#PNP_TAB: " + pnpElement.size());
@@ -92,38 +90,6 @@ public class Esse3PagamentiScraper extends Esse3BasicScraper {
 			} 
 			row = row.nextElementSibling();
 		}
-
-		// if (detailsTables.size() < 1) {
-		// return null;
-		// }
-		//
-		// Elements rows = detailsTables.get(0).getAllElements().first().getElementsByTag("tr");
-		// Elements titleRows = detailsTables.get(0).getElementsByClass("tplTitolo");
-		// if (titleRows.size() < 2) {
-		// return null;
-		// }
-		//
-		// int title1Position = rows.indexOf(titleRows.get(0));
-		// int title2Position = rows.indexOf(titleRows.get(1));
-		// if (Math.abs(title2Position - title1Position) < 1) {
-		// return null;
-		// }
-		//
-		// for (int i = title1Position + 1; i < title2Position; i++) {
-		// Element row = rows.get(i);
-		// Elements cells = row.getElementsByTag("td");
-		// // Log.d(Utils.TAG, "#DET_TAB_ROW_CELLS: " + cells.size());
-		// if (cells.size() != 7) {
-		// return null;
-		// }
-		//
-		// String pagamentoScadenza = cells.get(4).text();
-		// String pagamentoTitolo = cells.get(3).text();
-		// String pagamentoDescrizione = "";// cells.get(3).text();
-		// String pagamentoImporto = cells.get(5).text();
-		//
-		// pagamentiList.add(new Pagamento(pagamentoTitolo.trim(), pagamentoDescrizione.trim(), pagamentoImporto.trim(), pagamentoScadenza.trim()));
-		// }
 
 		return new Pagamenti(pagamentiList);
 	}
