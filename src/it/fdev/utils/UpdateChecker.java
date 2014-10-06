@@ -128,9 +128,15 @@ public class UpdateChecker {
 
 				builder.setNegativeButton(nextVersionButtonText, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						versionToIgnore = newVersionCode;
+//						versionToIgnore = newVersionCode;
+//						SharedPreferences.Editor editor = mPref.edit();
+//						editor.putInt("versionToIgnore", versionToIgnore);
+//						editor.commit();
+						
+						/* Save futire timestamp for next Check */
+						long futureTime = System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7 * 2); // Two weeks
 						SharedPreferences.Editor editor = mPref.edit();
-						editor.putInt("versionToIgnore", versionToIgnore);
+						editor.putLong("lastUpdateTime", futureTime);
 						editor.commit();
 					}
 				});
