@@ -156,5 +156,16 @@ public class StaffMember implements Parcelable {
 		dest.writeDouble(ufficioLatitudine);
 		dest.writeDouble(ufficioLongitudine);
 	}
+	
+	public static final Parcelable.Creator<StaffMember> CREATOR = new Parcelable.Creator<StaffMember>() {
+	    public StaffMember createFromParcel(Parcel in) {
+	        return new StaffMember(in);
+	    }
+
+	    public StaffMember[] newArray(int size) {
+	        return new StaffMember[size];
+	    }
+	};
+
 
 }
