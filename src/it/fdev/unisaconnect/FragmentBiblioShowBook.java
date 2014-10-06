@@ -106,6 +106,7 @@ public class FragmentBiblioShowBook extends MySimpleFragment {
 
 		mActivity.setLoadingVisible(true, true);
 
+		mSearchURL = getArguments().getString(FragmentBiblioDoSearch.ARG_URI);
 		if (mSearchURL == null) {
 			return;
 		}
@@ -289,10 +290,6 @@ public class FragmentBiblioShowBook extends MySimpleFragment {
 	@Override
 	public void actionRefresh() {
 		getLibri(true);
-	}
-
-	public void setURL(String url) {
-		this.mSearchURL = url;
 	}
 
 	@Override

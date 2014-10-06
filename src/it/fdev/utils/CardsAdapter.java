@@ -55,7 +55,18 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 		if (viewHolder != null) {
 			CardItem item = itemsList.get(position);
 			if (item != null) {
+				if (item.title.isEmpty()) {
+					viewHolder.titleView.setVisibility(View.GONE);
+				} else {
+					viewHolder.titleView.setVisibility(View.VISIBLE);
+				}
 				viewHolder.titleView.setText(item.title);
+				
+				if (item.text.isEmpty()) {
+					viewHolder.textView.setVisibility(View.GONE);
+				} else {
+					viewHolder.textView.setVisibility(View.VISIBLE);
+				}
 				viewHolder.textView.setText(item.text);
 				
 				if (item.date == null) {
@@ -87,6 +98,7 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 		private String text = null;
 		private String date = null;
 		private boolean singleLine;
+		private boolean isButton;
 
 		public CardItem(String title, String link, String text, String date, boolean singleLine) {
 			this.title = title;
@@ -98,6 +110,11 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 		
 		public CardItem(String title, String link, String text, String date) {
 			this(title, link, text, date, true);
+		}
+		
+		public CardItem(String title) {
+			this.title = title;
+			this.isButton = true;
 		}
 
 		public String getTitle() {
@@ -134,6 +151,10 @@ public class CardsAdapter extends ArrayAdapter<CardItem> {
 		
 		public boolean isSingleLine() {
 			return singleLine;
+		}
+		
+		public boolean isButton() {
+			return isButton;
 		}
 		
 	}

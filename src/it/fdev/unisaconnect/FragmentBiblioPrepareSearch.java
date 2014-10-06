@@ -19,7 +19,6 @@ import android.widget.Toast;
 public class FragmentBiblioPrepareSearch extends MySimpleFragment {
 	
 	public static final String BIBLIO_BASE_URL = "http://biblio-aleph.unisa.it/F/";
-	public static final String BIBLIO_SET_SETTINGS_URL = BIBLIO_BASE_URL + "?file_name=find-b&func=option-update&SHORT_NO_LINES=20&AUTO_FULL=15&SHORT_FORMAT=000&SCAN_INCLUDE_AUT=N&x=0&y=0";
 
 	View advancedSearchToggleCard, advancedSearchCard;
 	EditText testoView, annoDaView, annoAView;
@@ -141,7 +140,9 @@ public class FragmentBiblioPrepareSearch extends MySimpleFragment {
                 .toString();
 		
 		FragmentBiblioDoSearch fragmentDoSearch = new FragmentBiblioDoSearch();
-		fragmentDoSearch.setURL(uri);
+		Bundle args = new Bundle();
+		args.putString(FragmentBiblioDoSearch.ARG_URI, uri);
+		fragmentDoSearch.setArguments(args);
 		mActivity.switchContent(fragmentDoSearch);
 		
 	}

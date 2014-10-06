@@ -28,11 +28,16 @@ import android.widget.Toast;
 
 public class FragmentBiblioDoSearch extends MyListFragment {
 
+	public static final String ARG_URI = "uri";
+	public static final String BROADCAST_STATUS = "status";
+
 	private CardsAdapter adapter;
+	private CardItem moreResultsCard;
 	private boolean alreadyStarted = false;
 	private TextView listEmptyView;
 	private ListView listCardsView;
 	private String mSearchURL;
+	private int searchArgumentJump = 1;
 
 	ArrayList<CardItem> mCardsList;
 
@@ -65,12 +70,15 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 
 		mActivity.setLoadingVisible(true, true);
 
+		mSearchURL = getArguments().getString(ARG_URI);
 		if (mSearchURL == null) {
 			return;
 		}
 
 		listEmptyView = (TextView) view.findViewById(R.id.card_list_empty);
 		listCardsView = (ListView) view.findViewById(android.R.id.list);
+
+		moreResultsCard = new CardItem("\nMostra altri risultati...\n", "", "", "", false);
 
 		/* Metto animazione */
 		LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_layout_controller);
@@ -82,7 +90,7 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 	public void onResume() {
 		super.onResume();
 		mActivity.registerReceiver(mHandlerBroadcast, mIntentFilter);
-		getLibri(false);
+		getLibri(false, true);
 	}
 
 	@Override
@@ -94,9 +102,9 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 	public void onNewBroadcast(Context context, Intent intent) {
 		try {
 			if (BiblioSearchScraper.BROADCAST_STATE_BIBLIO_SEARCH.equals(intent.getAction())) {
-				if (intent.hasExtra("status")) {
-					ArrayList<Book> list = intent.getParcelableArrayListExtra("status");
-					if (list != null) {
+				if (intent.hasExtra(BROADCAST_STATUS)) {
+					ArrayList<Book> list = intent.getParcelableArrayListExtra(BROADCAST_STATUS);
+					if (list != null && !list.isEmpty()) {
 						ArrayList<CardItem> cardsList = new ArrayList<CardsAdapter.CardItem>();
 						for (Book book : list) {
 							String text = "";
@@ -112,17 +120,17 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 							CardItem cCard = new CardItem(book.getTitle(), book.getDetailsUrl(), text, book.getYear(), false);
 							cardsList.add(cCard);
 						}
-						showLibri(cardsList);
+						showLibri(cardsList, false);
 					} else {
-						showLibri(null);
+						showLibri(null, false);
 					}
 				} else {
-					showLibri(null);
+					showLibri(null, false);
 				}
 			}
 		} catch (Exception e) {
 			Log.e(Utils.TAG, "onReceiveBroadcast exception", e);
-			showLibri(null);
+			showLibri(null, false);
 		}
 	}
 
@@ -135,25 +143,29 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 		}
 		return actionsToShow;
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		try {
-			String url = mCardsList.get(position).getLink();
-//			Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//	        startActivity(webIntent);
-	        
-	        FragmentBiblioShowBook fragmentShowBook = new FragmentBiblioShowBook();
-	        fragmentShowBook.setURL(url);
-			mActivity.switchContent(fragmentShowBook);
-		} catch(Exception e) {
+			if (position == mCardsList.size()) {
+				searchArgumentJump += 10;
+				getLibri(true, false);
+			} else {
+				String url = mCardsList.get(position).getLink();
+				FragmentBiblioShowBook fragmentShowBook = new FragmentBiblioShowBook();
+				Bundle args = new Bundle();
+				args.putString(ARG_URI, url);
+				fragmentShowBook.setArguments(args);
+				mActivity.switchContent(fragmentShowBook);
+			}
+		} catch (Exception e) {
 			Toast.makeText(mActivity, R.string.problema_aprire_link, Toast.LENGTH_SHORT).show();
 			Log.w(Utils.TAG, e);
 		}
 	}
 
-	public void getLibri(boolean force) {
+	public void getLibri(boolean force, boolean clearList) {
 		if (!isAdded()) {
 			return;
 		}
@@ -163,12 +175,16 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 			return;
 		}
 
-		listCardsView.setSelectionAfterHeaderView();
-		mActivity.setLoadingVisible(true, true);
+		if (clearList) {
+			mActivity.setLoadingVisible(true, true);
+			listCardsView.setSelectionAfterHeaderView();
+		} else {
+			mActivity.setLoadingVisible(true, false);
+		}
 
 		if (!force && mCardsList != null) {
 			alreadyStarted = true;
-			showLibri(null);
+			showLibri(null, clearList);
 			return;
 		}
 
@@ -181,7 +197,19 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 		if (force || !alreadyStarted) {
 			alreadyStarted = true;
 			Log.d(Utils.TAG, "Starting biblio search...");
-			mActivity.startService(new Intent(mActivity, BiblioSearchScraper.class).putExtra("URL", mSearchURL));
+
+			String newUrl;
+			if (searchArgumentJump > 1) {
+				newUrl = mSearchURL.replace("func=find-b", "func=short-jump");
+				newUrl += "&jump=" + searchArgumentJump;
+			} else {
+				newUrl = mSearchURL;
+			}
+			// Log.d(Utils.TAG, "newUrl: " + newUrl);
+
+			Intent searchIntent = new Intent(mActivity, BiblioSearchScraper.class);
+			searchIntent.putExtra(ARG_URI, newUrl);
+			mActivity.startService(searchIntent);
 		} else {
 			listEmptyView.setVisibility(View.VISIBLE);
 			listCardsView.setVisibility(View.GONE);
@@ -190,7 +218,7 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 		}
 	}
 
-	public void showLibri(ArrayList<CardItem> cardsList) {
+	public void showLibri(ArrayList<CardItem> cardsList, boolean clearList) {
 		if (!isAdded()) {
 			return;
 		}
@@ -200,36 +228,52 @@ public class FragmentBiblioDoSearch extends MyListFragment {
 			mActivity.setLoadingVisible(false, false);
 			return;
 		}
-
-		if (cardsList != null) {
-			this.mCardsList = cardsList;
+		
+		if (cardsList == null) {
+			cardsList = new ArrayList<CardsAdapter.CardItem>();
 		}
-
-		if (this.mCardsList == null || this.mCardsList.isEmpty()) { // Non ho un menu da mostrare
-			listEmptyView.setVisibility(View.VISIBLE);
-			listCardsView.setVisibility(View.GONE);
-			mActivity.setLoadingVisible(false, false);
-			return;
+		if (mCardsList == null) {
+			mCardsList = new ArrayList<CardsAdapter.CardItem>();
+		}
+		
+		if (cardsList.isEmpty()) {
+			if (mCardsList.isEmpty()) {
+				listEmptyView.setVisibility(View.VISIBLE);
+				listCardsView.setVisibility(View.GONE);
+				mActivity.setLoadingVisible(false, false);
+				return;
+			}
+		} else {
+			if (clearList) {
+				mCardsList = cardsList;
+			} else {
+				mCardsList.addAll(cardsList);
+			}
 		}
 
 		listEmptyView.setVisibility(View.GONE);
 		listCardsView.setVisibility(View.VISIBLE);
 
-		adapter.clear();
-		adapter.addAll(mCardsList);
-		adapter.notifyDataSetChanged();
+		if (clearList) {
+			adapter.clear();
+			adapter.addAll(mCardsList);
+		} else {
+			adapter.remove(moreResultsCard);
+			if (cardsList.isEmpty()) {
+				
+			}
+			adapter.addAll(cardsList);
+		}
 
+		adapter.add(moreResultsCard);
+		adapter.notifyDataSetChanged();
 		mActivity.setLoadingVisible(false, false);
 	}
 
 	@Override
 	public void actionRefresh() {
 		super.actionRefresh();
-		getLibri(true);
-	}
-
-	public void setURL(String url) {
-		this.mSearchURL = url;
+		getLibri(true, true);
 	}
 
 	@Override

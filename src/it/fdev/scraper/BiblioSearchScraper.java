@@ -1,5 +1,6 @@
 package it.fdev.scraper;
 
+import it.fdev.unisaconnect.FragmentBiblioDoSearch;
 import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.Book;
 import it.fdev.utils.Utils;
@@ -31,6 +32,7 @@ public class BiblioSearchScraper extends IntentService {
 
 	private Context mContext;
 	private static CookieManager mCookieManager = new CookieManager();
+	private static String reqParam;
 
 	public BiblioSearchScraper() {
 		super("it.fdev.biblio.search_scraper_service");
@@ -39,7 +41,7 @@ public class BiblioSearchScraper extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		try {
-			String url = intent.getStringExtra("URL");
+			String url = intent.getStringExtra(FragmentBiblioDoSearch.ARG_URI);
 			if (url == null) {
 				isRunning = false;
 				stopForeground(true);
@@ -53,10 +55,10 @@ public class BiblioSearchScraper extends IntentService {
 			Utils.sendLoadingMessage(mContext, R.string.cerco_libri);
 
 			ArrayList<Book> results = getSearchResults(url);
-			Utils.broadcastStatus(mContext, BROADCAST_STATE_BIBLIO_SEARCH, "status", results);
+			Utils.broadcastStatus(mContext, BROADCAST_STATE_BIBLIO_SEARCH, FragmentBiblioDoSearch.BROADCAST_STATUS, results);
 		} catch (Exception e) {
 			Log.e(Utils.TAG, "Biblio search service crashed", e);
-			Utils.broadcastStatus(mContext, BROADCAST_STATE_BIBLIO_SEARCH, "status", null);
+			Utils.broadcastStatus(mContext, BROADCAST_STATE_BIBLIO_SEARCH, FragmentBiblioDoSearch.BROADCAST_STATUS, null);
 		}
 		isRunning = false;
 		stopForeground(true);
@@ -68,7 +70,7 @@ public class BiblioSearchScraper extends IntentService {
 		CookieHandler.setDefault(mCookieManager);
 		Response res = Jsoup.connect(url).method(Method.GET).timeout(30000).execute();
 		Document document = res.parse();
-		
+
 		String toSearch = Pattern.quote("lio-aleph.unisa.it/F/") + "([A-Z0-9]+" + Pattern.quote("-") + "[0-9]+)" + Pattern.quote("?func=fin");
 		Pattern pattern = Pattern.compile(toSearch);
 		Matcher matcher = pattern.matcher(document.toString());
@@ -79,14 +81,24 @@ public class BiblioSearchScraper extends IntentService {
 	}
 
 	private ArrayList<Book> getSearchResults(String url) throws IOException {
-		String reqParam = prepareCookies(url);
+		String urlToGet = url;
+		if (reqParam == null || reqParam.isEmpty()) {
+			reqParam = prepareCookies(url);
+		}
 		if (reqParam == null) {
 			return null;
 		}
+		urlToGet = url.replace(".unisa.it/F/", ".unisa.it/F/" + reqParam);
 
-		String fixedUrl = url.replace(".unisa.it/F/", ".unisa.it/F/" + reqParam);
-		Response res = Jsoup.connect(fixedUrl).method(Method.GET).timeout(30000).execute();
+		Log.d(Utils.TAG, "urlToGet: " + urlToGet);
+
+		Response res = Jsoup.connect(urlToGet).method(Method.GET).timeout(30000).execute();
 		Document document = res.parse();
+		
+		boolean isValidResults = document.getElementsMatchingOwnText("Numero di record nel set superato").isEmpty();
+		if (!isValidResults) {
+			return null;
+		}
 
 		ArrayList<Book> resultList = new ArrayList<Book>();
 		Element table = document.getElementsByTag("table").last();
