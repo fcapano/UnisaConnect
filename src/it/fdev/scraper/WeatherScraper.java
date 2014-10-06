@@ -126,7 +126,9 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 		super.onProgressUpdate(values);
 		switch (values[0]) {
 		case START:
-			activity.setLoadingText(R.string.sincronizzazione_meteo);
+			if (activity != null) { // Got a NullPointerException from Crittercism
+				activity.setLoadingText(R.string.sincronizzazione_meteo);
+			}
 			break;
 		case METEO_NOT_AVAILABLE:
 		case NO_INTERNET:
