@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.fdev.unisaconnect"
     android:installLocation="auto"
-    android:versionCode="44"
-    android:versionName="0.7.6 Beta 2" >
+    android:versionCode="45"
+    android:versionName="0.7.7" >
 
     <uses-sdk
         android:minSdkVersion="9"
