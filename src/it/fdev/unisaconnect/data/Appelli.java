@@ -43,8 +43,8 @@ public class Appelli implements Serializable {
 	}
 	
 	public boolean isEmpty(){
-		boolean disponibilyEmpty = listaAppelliDisponibili == null && listaAppelliDisponibili.isEmpty() ;
-		boolean prenotatiEmpty = listaAppelliPrenotati == null && listaAppelliPrenotati.isEmpty();
+		boolean disponibilyEmpty = ( listaAppelliDisponibili == null || listaAppelliDisponibili.isEmpty() );
+		boolean prenotatiEmpty = ( listaAppelliPrenotati == null || listaAppelliPrenotati.isEmpty() );
 		return disponibilyEmpty && prenotatiEmpty;
 	}
 
