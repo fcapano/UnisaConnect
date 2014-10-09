@@ -4,14 +4,11 @@ import it.fdev.unisaconnect.map.GoogleMapOverlayMapTileProvider;
 import it.fdev.unisaconnect.map.MapFocusPoint;
 import it.fdev.utils.MyMapFragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -33,33 +30,21 @@ public class FragmentMap extends MyMapFragment implements OnCameraChangeListener
 			14.798));
 
 	private LatLng lastValidPosition;
-	private View view;
 	private GoogleMap googleMap;
 
 	public static FragmentMap newInstance() {
 
-		return FragmentMap.newInstance(null);
-	}
-
-	public static FragmentMap newInstance(GoogleMapOptions googleMapOptions) {
-
-		FragmentMap fragment = new FragmentMap();
-		return fragment;
+		return new FragmentMap();
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-		view = super.onCreateView(inflater, container, savedInstanceState);
-
-		initializeMap();
-		Bundle fragmentArguments = getArguments();
-		if (fragmentArguments != null) {
-
-			focusMapWithMarker((MapFocusPoint) fragmentArguments.getSerializable(MAP_FOCUS_POINT_ARG));
+		googleMap = getMap();
+		if (googleMap != null) {
+			initializeMap(getArguments());
 		}
-
-		return view;
 	}
 
 	@Override
@@ -83,36 +68,39 @@ public class FragmentMap extends MyMapFragment implements OnCameraChangeListener
 		return R.string.map;
 	}
 
-	private void initializeMap() {
-
-		googleMap = getMap();
+	private void initializeMap(Bundle fragmentArguments) {
 
 		googleMap.setMyLocationEnabled(true);
 		googleMap.setOnCameraChangeListener(this);
 
-		TileProvider tileProvider = new GoogleMapOverlayMapTileProvider(getActivity().getAssets(), OVERLAY_TILES_FOLDER);
-
-		googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
 		googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UNISA_CENTER, MIN_ZOOM));
 
-		lastValidPosition = UNISA_CENTER;
+		TileProvider tileProvider = new GoogleMapOverlayMapTileProvider(getActivity().getAssets(), OVERLAY_TILES_FOLDER);
+		googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+
+		if (fragmentArguments != null) {
+			MapFocusPoint focusPoint = (MapFocusPoint) fragmentArguments.getSerializable(MAP_FOCUS_POINT_ARG);
+			if (focusPoint != null)
+				focusMapWithMapFocusPoint(focusPoint);
+		} else {
+			focusMap(UNISA_CENTER, MIN_ZOOM);
+		}
 	}
 
-	private void focusMapWithMarker(MapFocusPoint focusPoint) {
+	private void focusMap(LatLng focusCenter, int zoom) {
 
-		Double latitude = focusPoint.getLatitude();
-		Double longitude = focusPoint.getLongitude();
+		googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(focusCenter, zoom));
+		lastValidPosition = focusCenter;
+	}
 
-		if (latitude != 0 && longitude != 0) {
+	private void focusMapWithMapFocusPoint(MapFocusPoint focusPoint) {
 
-			LatLng latLng = new LatLng(latitude, longitude);
+		LatLng focusCenter = new LatLng(focusPoint.getLatitude(), focusPoint.getLongitude());
+		focusMap(focusCenter, MID_ZOOM);
 
-			MarkerOptions markerOptions = new MarkerOptions().title(focusPoint.getTitle())
-					.snippet(focusPoint.getSubtitle()).position(latLng);
-
-			Marker marker = googleMap.addMarker(markerOptions);
-			googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, MID_ZOOM));
-			marker.showInfoWindow();
-		}
+		MarkerOptions markerOptions = new MarkerOptions().title(focusPoint.getTitle())
+				.snippet(focusPoint.getSubtitle()).position(focusCenter);
+		Marker marker = googleMap.addMarker(markerOptions);
+		marker.showInfoWindow();
 	}
 }

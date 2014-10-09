@@ -177,15 +177,16 @@ public class FragmentStaffDetails extends MySimpleFragment {
 			public void onClick(View v) {
 				if (mStaffMember.getLatitudine() <= 0 || mStaffMember.getLongitudine() <= 0) {
 					return;
+				} else {
+					FragmentMap fragmentMap = FragmentMap.newInstance();
+
+					Bundle args = new Bundle();
+					MapFocusPoint mapFocusPoint = createMapFocusPointFromStaffMember(mStaffMember);
+					args.putSerializable(FragmentMap.MAP_FOCUS_POINT_ARG, mapFocusPoint);
+					fragmentMap.setArguments(args);
+
+					mActivity.switchContent(fragmentMap);
 				}
-				FragmentMap fragmentMap = FragmentMap.newInstance();
-				Bundle args = new Bundle();
-
-				MapFocusPoint mapFocusPoint = createMapFocusPoint();
-				args.putSerializable(FragmentMap.MAP_FOCUS_POINT_ARG, mapFocusPoint);
-
-				fragmentMap.setArguments(args);
-				mActivity.switchContent(fragmentMap);
 			}
 
 		});
@@ -454,12 +455,13 @@ public class FragmentStaffDetails extends MySimpleFragment {
 		return R.string.rubrica;
 	}
 
-	private MapFocusPoint createMapFocusPoint() {
+	private MapFocusPoint createMapFocusPointFromStaffMember(StaffMember staffMember) {
+
 		MapFocusPoint mapFocusPoint = new MapFocusPoint();
-		mapFocusPoint.setTitle(mStaffMember.getFullname());
-		mapFocusPoint.setSubtitle(formatMapInfo(mStaffMember.getMapInfo()));
-		mapFocusPoint.setLatitude(mStaffMember.getLatitudine());
-		mapFocusPoint.setLongitude(mStaffMember.getLongitudine());
+		mapFocusPoint.setTitle(staffMember.getFullname());
+		mapFocusPoint.setSubtitle(formatMapInfo(staffMember.getMapInfo()));
+		mapFocusPoint.setLatitude(staffMember.getLatitudine());
+		mapFocusPoint.setLongitude(staffMember.getLongitudine());
 		return mapFocusPoint;
 	}
 
