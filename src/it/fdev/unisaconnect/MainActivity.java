@@ -234,7 +234,11 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		unregisterReceiver(mHandlerBroadcast);
+		try {
+			unregisterReceiver(mHandlerBroadcast);
+		} catch (IllegalArgumentException e) {
+			// Receiver was not registered. Ignore
+		}
 	}
 
 	@Override
