@@ -1,9 +1,9 @@
 package it.fdev.unisaconnect;
 
-import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
+import it.fdev.utils.MyWebView;
 import it.fdev.utils.Utils;
 
 import java.lang.reflect.Method;
@@ -42,7 +42,7 @@ public class FragmentWebmail extends MySimpleFragment {
 
 	private SharedPrefDataManager mDataManager;
 	private ProgressBar progressBar;
-	private WebView mWebView;
+	private MyWebView mWebView;
 	private Fragment thisFragment;
 	
 	private boolean javascriptInterfaceBroken = true;
@@ -53,7 +53,7 @@ public class FragmentWebmail extends MySimpleFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
-		mWebView = (WebView) view.findViewById(R.id.webview);
+		mWebView = (MyWebView) view.findViewById(R.id.webview);
 		mWebView.setVisibility(View.VISIBLE);		// Workaround for nullpointerexception
 		mWebView.setFocusable(true);				// http://stackoverflow.com/questions/12325720/nullpointerexception-in-webview-java-android-webkit-webviewprivatehandler-hand
 		mWebView.requestFocus();					//

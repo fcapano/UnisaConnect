@@ -1,9 +1,9 @@
 package it.fdev.unisaconnect;
 
-import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
+import it.fdev.utils.MyWebView;
 import it.fdev.utils.Utils;
 
 import java.util.HashSet;
@@ -39,26 +39,26 @@ import android.widget.ProgressBar;
  */
 public class FragmentEsse3Web extends MySimpleFragment {
 
-//	public final static String esse3StartUrl = "http://esse3web.unisa.it/unisa/Home.do";
 	public final static String esse3LoginUrl = "https://esse3web.unisa.it/unisa/auth/Logon.do";
 
-//	private RelativeLayout webViewContainer;
 	private ProgressBar progressBar;
-	private WebView webView;
+	private MyWebView mWebView;
 	private SharedPrefDataManager mDataManager;
 	private boolean didSendLoginData = false;
 	private Fragment thisFragment;
 	
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View mainView = (View) inflater.inflate(R.layout.web_fragment, container, false);
+		return mainView;
+	}
+	
+	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-//		webViewContainer = (RelativeLayout) view.findViewById(R.id.webview_container);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
-		webView = (WebView) view.findViewById(R.id.webview);
-		webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
-		webView.setFocusable(true);				// http://stackoverflow.com/questions/12325720/nullpointerexception-in-webview-java-android-webkit-webviewprivatehandler-hand
-		webView.requestFocus();					//
+		mWebView = (MyWebView) view.findViewById(R.id.webview);
 
 		thisFragment = this;
 
@@ -106,7 +106,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 		}
 
 		// Inizializzo la webview
-		WebSettings webSettings = webView.getSettings();
+		WebSettings webSettings = mWebView.getSettings();
 		webSettings.setSavePassword(false);
 		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 		webSettings.setLoadsImagesAutomatically(true);
@@ -114,7 +114,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 		webSettings.setSupportZoom(true);
 		webSettings.setJavaScriptEnabled(false);
 		
-		webView.setWebChromeClient(new WebChromeClient() {
+		mWebView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {
 				// Activities and WebViews measure progress with different scales.
 				// The progress meter will automatically disappear when we reach 100%
@@ -123,7 +123,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 			}
 		});
 
-		webView.setWebViewClient(new WebViewClient() {
+		mWebView.setWebViewClient(new WebViewClient() {
 			// Quando la pagina richiede l'autenticazione HTTP
 			@Override
 			public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
@@ -171,26 +171,20 @@ public class FragmentEsse3Web extends MySimpleFragment {
 			}
 		});
 
-		webView.loadUrl(esse3LoginUrl);
-	}
-
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View mainView = (View) inflater.inflate(R.layout.web_fragment, container, false);
-		return mainView;
+		mWebView.loadUrl(esse3LoginUrl);
 	}
 
 	@Override
 	public boolean goBack() {
 		// Quando premo il tasto indietro
-		if (webView.canGoBack()) { // Se posso andare indietro nella cronologia della webview...
-//			Utils.createDialog(activity, getString(R.string.caricamento), false);
-			webView.goBack();
-			webView.reload();
+		if (mWebView.canGoBack()) { 			// Se posso andare indietro nella cronologia della webview...
+			mWebView.goBack();
+			mWebView.reload();
 			return false;
-		} else { // Altrimenti vado al fragment precedente
+		} else { 							// Altrimenti vado al fragment precedente
 			try {
-				webView.stopLoading();
-				webView.destroy();
+				mWebView.stopLoading();
+				mWebView.destroy();
 			} catch (Exception e) {
 			}
 			return super.goBack();
@@ -201,14 +195,13 @@ public class FragmentEsse3Web extends MySimpleFragment {
 	public Set<Integer> getActionsToShow() {
 		Set<Integer> actionsToShow = new HashSet<Integer>();
 		actionsToShow.add(R.id.action_refresh_button);
-//		actionsToShow.add(R.id.action_loading_animation);
 		return actionsToShow;
 	}
 
 	@Override
 	public void actionRefresh() {
 		try {
-			if (!isAdded() || webView == null) {
+			if (!isAdded() || mWebView == null) {
 				return;
 			}
 			if (!Utils.hasConnection(mActivity)) {
@@ -216,8 +209,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 				return;
 			}
 			didSendLoginData = false;
-//			Utils.createDialog(activity, getString(R.string.caricamento), false);
-			webView.reload();
+			mWebView.reload();
 		} catch (Exception e) {
 			// ho avuto java.lang.NullPointerException su webView.reload(); nonostante il controllo nel primo if
 			// viene deferenziata giusto tra l'if e il reload? Forse perchè hasConnection() prende un po' di tempo
@@ -227,8 +219,8 @@ public class FragmentEsse3Web extends MySimpleFragment {
 	@Override
 	public void onPause() {
 		try {
-			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
-			webView.stopLoading();
+			mWebView.setVisibility(View.GONE);	// Workaround for nullpointerexception
+			mWebView.stopLoading();
 		} catch (Exception e) {
 		}
 		super.onPause();
@@ -237,25 +229,13 @@ public class FragmentEsse3Web extends MySimpleFragment {
 	@Override
 	public void onResume() {
 		try {
-			webView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
-			webView.reload();
+			mWebView.setVisibility(View.VISIBLE);	// Workaround for nullpointerexception
+			mWebView.reload();
 		} catch (Exception e) {
 		}
 		super.onResume();
 	}
 
-//	@Override
-//	public void onStop() {
-//		try {
-//			webView.setVisibility(View.GONE);	// Workaround for nullpointerexception
-//			webView.stopLoading();
-//			webViewContainer.removeView(webView);
-//			webView.destroy();
-//		} catch (Exception e) {
-//		}
-//		super.onStop();
-//	}
-	
 	@Override
 	public int getTitleResId() {
 		return R.string.esse3_pagina_web;

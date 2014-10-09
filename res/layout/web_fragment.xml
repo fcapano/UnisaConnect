@@ -4,21 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <WebView
+    <it.fdev.utils.MyWebView
         android:id="@+id/webview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:background="@android:color/white" />
-
-    <!-- <ProgressBar -->
-    <!-- android:id="@+id/progress__bar" -->
-    <!-- style="@style/Widget.Sherlock.ProgressBar.Horizontal" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="8dip" -->
-    <!-- android:layout_alignParentTop="true" -->
-    <!-- android:indeterminate="false" -->
-    <!-- android:visibility="gone" /> -->
 
     <ProgressBar
         android:id="@+id/progress__bar"
