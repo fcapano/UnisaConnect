@@ -192,45 +192,6 @@ public class FragmentLibretto extends MySimpleFragment {
 
 		librettoDB = new LibrettoDB(mActivity);
 		librettoDB.open();
-
-		// Line l = new Line();
-		// LinePoint p = new LinePoint();
-		// p.setX(0);
-		// p.setY(5);
-		// l.addPoint(p);
-		// p = new LinePoint();
-		// p.setX(8);
-		// p.setY(8);
-		// l.addPoint(p);
-		// p = new LinePoint();
-		// p.setX(10);
-		// p.setY(4);
-		// l.addPoint(p);
-		// l.setColor(Color.parseColor("#FFBB33"));
-		// LineGraph li = (LineGraph) view.findViewById(R.id.libretto_line_graph);
-		// li.addLine(l);
-		// li.setRangeY(0, 10);
-		// li.setLineToFill(0);
-		//
-		// PieGraph pg = (PieGraph) view.findViewById(R.id.graph1);
-		// // pg.setThickness(150);
-		// // pg.setFull(true);
-		// PieSlice slice = new PieSlice();
-		// slice.setColor(Color.parseColor("#FF0000"));
-		// slice.setValue(13);
-		// pg.addSlice(slice);
-		// slice = new PieSlice();
-		// slice.setColor(Color.parseColor("#00FF00"));
-		// slice.setValue(12);
-		// pg.addSlice(slice);
-		// slice = new PieSlice();
-		// slice.setColor(Color.parseColor("#0000FF"));
-		// slice.setValue(25);
-		// pg.addSlice(slice);
-		// slice = new PieSlice();
-		// slice.setColor(Color.parseColor("#AA66CC"));
-		// slice.setValue(50);
-		// pg.addSlice(slice);
 	}
 
 	@Override
