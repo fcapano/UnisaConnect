@@ -29,7 +29,7 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 	public Esse3LibrettoScraper(Context context, SharedPrefDataManager dataManager, String base64login, String broadcastID) {
 		super(context, dataManager, base64login, broadcastID);
 	}
-	
+
 	@Override
 	public LoadStates startScraper() {
 		Libretto libretto = new Libretto();
@@ -38,7 +38,7 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 		try {
 			corsiList = scraperStepLibretto();
 			if (corsiList != null) {
-				Log.d(Utils.TAG, "Ci sono #" + corsiList.size() + " corsi da inserire");
+				// Log.d(Utils.TAG, "Ci sono #" + corsiList.size() + " corsi da inserire");
 				libretto.setCorsi(corsiList);
 				LibrettoDB librettoDB = new LibrettoDB(mContext);
 				try {
@@ -85,12 +85,12 @@ public class Esse3LibrettoScraper extends Esse3BasicScraper {
 				String courseDate;
 				try {
 					courseMark = courseMarkDate.substring(0, courseMarkDate.indexOf("-"));
-					courseDate = courseMarkDate.substring(courseMarkDate.indexOf("-")+1);
-				} catch(Exception e) {
+					courseDate = courseMarkDate.substring(courseMarkDate.indexOf("-") + 1);
+				} catch (Exception e) {
 					courseMark = "";
 					courseDate = "";
 				}
-				corsiList.add(new CorsoLibretto(courseName.replace("\u00a0","").trim(), courseCFU.replace("\u00a0","").trim(), courseDate.replace("\u00a0","").trim(), courseMark.replace("\u00a0","").trim()));
+				corsiList.add(new CorsoLibretto(courseName.replace("\u00a0", "").trim(), courseCFU.replace("\u00a0", "").trim(), courseDate.replace("\u00a0", "").trim(), courseMark.replace("\u00a0", "").trim()));
 			}
 			return corsiList;
 		}

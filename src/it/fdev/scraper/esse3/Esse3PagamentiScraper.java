@@ -59,7 +59,6 @@ public class Esse3PagamentiScraper extends Esse3BasicScraper {
 		ArrayList<Pagamento> pagamentiList = new ArrayList<Pagamento>();
 
 		Elements pnpElement = document.getElementsMatchingOwnText("Pagamento non pervenuto");
-		Log.d(Utils.TAG, "#PNP_TAB: " + pnpElement.size());
 		
 		if (pnpElement.size() < 1) {
 			return null;

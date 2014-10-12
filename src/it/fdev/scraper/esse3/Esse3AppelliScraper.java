@@ -27,7 +27,7 @@ public class Esse3AppelliScraper extends Esse3BasicScraper {
 	public final String appelliPrenotatiURL = "https://esse3web.unisa.it/unisa/auth/studente/Appelli/BachecaPrenotazioni.do";
 	private ArrayList<Appello> listaAppelliDisponibili;
 	private ArrayList<Appello> listaAppelliPrenotati;
-	
+
 	public Esse3AppelliScraper(Context context, SharedPrefDataManager dataManager, String base64login, String broadcastID) {
 		super(context, dataManager, base64login, broadcastID);
 	}
@@ -37,10 +37,10 @@ public class Esse3AppelliScraper extends Esse3BasicScraper {
 		try {
 			listaAppelliDisponibili = scraperStepAppelliDisponibili();
 			listaAppelliPrenotati = scraperStepAppelliPrenotati();
-			if (listaAppelliDisponibili != null)
-				Log.d(Utils.TAG, "Ci sono #" + listaAppelliDisponibili.size() + " appelli disponibili");
-			if (listaAppelliPrenotati != null)
-				Log.d(Utils.TAG, "Ci sono #" + listaAppelliPrenotati.size() + " appelli prenotati");
+			// if (listaAppelliDisponibili != null)
+			// Log.d(Utils.TAG, "Ci sono #" + listaAppelliDisponibili.size() + " appelli disponibili");
+			// if (listaAppelliPrenotati != null)
+			// Log.d(Utils.TAG, "Ci sono #" + listaAppelliPrenotati.size() + " appelli prenotati");
 			mDataManager.setAppelli(new Appelli(listaAppelliDisponibili, listaAppelliPrenotati));
 			return LoadStates.FINISHED;
 		} catch (HttpStatusException e) {
@@ -92,13 +92,13 @@ public class Esse3AppelliScraper extends Esse3BasicScraper {
 					Log.d(Utils.TAG, "Error interpeting dateText: " + date);
 					date = "";
 				}
-				
+
 				String time = rows.get(4).child(1).text().trim();
 				if (!time.isEmpty() && !time.matches("[0-9]+\\:[0-9]+")) {
 					Log.d(Utils.TAG, "Error interpeting timeText: " + time);
 					time = "";
 				}
-				
+
 				String location = rows.get(4).child(3).text().trim();
 
 				appelliPrenotatiList.add(new Appello(name, date, time, description, subscribedNum, location));
@@ -106,7 +106,7 @@ public class Esse3AppelliScraper extends Esse3BasicScraper {
 		}
 		return appelliPrenotatiList;
 	}
-	
+
 	private ArrayList<Appello> scraperStepAppelliDisponibili() throws HttpStatusException, IOException, InterruptedException {
 		Document document = scraperGetUrl(appelliDisponibiliURL);
 		if (document == null) {
