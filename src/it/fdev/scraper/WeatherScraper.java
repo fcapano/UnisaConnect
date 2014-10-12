@@ -86,7 +86,7 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 			for (int i=0; i<dailyForecastsElements.size(); i++) {
 				dailyElement = dailyForecastsElements.get(i);
 				String validThrough = dailyElement.getElementsByTag("validThrough").text();
-				String lastUpdateMilliseconds = dailyElement.getElementsByTag("validThrough").attr("millisec");
+				String validThroughMillis = dailyElement.getElementsByTag("validThrough").attr("millisec");
 				String description = dailyElement.getElementsByTag("description").text();
 				String iconUrl = dailyElement.getElementsByTag("iconUrl").text();
 				String maxTemp = dailyElement.getElementsByTag("maxTemp").text();
@@ -96,7 +96,7 @@ public class WeatherScraper extends AsyncTask<MainActivity, WeatherScraper.loadS
 				String avgWindSpeed = dailyElement.getElementsByTag("avgWindSpeed").text();
 				String probOfPrec = dailyElement.getElementsByTag("probOfPrec").text();
 				
-				DailyForecast cForecast = cMeteo.new DailyForecast(validThrough, lastUpdateMilliseconds, description, iconUrl, maxTemp, minTemp, 
+				DailyForecast cForecast = cMeteo.new DailyForecast(validThrough, validThroughMillis, description, iconUrl, maxTemp, minTemp, 
 						avgHumidity, avgWindDir, avgWindSpeed, probOfPrec);
 				cMeteo.addDailyForecast(cForecast);
 			}

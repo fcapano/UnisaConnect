@@ -157,6 +157,7 @@
     <string name="vento">Vento</string>
     <string name="umidita">Umidità</string>
     <string name="meteo_non_disponibile">Si è verificato un errore nel reperire il meteo</string>
+    <string name="previsioni_non_disponibili">Le previsioni non sono al momento disponibili</string>
     <!-- end of Meteo -->
 
 

@@ -1,19 +1,13 @@
 package it.fdev.unisaconnect;
 
-import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.WeatherData.ActualCondition;
 import it.fdev.utils.DrawableManager;
 import it.fdev.utils.DrawableManager.DrawableManagerListener;
 import it.fdev.utils.MyDateUtils;
-import it.fdev.utils.Utils;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +16,7 @@ import android.widget.TextView;
 
 public class FragmentWeatherActualCondition extends Fragment {
 
-	private Activity activity;
+	private Activity mActivity;
 	private DrawableManager dm;
 
 	private ActualCondition condition;
@@ -64,6 +58,7 @@ public class FragmentWeatherActualCondition extends Fragment {
 						downloadedWebcamImg = image;
 						webcamView.setImageDrawable(downloadedWebcamImg);
 					}
+
 					@Override
 					public void onLoadingError() {
 					}
@@ -76,7 +71,7 @@ public class FragmentWeatherActualCondition extends Fragment {
 	}
 
 	public void setActivity(Activity activity) {
-		this.activity = activity;
+		this.mActivity = activity;
 	}
 
 	public void setCondition(ActualCondition condition) {
@@ -95,9 +90,70 @@ public class FragmentWeatherActualCondition extends Fragment {
 	}
 
 	public void showCondition() {
+		if (condition == null) {
+			return;
+		}
+
+		long millis = Long.parseLong(condition.getLastUpdateMilliseconds());
+		String updateText = MyDateUtils.getLastUpdateString(mActivity, millis, false);
+
+		if (updateText == null || updateText.isEmpty()) {
+			lastUpdateTimeView.setVisibility(View.GONE);
+			lastUpdateIconView.setVisibility(View.GONE);
+		} else {
+			lastUpdateTimeView.setVisibility(View.VISIBLE);
+			lastUpdateIconView.setVisibility(View.VISIBLE);
+			lastUpdateTimeView.setText(updateText);
+		}
+
+		Drawable icon = condition.getIconDrawable(mActivity);
+		if (icon == null) {
+			iconView.setVisibility(View.INVISIBLE);
+		} else {
+			iconView.setVisibility(View.VISIBLE);
+			iconView.setImageDrawable(icon);
+		}
+		
+		if(condition.getTemp() == null || condition.getTemp().isEmpty()) {
+			tempView.setVisibility(View.GONE);
+		} else {
+			tempView.setVisibility(View.VISIBLE);
+			tempView.setText(condition.getTemp());
+		}
+		
+		if(condition.getDescription() == null || condition.getDescription().isEmpty()) {
+			descriptionView.setVisibility(View.GONE);
+		} else {
+			descriptionView.setVisibility(View.VISIBLE);
+			descriptionView.setText(condition.getDescription());
+		}
+		
+		if(condition.getHumidity() == null || condition.getHumidity().isEmpty()) {
+			humidityView.setVisibility(View.GONE);
+		} else {
+			humidityView.setVisibility(View.VISIBLE);
+			humidityView.setText(condition.getHumidity());
+		}
+		
+		if(condition.getWindSpeed() == null || condition.getWindSpeed().isEmpty()) {
+			windView.setVisibility(View.GONE);
+		} else {
+			windView.setVisibility(View.VISIBLE);
+			windView.setText(condition.getWindSpeed());
+		}
+		
+		if(condition.getWindDir() == null || condition.getWindDir().isEmpty()) {
+			windDirView.setVisibility(View.GONE);
+		} else {
+			windDirView.setVisibility(View.VISIBLE);
+			windDirView.setText(condition.getWindDir());
+		}
+	}
+
+	public void showCondition1() {
 		if (condition != null && lastUpdateTimeView != null && iconView != null && tempView != null && descriptionView != null && humidityView != null && windView != null) {
 			long millis = Long.parseLong(condition.getLastUpdateMilliseconds());
-			String updateText = MyDateUtils.getLastUpdateString(activity, millis, false);
+			String updateText = MyDateUtils.getLastUpdateString(mActivity, millis, false);
 			if (updateText != null && !updateText.isEmpty()) {
 				lastUpdateTimeView.setText(updateText);
 				lastUpdateTimeView.setVisibility(View.VISIBLE);
@@ -106,7 +162,7 @@ public class FragmentWeatherActualCondition extends Fragment {
 				lastUpdateTimeView.setVisibility(View.GONE);
 				lastUpdateIconView.setVisibility(View.GONE);
 			}
-			iconView.setImageDrawable(condition.getIconDrawable(activity));
+			iconView.setImageDrawable(condition.getIconDrawable(mActivity));
 			tempView.setText(condition.getTemp());
 			descriptionView.setText(condition.getDescription());
 			humidityView.setText(condition.getHumidity());

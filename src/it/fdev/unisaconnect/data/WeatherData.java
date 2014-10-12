@@ -2,13 +2,14 @@ package it.fdev.unisaconnect.data;
 
 import it.fdev.utils.Utils;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -16,10 +17,11 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 public class WeatherData implements Serializable {
-	private static final long serialVersionUID = -5469551483116210662L;
+	private static final long serialVersionUID = -5469551483116280662L;
 
 	private final String OPTIMIZED_WEBCAM_IMG_URL = "http://unisameteo.appspot.com/serve?id=";
 	private final String YOW_PATH = "Yow/";
+	private final String YOW_DEFAULT_ICON = "thermometer";
 	private static Map<String, String> yowIconsAssociations = new HashMap<String, String>();
 	static {
 		yowIconsAssociations.put("chanceflurries", "11.png");
@@ -120,7 +122,7 @@ public class WeatherData implements Serializable {
 	}
 
 	public class ActualCondition implements Serializable {
-		private static final long serialVersionUID = 8492846515841436039L;
+		private static final long serialVersionUID = 8492846115841436039L;
 		
 		private String lastUpdate;
 		private String lastUpdateMilliseconds;
@@ -180,7 +182,6 @@ public class WeatherData implements Serializable {
 
 		public Drawable getIconDrawable(Context context) {
 			return WeatherData.this.getIconDrawable(context, iconUrl);
-//			return iconDrawable;
 		}
 
 		public String getTemp() {
@@ -237,10 +238,12 @@ public class WeatherData implements Serializable {
 	}
 
 	public class DailyForecast implements Serializable {
-		private static final long serialVersionUID = -5934884410095632828L;
+		private static final long serialVersionUID = -5934884110094632828L;
 		
 		private String validThrough;
-		private String lastUpdateMilliseconds;
+		private long validThroughMillis;
+		private Date validThroughDate;
+		private String validDay;
 		private String description;
 		private String iconUrl;
 		private String maxTemp;
@@ -250,11 +253,22 @@ public class WeatherData implements Serializable {
 		private String avgWindSpeed;
 		private String probOfPrec;
 
-		public DailyForecast(String validThrough, String lastUpdateMilliseconds, String description, String iconUrl, String maxTemp, 
+		public DailyForecast(String validThrough, String validThroughMillisString, String description, String iconUrl, String maxTemp, 
 				String minTemp, String avgHumidity, String avgWindDir, String avgWindSpeed, String probOfPrec) {
-			String shortDay = validThrough.trim().substring(0, 3).toUpperCase(Locale.ITALY);
-			this.validThrough = shortDay;
-			this.lastUpdateMilliseconds = lastUpdateMilliseconds;
+			String shortDay = validThrough.trim().substring(0, 3).toUpperCase();
+			this.validThrough = validThrough;
+			try {
+				this.validThroughMillis = Long.parseLong(validThroughMillisString);
+			} catch (NumberFormatException e) {
+				this.validThroughMillis = 0;
+			}
+			validThroughDate = new Date(this.validThroughMillis);
+			if (this.validThroughMillis != 0) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd");
+				this.validDay = dateFormat.format(validThroughDate).toUpperCase();
+			} else {
+				this.validDay = shortDay;
+			}
 			this.description = description;
 			this.iconUrl = iconUrl;
 			this.maxTemp = maxTemp;
@@ -269,8 +283,16 @@ public class WeatherData implements Serializable {
 			return validThrough;
 		}
 
-		public String getLastUpdateMilliseconds() {
-			return lastUpdateMilliseconds;
+		public long getValidThroughMillis() {
+			return validThroughMillis;
+		}
+		
+		public Date getValidThroughDate() {
+			return validThroughDate;
+		}
+		
+		public String getValidDay() {
+			return validDay;
 		}
 
 		public String getDescription() {
@@ -313,20 +335,25 @@ public class WeatherData implements Serializable {
 	}
 	
 	private synchronized Drawable getIconDrawable(Context context, String iconUrl) {
-		try {
-			if (usedImg == null)
-				usedImg = new HashMap<String, Drawable>();
-			else if (usedImg.containsKey(iconUrl))
-				return usedImg.get(iconUrl);
+		if (usedImg == null)
+			usedImg = new HashMap<String, Drawable>();
+		else if (usedImg.containsKey(iconUrl))
+			return usedImg.get(iconUrl);
 
-			String imageFileName = filenameFromUrl(iconUrl);
-			String yowImageFileName = yowIconsAssociations.get(imageFileName);
-			Drawable img = Drawable.createFromStream(context.getAssets().open(YOW_PATH + yowImageFileName), null);
-			usedImg.put(iconUrl, img);
-			return img;
-		} catch (Exception e) {
-			Log.e(Utils.TAG, "Problem fetching the weather icon", e);
-			return null;
+		String imageFileName = filenameFromUrl(iconUrl);
+		String yowImageFileName = yowIconsAssociations.get(imageFileName);
+		Drawable img;
+		try {
+			img = Drawable.createFromStream(context.getAssets().open(YOW_PATH + yowImageFileName), null);
+		} catch (IOException e) {
+			try {
+				img = Drawable.createFromStream(context.getAssets().open(YOW_PATH + yowIconsAssociations.get(YOW_DEFAULT_ICON)), null);
+			} catch (IOException e1) {
+				Log.e(Utils.TAG, "Problem fetching the weather icon", e);
+				return null;
+			}
 		}
+		usedImg.put(iconUrl, img);
+		return img;
 	}
 }

@@ -4,10 +4,12 @@ import it.fdev.scraper.WeatherScraper;
 import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.unisaconnect.data.WeatherData;
+import it.fdev.unisaconnect.data.WeatherData.DailyForecast;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -37,8 +39,10 @@ public class FragmentWeather extends MySimpleFragment {
 	private SharedPrefDataManager mDataManager;
 
 	private RelativeLayout weatherActualContainerView;
+	private RelativeLayout weatherForecastContainerView;
 	private GridView weatherForecastGridview;
 	private TextView meteoNDView;
+	private TextView forecastNDView;
 	private ViewPager pager;
 
 	private TextView lastUpdateView;
@@ -60,6 +64,7 @@ public class FragmentWeather extends MySimpleFragment {
 		mActivity.setLoadingVisible(true, true);
 		
 		meteoNDView = (TextView) view.findViewById(R.id.meteo_non_disponibile);
+		forecastNDView = (TextView) view.findViewById(R.id.forecast_not_available);
 		pager = (ViewPager) view.findViewById(R.id.meteo_pager);
 		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
 		lastUpdateIconView = (ImageView) view.findViewById(R.id.last_update_icon);
@@ -70,6 +75,7 @@ public class FragmentWeather extends MySimpleFragment {
 		windView = (TextView) view.findViewById(R.id.weather_wind);
 		windDirView = (TextView) view.findViewById(R.id.weather_wind_dir);
 		weatherActualContainerView = (RelativeLayout) view.findViewById(R.id.weather_actual_container);
+		weatherForecastContainerView = (RelativeLayout) view.findViewById(R.id.weather_forecast_container);
 		weatherForecastGridview = (GridView) view.findViewById(R.id.weather_forecast_gridview);
 		
 		mDataManager = new SharedPrefDataManager(mActivity);
@@ -151,13 +157,13 @@ public class FragmentWeather extends MySimpleFragment {
 		}
 		if (newWeatherData == null && this.meteo == null) {
 			weatherActualContainerView.setVisibility(View.GONE);
-			weatherForecastGridview.setVisibility(View.GONE);
+			weatherForecastContainerView.setVisibility(View.GONE);
 			meteoNDView.setVisibility(View.VISIBLE);
 			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		weatherActualContainerView.setVisibility(View.VISIBLE);
-		weatherForecastGridview.setVisibility(View.VISIBLE);
+		weatherForecastContainerView.setVisibility(View.VISIBLE);
 		meteoNDView.setVisibility(View.GONE);
 		
 		if (newWeatherData != null) {
@@ -180,7 +186,18 @@ public class FragmentWeather extends MySimpleFragment {
 		});
 		pager.setCurrentItem(1);
 		
-		weatherForecastGridview.setAdapter(new WeatherForecastAdapter(mActivity, this.meteo.getDailyForecastList()));
+		ArrayList<DailyForecast> forecastList = this.meteo.getDailyForecastList();
+		DailyForecast lastForecast = forecastList.get(forecastList.size()-1);
+		
+		boolean isForecastPast = Utils.isBefore(lastForecast.getValidThroughDate());
+		if (isForecastPast) {
+			weatherForecastGridview.setVisibility(View.GONE);
+			forecastNDView.setVisibility(View.VISIBLE);
+		} else {
+			forecastNDView.setVisibility(View.GONE);
+			weatherForecastGridview.setVisibility(View.VISIBLE);
+			weatherForecastGridview.setAdapter(new WeatherForecastAdapter(mActivity, this.meteo.getDailyForecastList()));
+		}
 		
 		if (meteo.getFetchTime().getTime() > 0) {
 		    String dateFirstPart = new SimpleDateFormat("dd/MM", Locale.ITALY).format(meteo.getFetchTime());

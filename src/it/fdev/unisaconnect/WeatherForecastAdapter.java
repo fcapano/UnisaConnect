@@ -56,7 +56,7 @@ public class WeatherForecastAdapter extends BaseAdapter {
 		TextView maxTempView = (TextView) v.findViewById(R.id.forecast_max);
 		TextView precipitationsView = (TextView) v.findViewById(R.id.forecast_precipitations);
 
-		dayView.setText(cForecast.getValidThrough());
+		dayView.setText(cForecast.getValidDay());
 		iconView.setImageDrawable(cForecast.getIconDrawable(context));
 		descriptionView.setText(cForecast.getDescription());
 		minTempView.setText(cForecast.getMinTemp());
