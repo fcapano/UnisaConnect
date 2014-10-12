@@ -66,6 +66,8 @@ public class WeatherData implements Serializable {
 		yowIconsAssociations.put("nt_tstorms", "20.png");
 		yowIconsAssociations.put("nt_cloudy", "1.png");
 		yowIconsAssociations.put("nt_partlycloudy", "2.png");
+		
+		yowIconsAssociations.put("thermometer", "23.png");
 	}
 	
 	private Date fetchTime;
