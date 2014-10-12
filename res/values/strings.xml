@@ -94,6 +94,7 @@
 
     <!-- Libretto -->
     <string name="libretto_vuoto">Non sono presenti esami nel libretto</string>
+    <string name="cfu_conseguiti">CFU conseguiti:</string>
     <string name="media_ponderata">Media Ponderata:</string>
     <string name="media_aritmetica">Media Aritmetica:</string>
     <string name="parti_da">Parti da:</string>

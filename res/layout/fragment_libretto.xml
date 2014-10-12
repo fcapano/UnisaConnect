@@ -15,8 +15,10 @@
 
     <include
         android:id="@+id/last_update_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         layout="@layout/update_text" />
 
     <LinearLayout
@@ -34,6 +36,48 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/cfu_conseguiti"
+                android:textColor="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/cfu_conseguiti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold"
+                tools:ignore="SelectableText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:textStyle="bold"
+                tools:ignore="SelectableText" />
+
+            <TextView
+                android:id="@+id/cfu_totali"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/lighter_gray" />
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -12,8 +12,6 @@ import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,6 +39,8 @@ import com.echo.holographlibrary.LinePoint;
 
 public class FragmentLibretto extends MySimpleFragment {
 
+	private final String RIEPILOGO_FLOAT_FORMAT_TYPE = "%.3f";
+	
 	private SharedPrefDataManager mDataManager;
 	private boolean alreadyStarted = false;
 	private LibrettoDB librettoDB;
@@ -50,6 +50,8 @@ public class FragmentLibretto extends MySimpleFragment {
 	private LinearLayout riepilogoContainerView;
 	private LinearLayout listaCorsiView;
 
+	private TextView cfuConseguitiView;
+	private TextView cfuTotaliView;
 	private TextView avgWeightedView;
 	private TextView avgArithView;
 	private TextView baseMarkView;
@@ -67,33 +69,7 @@ public class FragmentLibretto extends MySimpleFragment {
 	private View sorterIconView;
 	private ProgressBar sorterLoadingView;
 	private TextView sorterTextView;
-
-	private Comparator<CorsoLibretto> sorterCorsiByName = new Comparator<CorsoLibretto>() {
-		// Compara per [voto esiste] [nome]
-		public int compare(CorsoLibretto c1, CorsoLibretto c2) {
-			String nome1 = c1.getName();
-			String nome2 = c2.getName();
-
-			int voto1 = 1;
-			if (c1.getMark().isEmpty()) {
-				voto1 = -1;
-			}
-			int voto2 = 1;
-			if (c2.getMark().isEmpty()) {
-				voto2 = -1;
-			}
-
-			if (voto1 == voto2) {
-				return nome1.compareTo(nome2);
-			}
-			if (voto1 < 0) {
-				return 1;
-			} else if (voto2 < 0) {
-				return -1;
-			}
-			return nome1.compareTo(nome2);
-		}
-	};
+	
 
 	private IntentFilter mIntentFilter = new IntentFilter();
 	private final BroadcastReceiver mHandlerBroadcast = new BroadcastReceiver() {
@@ -102,6 +78,8 @@ public class FragmentLibretto extends MySimpleFragment {
 			onNewBroadcast(context, intent);
 		}
 	};
+	
+	private Libretto libretto;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,6 +102,8 @@ public class FragmentLibretto extends MySimpleFragment {
 		listaCorsiView = (LinearLayout) view.findViewById(R.id.lista_corsi);
 
 		riepilogoContainerView = (LinearLayout) view.findViewById(R.id.riepilogo_libretto);
+		cfuConseguitiView = (TextView) riepilogoContainerView.findViewById(R.id.cfu_conseguiti);
+		cfuTotaliView = (TextView) riepilogoContainerView.findViewById(R.id.cfu_totali);
 		avgWeightedView = (TextView) riepilogoContainerView.findViewById(R.id.avg_weighted);
 		avgArithView = (TextView) riepilogoContainerView.findViewById(R.id.avg_arithmetic);
 		baseMarkView = (TextView) riepilogoContainerView.findViewById(R.id.base_mark);
@@ -280,7 +260,7 @@ public class FragmentLibretto extends MySimpleFragment {
 
 		Libretto libretto = librettoDB.getLibretto();
 		// Il libretto c'è e non devo forzare l'aggiornamento
-		if (!force && libretto.getCorsi().size() > 0) {
+		if (!force && libretto.getSize() > 0) {
 			mostraCorsi();
 			mActivity.setLoadingVisible(false, false);
 			alreadyStarted = true;
@@ -309,9 +289,11 @@ public class FragmentLibretto extends MySimpleFragment {
 			return;
 		}
 
-		final Libretto libretto = librettoDB.getLibretto();
-		ArrayList<CorsoLibretto> corsi = libretto.getCorsi();
-		if (corsi.size() == 0) {
+		if (libretto == null) {
+			libretto = librettoDB.getLibretto();
+		} 
+		
+		if (libretto.getSize() == 0) {
 			riepilogoContainerView.setVisibility(View.GONE);
 			librettoNDView.setVisibility(View.VISIBLE);
 			return;
@@ -335,17 +317,19 @@ public class FragmentLibretto extends MySimpleFragment {
 		LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		listaCorsiView.removeAllViews();
 
-		ArrayList<CorsoLibretto> corsiSorted = (ArrayList<CorsoLibretto>) corsi.clone();
+		ArrayList<CorsoLibretto> corsiByName = libretto.getCorsiByName();
+		ArrayList<CorsoLibretto> corsiByDate = libretto.getCorsiByDate();
+		ArrayList<CorsoLibretto> corsi;
 		if (sortByName) {
-			Collections.sort(corsiSorted, sorterCorsiByName);
+			corsi = corsiByName;
 		} else {
-			Collections.sort(corsiSorted);
+			corsi = corsiByDate;
 		}
 
-		for (CorsoLibretto corso : corsiSorted) {
+		for (CorsoLibretto corso : corsi) {
 			View rowView;
 
-			if (corso.getMark().isEmpty()) {
+			if (corso.getDate() == null) {
 				rowView = inflater.inflate(R.layout.libretto_row_with_slider, listaCorsiView, false);
 			} else {
 				rowView = inflater.inflate(R.layout.libretto_row, listaCorsiView, false);
@@ -355,10 +339,12 @@ public class FragmentLibretto extends MySimpleFragment {
 			TextView cfuView = (TextView) rowView.findViewById(R.id.course_credits);
 			final TextView markView = (TextView) rowView.findViewById(R.id.course_mark);
 
-			final String name = corso.getName();
+			final CorsoLibretto cCorso = corso;
+			String name = corso.getName();
 			nameView.setText(name);
 			cfuView.setText(corso.getCFU() + " CFU");
-			if (corso.getMark().isEmpty()) {
+			
+			if (corso.getDate() == null) {
 				markView.setText("ND");
 
 				SeekBar seekBarView = (SeekBar) rowView.findViewById(R.id.course_seekbar);
@@ -381,14 +367,23 @@ public class FragmentLibretto extends MySimpleFragment {
 							newMark = Integer.toString(progress + 17);
 						}
 						markView.setText(newMark);
-						libretto.getCorso(name).setMark(newMark);
+						cCorso.setMark(progress + 17);
+						libretto.calcolaStatistiche();
 						aggiornaRiepilogo(libretto);
 					}
 				});
 			} else {
 				TextView dateView = (TextView) rowView.findViewById(R.id.course_date);
-				dateView.setText(corso.getDate());
-				markView.setText(corso.getMark());
+				dateView.setText(corso.getDateString());
+				String markString;
+				if (corso.getMark() == 31) {
+					markString = "30L";
+				} else if (corso.getMark() == -1) {
+					markString = "SUP";
+				} else {
+					markString = Integer.toString(corso.getMark());
+				}
+				markView.setText(markString);
 			}
 
 			listaCorsiView.addView(rowView);
@@ -398,23 +393,20 @@ public class FragmentLibretto extends MySimpleFragment {
 		int position = 1;
 		int minVoto = Integer.MAX_VALUE, maxVoto = Integer.MIN_VALUE;
 
-		ArrayList<CorsoLibretto> corsiByDate = (ArrayList<CorsoLibretto>) corsi.clone();
-		Collections.sort(corsiByDate);
 		final ArrayList<CorsoLibretto> coursesInsertedInGraph = new ArrayList<Libretto.CorsoLibretto>();
 		for (CorsoLibretto corso : corsiByDate) {
 			int voto;
-			try {
-				voto = Integer.parseInt(corso.getMark());
-				minVoto = Math.min(voto, minVoto);
-				maxVoto = Math.max(voto, maxVoto);
-			} catch (NumberFormatException e) {
-				// Esame non superato o ad idoneità o 30L
-				if (corso.getMark().equalsIgnoreCase("30L")) {
-					voto = 30;
-				} else {
-					continue;
-				}
+			voto = corso.getMark();
+			if (voto == 31) {
+				voto = 30;
+			} else if (voto == -1 || voto == 0) {
+				continue;
 			}
+			if (corso.getDate() == null) {
+				continue;
+			}
+			minVoto = Math.min(voto, minVoto);
+			maxVoto = Math.max(voto, maxVoto);
 			LinePoint point = new LinePoint(position, voto);
 			line.addPoint(point);
 			position++;
@@ -434,7 +426,7 @@ public class FragmentLibretto extends MySimpleFragment {
 					CorsoLibretto corso = coursesInsertedInGraph.get(pointIndex);
 					librettoGraphEsameContainerView.setVisibility(View.VISIBLE);
 					librettoGraphEsameNomeView.setText(corso.getName());
-					librettoGraphEsameSuperatoView.setText(getString(R.string.superato_il_con, corso.getDate(), corso.getMark()));
+					librettoGraphEsameSuperatoView.setText(getString(R.string.superato_il_con, corso.getDateString(), Integer.toString(corso.getMark())));
 				}
 			});
 			// librettoLineGraph.setPointClicked(0,coursesInsertedInGraph.size()-1);
@@ -445,12 +437,14 @@ public class FragmentLibretto extends MySimpleFragment {
 	}
 
 	private void aggiornaRiepilogo(Libretto libretto) {
-		String formatType = "%.3f";
-
+		int cfuConseguiti = libretto.getCFUConseguiti();
+		cfuConseguitiView.setText(Integer.toString(cfuConseguiti));
+		int cfuTotali = libretto.getCFUTotali();
+		cfuTotaliView.setText(Integer.toString(cfuTotali));
 		float mediaAritmetica = libretto.getMediaAritmetica();
-		avgArithView.setText(String.format(formatType, mediaAritmetica));
-		float mediaPesata = libretto.getMediaPesata();
-		avgWeightedView.setText(String.format(formatType, mediaPesata));
+		avgArithView.setText(String.format(RIEPILOGO_FLOAT_FORMAT_TYPE, mediaAritmetica));
+		float mediaPesata = libretto.getMediaPonderata();
+		avgWeightedView.setText(String.format(RIEPILOGO_FLOAT_FORMAT_TYPE, mediaPesata));
 		long baseMark = Math.round((mediaPesata * 110.0) / 30.0);
 		baseMarkView.setText(Long.toString(baseMark));
 	}

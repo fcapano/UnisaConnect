@@ -1,163 +1,252 @@
 package it.fdev.unisaconnect.data;
 
-import it.fdev.utils.Utils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
-import android.util.Log;
-
 public class Libretto {
 	private Date fetchTime;
-	private ArrayList<CorsoLibretto> corsi;
+	private float mediaAritmetica;
+	private float mediaPonderata;
+	private int nCFUTotali;
+	private int nCFUConseguiti;
+	
+	private ArrayList<CorsoLibretto> corsiByDate;
+	private ArrayList<CorsoLibretto> corsiByName;
 	
 	public Libretto() {
-		this.fetchTime = new Date();
-		this.corsi = new ArrayList<CorsoLibretto>();
+		this(new Date(), new ArrayList<CorsoLibretto>());
 	}
 
 	public Libretto(Date fetchTime, ArrayList<CorsoLibretto> corsi) {
 		this.fetchTime = fetchTime;
-		this.corsi = corsi;
+		setCorsi(corsi);
 	}
 
+	@SuppressWarnings("unchecked")
+	public void setCorsi(ArrayList<CorsoLibretto> corsi) {
+		this.corsiByDate = (ArrayList<CorsoLibretto>) corsi.clone();
+		Collections.sort(this.corsiByDate, sorterCorsiByDate);
+		this.corsiByName = corsi;
+		Collections.sort(this.corsiByName, sorterCorsiByName);
+		calcolaStatistiche();
+	}
+	
 	public Date getFetchTime() {
 		return fetchTime;
 	}
 
-	public ArrayList<CorsoLibretto> getCorsi() {
-		return corsi;
+	public ArrayList<CorsoLibretto> getCorsiByName() {
+		return corsiByName;
 	}
 	
-	public void setCorsi(ArrayList<CorsoLibretto> corsi) {
-		this.corsi = corsi;
+	public ArrayList<CorsoLibretto> getCorsiByDate() {
+		return corsiByDate;
 	}
 	
-	public CorsoLibretto getCorso(String name) {
-		for (CorsoLibretto corso : corsi) {
-			if (corso.getName().equals(name)) {
-				return corso;
-			}
-		}
-		return null;
+	public int getCFUTotali() {
+		return this.nCFUTotali;
 	}
 	
-	public float getMediaAritmetica(){
+	public int getCFUConseguiti() {
+		return this.nCFUConseguiti;
+	}
+	
+	public float getMediaAritmetica() {
+		return this.mediaAritmetica;
+	}
+	
+	public float getMediaPonderata() {
+		return this.mediaPonderata;
+	}
+	
+	public int getSize() {
+		return corsiByName.size();
+	}
+	
+	
+	public void calcolaStatistiche(){
 		int numeroEsami = 0;
-		int sommaVoti = 0;
-		for (CorsoLibretto corso : corsi) {
-			try { // Calcolo la media
-				int cfu = Integer.parseInt(corso.getCFU().trim());
-				int mark;
-				if (corso.getMark().equalsIgnoreCase("30L"))
-					mark = 30;
-				else
-					mark = Integer.parseInt(corso.getMark().trim());
-				if (cfu > 0 && mark >= 18) {
-					numeroEsami++;
-					sommaVoti += mark;
-				}
-			} catch (NumberFormatException e) {
-				// Esami con ideneità. Compaiono come "SUP" e non influiscono sulla media
-//				Log.w(Utils.TAG, "Voto o cfu non numerico: '" + corso.getCFU() + "' | '" + corso.getMark() + "'", e);
-			}
-			if (corso.getMark().isEmpty()) // Esame non ancora fatto
+		int sommaCFUTotali= 0;
+		int sommaCFUConseguiti = 0;
+		int sommaCFUConseguitiFannoMedia = 0;
+		int sommaVotiPesati = 0;
+		int sommaVotiNonPesati = 0;
+		
+		for (CorsoLibretto corso : corsiByName) {
+			int cfu = corso.getCFU();
+			boolean hasDate = corso.getDate() != null;
+			int mark = corso.getMark();
+			
+			if (cfu <= 0) {
 				continue;
+			}
+			
+			sommaCFUTotali += cfu;
+			
+			if (mark == -1 || mark >= 18) {					//Esame conseguito
+				if (hasDate) {								//Ha una data -> Il voto non è inserito graficamente con lo slider
+					sommaCFUConseguiti += cfu;
+				}
+				if (mark >= 18) {							//Esame conseguito e non idoneità
+					numeroEsami++;
+					sommaCFUConseguitiFannoMedia += cfu;
+					if (mark == 31) {						//Lode = 30?
+						mark = 30;
+					}
+					sommaVotiPesati += mark * cfu;
+					sommaVotiNonPesati += mark;
+				}
+			}
 		}
-		float mediaAritmetica = sommaVoti/ (float) numeroEsami;
+		
+		float mediaPonderata = sommaVotiPesati / (float) sommaCFUConseguitiFannoMedia;
+		mediaPonderata = Math.round(mediaPonderata * (float) 1000) / (float) 1000;
+		this.mediaPonderata = mediaPonderata;
+		
+		float mediaAritmetica = sommaVotiNonPesati/ (float) numeroEsami;
 		mediaAritmetica = Math.round(mediaAritmetica * (float) 1000) / (float) 1000;
-		return mediaAritmetica;
+		this.mediaAritmetica = mediaAritmetica;
+		
+		this.nCFUTotali = sommaCFUTotali;
+		this.nCFUConseguiti = sommaCFUConseguiti;
 	}
 	
-	public float getMediaPesata(){
-		int sommaCFU = 0;
-		int sommaVotiPesati = 0;
-		for (CorsoLibretto corso : corsi) {
-			try { // Calcolo la media
-				int cfu = Integer.parseInt(corso.getCFU());
-				int mark;
-				if (corso.getMark().equalsIgnoreCase("30L"))
-					mark = 30;
-				else
-					mark = Integer.parseInt(corso.getMark());
-				if (cfu > 0 && mark >= 18) {
-					sommaCFU += cfu;
-					sommaVotiPesati += mark * cfu;
-				}
-			} catch (NumberFormatException e) {
-				// Esami con ideneità. Compaiono come "SUP" e non influiscono sulla media
+	private Comparator<CorsoLibretto> sorterCorsiByDate = new Comparator<CorsoLibretto>() {
+		public int compare(CorsoLibretto c1, CorsoLibretto c2) {
+			Date c1Date = c1.getDate();
+			Date c2Date = c2.getDate();
+			if (c1Date == null && c2Date == null) {
+				return 0;
+			} else if (c1Date == null) {
+				return 1;
+			} else if (c2Date == null) {
+				return -1;
+			} else {
+				return c1Date.compareTo(c2Date);
 			}
 		}
-		float mediaPesata = sommaVotiPesati / (float) sommaCFU;
-		mediaPesata = Math.round(mediaPesata * (float) 1000) / (float) 1000;
-		return mediaPesata;
-	}
+	};
+	
+	/**
+	 * Compara per [voto esiste] [nome]
+	 */
+	private Comparator<CorsoLibretto> sorterCorsiByName = new Comparator<CorsoLibretto>() {
+		public int compare(CorsoLibretto c1, CorsoLibretto c2) {
+			String nome1 = c1.getName();
+			String nome2 = c2.getName();
 
-	public static class CorsoLibretto implements Comparable<CorsoLibretto> {
+			int voto1 = 1;
+			if (c1.getMark() == 0 || c1.getDate() == null) {
+				voto1 = -1;
+			}
+			int voto2 = 1;
+			if (c2.getMark() == 0 || c2.getDate() == null) {
+				voto2 = -1;
+			}
+
+			if (voto1 == voto2) {
+				return nome1.compareTo(nome2);
+			}
+			if (voto1 < 0) {
+				return 1;
+			} else if (voto2 < 0) {
+				return -1;
+			}
+			return nome1.compareTo(nome2);
+		}
+	};
+
+	public static class CorsoLibretto {
 		private String name;
-		private String cfu;
-		private String date;
-		private String mark;
-
-		public CorsoLibretto(String name, String cfu, String date, String mark) {
+		private int cfu;
+		private Date date;
+		private int mark;
+		
+		private static SimpleDateFormat parserSDF = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+		
+		/**
+		 * @param name Nome
+		 * @param cfuString CFU
+		 * @param dateString Data conseguito
+		 * @param markString Voto
+		 */
+		public CorsoLibretto(String name, String cfuString, String dateString, String markString) {
 			this.name = name;
-			this.cfu = cfu;
-			this.date = date;
-			this.mark = mark;
+			
+			if(cfuString == null) {
+				this.cfu = 0;
+			} else {
+				try {
+					this.cfu = Integer.parseInt(cfuString);
+				} catch(NumberFormatException e) {
+					this.cfu = 0;
+				}
+			}
+			
+			if(dateString == null) {
+				this.date = null;
+			} else {
+				try {
+					this.date = parserSDF.parse(dateString);
+				} catch (ParseException e) {
+					this.date = null;
+				}
+			}
+			
+			if (markString == null) {
+				this.mark = 0;
+			} else if (markString.equalsIgnoreCase("30L")) {
+				this.mark = 31;
+			} else if (markString.toLowerCase(Locale.ITALIAN).startsWith("sup") || markString.toLowerCase(Locale.ITALIAN).startsWith("id")) {
+				mark = -1;
+			} else {
+				try {
+					this.mark = Integer.parseInt(markString);
+				} catch (NumberFormatException e) {
+					this.mark = 0;
+				}
+			}
 		}
 
 		public String getName() {
 			return name;
 		}
 
-		public String getCFU() {
+		public int getCFU() {
 			return cfu;
 		}
 
-		public String getDate() {
+		public Date getDate() {
 			return date;
 		}
 		
-		public String getMark() {
+		public String getDateString() {
+			if (this.date == null) {
+				return null;
+			}
+			return parserSDF.format(this.date);
+		}
+		
+		/**
+		 * @return 18-30, 31=30Lode, -1=SUPERATO, 0=Nessun voto
+		 */
+		public int getMark() {
 			return mark;
 		}
 		
-		public void setMark(String mark) {
+		public void setMark(int mark) {
 			this.mark = mark;
-		}
-
-		@Override
-		public int compareTo(CorsoLibretto another) {
-			SimpleDateFormat parserSDF = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-			Date thisDate, otherDate;
-			try {
-				thisDate = parserSDF.parse(getDate());
-			} catch (ParseException e) {
-				thisDate = null;
-			}
-			try {
-				otherDate = parserSDF.parse(another.getDate());
-			} catch (ParseException e) {
-				otherDate = null;
-			}
-			
-			if (thisDate == null && otherDate == null) {
-				return 0;
-			} else if (thisDate == null) {
-				return 1;
-			} else if (otherDate == null) {
-				return -1;
-			} else {
-				return thisDate.compareTo(otherDate);
-			}
 		}
 		
 		@Override
-		protected Object clone() throws CloneNotSupportedException {
-			return new CorsoLibretto(name, cfu, date, mark);
+		protected Object clone() {
+			// return new CorsoLibretto(name, cfu, date, mark);
+			return this;
 		}
 	}
 }

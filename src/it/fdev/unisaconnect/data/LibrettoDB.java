@@ -68,7 +68,7 @@ public class LibrettoDB {
 			ContentValues values = new ContentValues();
 			values.put("name", course.getName());
 			values.put("cfu", course.getCFU());
-			values.put("date", course.getDate());
+			values.put("date", course.getDateString());
 			values.put("mark", course.getMark());
 			db.insert("Libretto", "", values);
 		} finally {
@@ -102,7 +102,7 @@ public class LibrettoDB {
 	
 	public void resetLibretto(Libretto libretto) {
 		deleteAllCourses();
-		insertCourses(libretto.getCorsi());
+		insertCourses(libretto.getCorsiByDate());
 		mDataManager.setLibrettoFetchDate(libretto.getFetchTime());
 	}
 	
