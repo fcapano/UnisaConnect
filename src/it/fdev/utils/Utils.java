@@ -58,9 +58,14 @@ public class Utils {
 		}
 	}
 
-	public static void sendSupportMail(MainActivity activity, String title, String subject) {
-		String email = activity.getString(R.string.dev_email);
-		sendMail(activity, email, title, subject);
+	public static void sendSupportMail(final MainActivity activity, final String title, final String subject) {
+		createDialog(activity, activity.getString(R.string.send_mail_sure), new Runnable() {
+			@Override
+			public void run() {
+				String email = activity.getString(R.string.dev_email);
+				sendMail(activity, email, title, subject);
+			}
+		});
 	}
 
 	public static void sendMail(MainActivity activity, String recipient, String title, String subject) {
@@ -71,6 +76,9 @@ public class Utils {
 	}
 
 	public static void createAlert(final MainActivity activity, String message, final BootableFragmentsEnum goToFragmentEnum, final boolean shouldReturnToMenu) {
+		if (message == null || message.isEmpty()) {
+			return;
+		}
 		try {
 			dismissAlert();
 			alert = new AlertDialog.Builder(activity).create();
@@ -91,6 +99,35 @@ public class Utils {
 				}
 			});
 			alert.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return;
+	}
+
+	public static void createDialog(final MainActivity activity, String message, final Runnable runOnPositive) {
+		if (message == null || message.isEmpty()) {
+			return;
+		}
+		try {
+			dismissAlert();
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+	        builder.setMessage(message);
+	        builder.setCancelable(true);
+	        builder.setIcon(R.drawable.ic_launcher);
+	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					if (runOnPositive != null) {
+						activity.runOnUiThread(runOnPositive);
+					}
+				}
+	        });
+	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+				}
+	        });
+	        builder.create().show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -220,6 +220,7 @@
 
 
     <!-- Da ordinare / Generale -->
+    <string name="send_mail_sure">Risponderemo solo a mail riguardanti l\'applicazione Android.\nUnisa Connect non è in alcun modo legata all\'Università di Salerno!</string>
     <string name="problema_aprire_link">Impossibile aprire la pagina</string>
     <string name="email_chooser_titolo">Invia la mail con</string>
     <string name="controlla_connessione">Controlla la\nconnessione\nad internet</string>
