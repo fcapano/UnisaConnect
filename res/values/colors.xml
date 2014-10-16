@@ -6,6 +6,8 @@
     
     <color name="orange_actionbar_transparent_50">#80F4842D</color>
    	<color name="orange_actionbar_transparent_40">#66F4842D</color>
+   	
+	<color name="card_background_shadow">#CCCCCC</color>
     
     <color name="dark_gray">#333333</color>
     <color name="darker_gray">#171717</color>

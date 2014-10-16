@@ -2,8 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="icon">@drawable/ic_action_logo</item>
-        <item name="android:icon">@drawable/ic_action_logo</item>
+        <item name="icon">@android:color/transparent</item>
+        <item name="android:icon">@android:color/transparent</item>
         <item name="background">@drawable/actionbar_orange</item>
         <item name="android:background">@drawable/actionbar_orange</item>
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
@@ -12,6 +12,7 @@
 
     <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="MyEditText" parent="MyTheme_Orangy">
