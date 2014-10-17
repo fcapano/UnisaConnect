@@ -173,6 +173,11 @@
     <string name="unisound">Unis@und Radio</string>
     <!-- end of WebRadio -->
     
+    <!-- Webmail -->
+    <string name="mail_non_lette">Hai %1$d mail non lette</string>
+    <string name="controlla_nuove_mail">Controlla nuove mail ogni due ore</string>
+    <!-- end of Webmail -->
+    
     <!-- Biblioteca -->
     <string name="cerca_testo_non_vuoto">Il testo da cercare non può essere vuoto</string>
     <string name="libro_non_trovato">Impossibile ottenere i dettagli del libro</string>

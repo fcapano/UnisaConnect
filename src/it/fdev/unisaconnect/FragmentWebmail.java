@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.backgroundSync.MailChecker;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
@@ -31,6 +32,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ProgressBar;
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -44,14 +48,21 @@ public class FragmentWebmail extends MySimpleFragment {
 	private ProgressBar progressBar;
 	private MyWebView mWebView;
 	private Fragment thisFragment;
+	private CheckBox checkMailCheckbox;
 	
 	private boolean javascriptInterfaceBroken = true;
 	private JavascriptBridge jsBridge = new JavascriptBridge();
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View mainView = (View) inflater.inflate(R.layout.fragment_webmail, container, false);
+		return mainView;
+	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
+		checkMailCheckbox = (CheckBox) view.findViewById(R.id.check_mail_option);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
 		mWebView = (MyWebView) view.findViewById(R.id.webview);
 		mWebView.setVisibility(View.VISIBLE);		// Workaround for nullpointerexception
@@ -64,6 +75,15 @@ public class FragmentWebmail extends MySimpleFragment {
 			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
+		
+		checkMailCheckbox.setChecked(mDataManager.getMailDoCheck());
+		checkMailCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mDataManager.setMailDoCheck(isChecked);
+				MailChecker.autoSetAlarm(mActivity);
+			}
+		});
 		
 		CookieSyncManager.createInstance(mActivity);
 		CookieManager cookieManager = CookieManager.getInstance();
@@ -274,11 +294,6 @@ public class FragmentWebmail extends MySimpleFragment {
         }
     }
 	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View mainView = (View) inflater.inflate(R.layout.web_fragment, container, false);
-		return mainView;
-	}
-	
 	@Override
 	public boolean goBack() {
 		if(mWebView.canGoBack()) {
@@ -292,7 +307,6 @@ public class FragmentWebmail extends MySimpleFragment {
 	public Set<Integer> getActionsToShow() {
 		Set<Integer> actionsToShow = new HashSet<Integer>();
 		actionsToShow.add(R.id.action_refresh_button);
-//		actionsToShow.add(R.id.action_loading_animation);
 		return actionsToShow;
 	}
 	
@@ -325,7 +339,6 @@ public class FragmentWebmail extends MySimpleFragment {
 		try {
 			mWebView.setVisibility(View.VISIBLE);
 			mWebView.reload();
-//			webView.loadUrl(URL_STRING);
 		} catch (Exception e) {
 		}
 		super.onResume();

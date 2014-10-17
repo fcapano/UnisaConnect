@@ -54,6 +54,12 @@ public class SharedPrefDataManager {
 	private static final String PREF_PAGAMENTI = "pagamenti";
 	// Biblioteca
 	private static final String PREF_BIBLIO_LAST_SEARCH = "biblio_last_search";
+	// Webmail
+	private static final String PREF_MAIL_DO_CHECK = "webmail_do_check";
+	private static final String PREF_MAIL_LAST_READ = "webmail_last_read";
+
+	
+	
 	// Testing
 	private static final String PREF_TESTING_ENABLED = "testingEnabled";
 	// Crypto
@@ -240,6 +246,22 @@ public class SharedPrefDataManager {
 	
 	public void setBiblioLastSearch(String lastSearch) {
 		saveField(PREF_BIBLIO_LAST_SEARCH, lastSearch);
+	}
+	
+	public boolean getMailDoCheck() {
+		return mPrefs.getBoolean(PREF_MAIL_DO_CHECK, true);
+	}
+	
+	public void setMailDoCheck(boolean doCheck) {
+		saveField(PREF_MAIL_DO_CHECK, doCheck);
+	}
+	
+	public Date getMailLastRead() {
+		return new Date(mPrefs.getLong(PREF_MAIL_LAST_READ, 0));
+	}
+	
+	public void setMailLastRead(Date lastReadDate) {
+		saveField(PREF_MAIL_LAST_READ, lastReadDate.getTime());
 	}
 	
 	public Class<? extends MyFragmentInterface> getBootFragmentClass() {

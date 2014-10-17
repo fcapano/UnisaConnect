@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.backgroundSync.MailChecker;
 import it.fdev.scraper.esse3.Esse3BasicScraper.LoadStates;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.ListAdapterDrawer;
@@ -64,12 +65,14 @@ public class MainActivity extends ActionBarActivity {
 	public final static String BROADCAST_LOADING_MESSAGE = "it.fdev.loading_message";
 	public final static String BROADCAST_ERROR = "it.fdev.error";
 
-	// Fragments which can be started at application startup (do not require special configuration to start)
+	// Fragments which can be started at application startup (do not require
+	// special configuration to start)
 	public static enum BootableFragmentsEnum {
 		ACCOUNT, MENSA, WEBMAIL, STUDENT_SERVICES, STAFF_SEARCH, TIMETABLE, MAP, WEATHER, LIBRETTO, ESSE3_WEB, APPELLI, PRESENZE, PAGAMENTI, PREFERENCES, NEWS_ALL, WEB_RADIO, BIBLIO_SEARCH, TIPO_CORSO, BUS
 	}
 
-	// References to fragments used to save the fragment to boot in the preferences
+	// References to fragments used to save the fragment to boot in the
+	// preferences
 	public static HashMap<BootableFragmentsEnum, Class<? extends MyFragmentInterface>> fragmentsIDs = new HashMap<MainActivity.BootableFragmentsEnum, Class<? extends MyFragmentInterface>>();
 	static {
 		fragmentsIDs.put(BootableFragmentsEnum.ACCOUNT, FragmentAccount.class);
@@ -106,9 +109,9 @@ public class MainActivity extends ActionBarActivity {
 
 	private String mAppName;
 
-	private static final int VALID_NAVIGATION_DRAWER_ELEMENTS_NUM = 9;  // When testing is disabled only these elements are shown
-																		// To enable testing, in the account preferences as username enter
-																		// the string in Utils.TOGGLE_TESTING_STRING ("testing!")
+	private static final int VALID_NAVIGATION_DRAWER_ELEMENTS_NUM = 9; 	// When testing is disabled only these elements are shown
+	// To enable testing, in the account preferences as
+	// username enter the string in Utils.TOGGLE_TESTING_STRING ("testing!")
 
 	private IntentFilter mIntentFilter = new IntentFilter();
 	private final BroadcastReceiver mHandlerBroadcast = new BroadcastReceiver() {
@@ -119,9 +122,9 @@ public class MainActivity extends ActionBarActivity {
 	};
 
 	private static Set<Integer> mActionsToShow = new HashSet<Integer>();
-	private boolean menuAlreadyToggled = false; // After the first time in onPostCreate the menu shouldn't be toggled automatically
-	private boolean showMenuOnStartup = true; // Show the sliding menu on startup
-	private FragmentManager mFragmentManager; 
+	private boolean menuAlreadyToggled = false; 		// After the first time in onPostCreate the menu shouldn't be toggled automatically
+	private boolean showMenuOnStartup = true; 			// Show the sliding menu on startup
+	private FragmentManager mFragmentManager;
 	private Menu mOptionsMenu;
 	private ActionBar mActionBar;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -137,10 +140,11 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		try {	
+
+		try {
 			// The catch blocks exceptions before initialization of crittercism
-			// isTestingAPK is true only if the app wasn't signed with a production key (debug build from eclipse)
+			// isTestingAPK is true only if the app wasn't signed with a
+			// production key (debug build from eclipse)
 			isTestingAPK = (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE));
 			if (isTestingAPK) {
 				Log.d(Utils.TAG, "The applications is running as debuggable!");
@@ -148,7 +152,7 @@ public class MainActivity extends ActionBarActivity {
 		} catch (Exception e) {
 			isTestingAPK = false;
 		}
-		
+
 		// Initialize Crittercism
 		Crittercism.initialize(getApplicationContext(), "5135ccc2558d6a05f7000024");
 		Crittercism.setOptOutStatus(isTestingAPK);
@@ -156,17 +160,17 @@ public class MainActivity extends ActionBarActivity {
 		// Initialize Google Analytics
 		EasyTracker.getInstance().setContext(this);
 		EasyTracker.getInstance().activityStart(this);
-		
+
 		mFragmentManager = getSupportFragmentManager();
-		
+
 		mIntentFilter.addAction(BROADCAST_LOADING_MESSAGE);
 		mIntentFilter.addAction(BROADCAST_ERROR);
-		
+
 		mDataManager = new SharedPrefDataManager(this);
-		
+
 		mAppName = getString(R.string.app_name);
 		mActionbarTitle = mAppName;
-		
+
 		// set the Above View
 		setContentView(R.layout.activity_main);
 		loadingAnimationContainer = findViewById(R.id.content_loading_container);
@@ -174,55 +178,56 @@ public class MainActivity extends ActionBarActivity {
 		loadingAnimationText = (TextView) findViewById(R.id.content_loading_text);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
-		
+
 		// Set spinner color
 		loadingAnimationSpinner.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
-		
+
 		// set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.ic_drawer_shadow, GravityCompat.START);
-		
+		mDrawerLayout.setDrawerShadow(R.drawable.ic_drawer_shadow, GravityCompat.START);
+
 		// customize the actionbar
 		mActionBar = getSupportActionBar();
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 		mActionBar.setHomeButtonEnabled(true);
-		
+
 		SystemBarTintManager tintManager = new SystemBarTintManager(this);
 		tintManager.setStatusBarTintEnabled(true);
 		tintManager.setStatusBarTintResource(R.color.orange_actionbar);
-//		tintManager.setNavigationBarTintEnabled(true);
-		
-		//Initialize Drawer
-        initializeDrawer();
-		
+		// tintManager.setNavigationBarTintEnabled(true);
+
+		// Initialize Drawer
+		initializeDrawer();
+
 		// Initialize image downloader used by fragments
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheOnDisk(true).build();
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-												.defaultDisplayImageOptions(defaultOptions)
-												.memoryCacheExtraOptions(100, 100)
-												.build();
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).defaultDisplayImageOptions(defaultOptions).memoryCacheExtraOptions(100, 100).build();
 		ImageLoader.getInstance().init(config);
 
 		Bundle extras = getIntent().getExtras();
-	    if(extras != null &&  extras.containsKey("launch_fragment")){ // Intent contains fragment to show
-	    	onNewIntent(getIntent());
-	    } else {
-	    	// Start the last used fragment
-//			Class<? extends MyFragment> fragmentClassToBoot = sharedPref.getBootFragmentClass();
-//			MyFragment fragmentToBoot;
-//			try {
-//				fragmentToBoot = fragmentClassToBoot.newInstance();
-//			} catch (Exception e) {
-//				fragmentToBoot = new WifiPreferencesFragment();
-//			}
+		if (extras != null && extras.containsKey("launch_fragment")) { // Intent contains fragment to show
+			onNewIntent(getIntent());
+		} else {
+			// Start the last used fragment
+			// Class<? extends MyFragment> fragmentClassToBoot =
+			// sharedPref.getBootFragmentClass();
+			// MyFragment fragmentToBoot;
+			// try {
+			// fragmentToBoot = fragmentClassToBoot.newInstance();
+			// } catch (Exception e) {
+			// fragmentToBoot = new WifiPreferencesFragment();
+			// }
 			switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
-	    }
-	    
-//	    setupUpxAppBanner();
+		}
+		
+		// setupUpxAppBanner();
 		new UpdateChecker(this).start();
-	    
-//	    WVersionManager versionManager = new WVersionManager(this);
-//	    versionManager.setVersionContentUrl("http://fdev.eu/unisaconnect/version"); // your update content url, see the response format below
-//	    versionManager.checkVersion();
+
+		// WVersionManager versionManager = new WVersionManager(this);
+		// versionManager.setVersionContentUrl("http://fdev.eu/unisaconnect/version");
+		// // your update content url, see the response format below
+		// versionManager.checkVersion();
+
+		MailChecker.autoSetAlarm(this);
 	}
 
 	@Override
@@ -308,11 +313,11 @@ public class MainActivity extends ActionBarActivity {
 			} else if (INTENT_LAUNCH_FRAGMENT.equals(intent.getAction())) {
 				Bundle extras = intent.getExtras();
 				if (extras != null) {
-					if (extras != null) {
-						BootableFragmentsEnum fragmentToBootEnum = (BootableFragmentsEnum) extras.getSerializable("launch_fragment");
-						switchContent(fragmentToBootEnum, true);
-						showMenuOnStartup = false;
-					}
+					Log.d(Utils.TAG, "Switch!");
+					super.onNewIntent(intent);
+					BootableFragmentsEnum fragmentToBootEnum = (BootableFragmentsEnum) extras.getSerializable("launch_fragment");
+					switchContent(fragmentToBootEnum, true);
+					showMenuOnStartup = false;
 				}
 			}
 		} catch (Exception e) {
@@ -403,14 +408,15 @@ public class MainActivity extends ActionBarActivity {
 		}
 		try {
 			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-			// fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+			// fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+			// android.R.anim.fade_out);
 			Fragment currFrag = mFragmentManager.findFragmentById(R.id.content_frame);
 			Class<? extends Fragment> currClass = null;
 			if (currFrag != null) {
-				currClass = mFragmentManager.findFragmentById(R.id.content_frame).getClass(); // Classe del fragment attualmente visualizzato
+				currClass = mFragmentManager.findFragmentById(R.id.content_frame).getClass(); 	// Classe del fragment attualmente visualizzato
 			}
-			Class<? extends MyFragmentInterface> newClass = fragmentsIDs.get(newFragmentEnum); // Classe del fragment da visualizzare
-			if (currFrag == null || !newClass.equals(currClass)) { // I fragment sono diversi
+			Class<? extends MyFragmentInterface> newClass = fragmentsIDs.get(newFragmentEnum); 	// Classe del fragment da visualizzare
+			if (currFrag == null || !newClass.equals(currClass)) { 								// I fragment sono diversi
 				Fragment fragmentToShow = (Fragment) newClass.newInstance();
 				if (emptyBackStack) {
 					mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -439,9 +445,10 @@ public class MainActivity extends ActionBarActivity {
 	public void switchContent(Fragment newFragment) {
 		if (newFragment == null)
 			return;
-		
+
 		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		// fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+		// fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+		// android.R.anim.fade_out);
 		boolean isSameFragment;
 		String currentFragmentClass;
 		try {
@@ -541,7 +548,8 @@ public class MainActivity extends ActionBarActivity {
 		} else {
 			title = mAppName;
 		}
-		if (mActionBar != null) { // When screen rotates and the fragment is recreated
+		if (mActionBar != null) { // When screen rotates and the fragment is
+			// recreated
 			mActionBar.setTitle(title);
 		}
 	}
@@ -621,7 +629,8 @@ public class MainActivity extends ActionBarActivity {
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		searchView.setIconifiedByDefault(true); // Iconify the widget; do not expand it by default
 
-		// SearchView searchWidget = (SearchView) menu.findItem(R.id.action_search_button).getActionView();
+		// SearchView searchWidget = (SearchView)
+		// menu.findItem(R.id.action_search_button).getActionView();
 		// searchWidget.setOnQueryTextListener(this);
 		// return super.onCreateOptionsMenu(menu);
 		return true;
@@ -629,8 +638,8 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
 		outState.putBoolean("menuAlreadyToggled", menuAlreadyToggled);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -693,12 +702,14 @@ public class MainActivity extends ActionBarActivity {
 		TypedArray imgs = resources.obtainTypedArray(R.array.menu_icons);
 		ArrayList<ListItemDrawer> listItem = new ArrayList<ListItemDrawer>();
 		for (int i = 0; i < VALID_NAVIGATION_DRAWER_ELEMENTS_NUM; i++) {
-			// On Gingerbread if no background is pecified it becomes black on scroll
+			// On Gingerbread if no background is pecified it becomes black on
+			// scroll
 			listItem.add(new ListItemDrawer(menuText[i], imgs.getResourceId(i, -1)));
 		}
 		if (mDataManager.isTestingingEnabled()) {
 			for (int i = VALID_NAVIGATION_DRAWER_ELEMENTS_NUM; i < menuText.length; i++) {
-				// On Gingerbread if no background is specified it becomes black on scroll
+				// On Gingerbread if no background is specified it becomes black
+				// on scroll
 				listItem.add(new ListItemDrawer(menuText[i], imgs.getResourceId(i, -1), true));
 			}
 		}
@@ -835,7 +846,9 @@ public class MainActivity extends ActionBarActivity {
 	// return;
 	// }
 	//
-	// final Animation hideBannerFadeOutAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+	// final Animation hideBannerFadeOutAnimation =
+	// AnimationUtils.loadAnimation(getApplicationContext(),
+	// android.R.anim.fade_out);
 	// hideBannerFadeOutAnimation.setAnimationListener(new AnimationListener() {
 	// @Override
 	// public void onAnimationEnd(Animation animation) {
@@ -852,7 +865,8 @@ public class MainActivity extends ActionBarActivity {
 	// OnClickListener startBrowserListener = new OnClickListener() {
 	// @Override
 	// public void onClick(View v) {
-	// EasyTracker.getTracker().sendEvent("ui_action", "button_press", "upxapp_vote", 1L);
+	// EasyTracker.getTracker().sendEvent("ui_action", "button_press",
+	// "upxapp_vote", 1L);
 	// Intent i = new Intent(Intent.ACTION_VIEW);
 	// i.setData(Uri.parse(voteURL));
 	// startActivity(i);
@@ -865,7 +879,8 @@ public class MainActivity extends ActionBarActivity {
 	// close.setOnClickListener(new OnClickListener() {
 	// @Override
 	// public void onClick(View v) {
-	// EasyTracker.getTracker().sendEvent("ui_action", "button_press", "upxapp_close", 1L);
+	// EasyTracker.getTracker().sendEvent("ui_action", "button_press",
+	// "upxapp_close", 1L);
 	// banner.startAnimation(hideBannerFadeOutAnimation);
 	// }
 	// });

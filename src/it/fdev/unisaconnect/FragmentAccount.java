@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import it.fdev.backgroundSync.MailChecker;
 import it.fdev.unisaconnect.R;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
@@ -125,7 +126,7 @@ public class FragmentAccount extends MySimpleFragment {
 //			if (!Esse3ScraperService.isRunning) {
 //				activity.startService(new Intent(activity, Esse3ScraperService.class).setAction(Esse3ScraperService.BROADCAST_STATE_E3_LIBRETTO));
 //			}
-			
+			MailChecker.autoSetAlarm(mActivity);
 			mActivity.switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
 		} catch(Exception e) {
 			Log.e(Utils.TAG, "Error saving data!", e);
