@@ -8,66 +8,32 @@
     <TextView
         android:id="@+id/meteo_non_disponibile"
         style="@style/bigBackgroundTextStyle"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="right|center_vertical"
         android:text="@string/meteo_non_disponibile"
         android:visibility="gone" />
 
-    <RelativeLayout
-        android:id="@+id/weather_forecast_container"
+    <GridView
+        android:id="@+id/weather_forecast_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="1dp"
         android:gravity="center_vertical"
         android:listSelector="@android:color/transparent"
         android:numColumns="4"
+        android:paddingBottom="1dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="0dp"
-        android:visibility="visible" >
-
-        <GridView
-            android:id="@+id/weather_forecast_gridview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="1dp"
-            android:gravity="center_vertical"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="0dp"
-            android:visibility="visible" />
-
-        <TextView
-            android:id="@+id/forecast_not_available"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/weather_forecast_gridview"
-            android:layout_alignTop="@+id/weather_forecast_gridview"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/previsioni_non_disponibili"
-            android:visibility="visible" />
-    </RelativeLayout>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/weather_actual_container"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/weather_forecast_container"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/weather_forecast_gridview"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="1dp"
         android:visibility="gone" >
 
         <android.support.v4.view.ViewPager
@@ -89,10 +55,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:layout_marginTop="50dp"
             android:gravity="center"
             android:orientation="vertical" >

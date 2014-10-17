@@ -39,10 +39,10 @@ public class FragmentWeather extends MySimpleFragment {
 	private SharedPrefDataManager mDataManager;
 
 	private RelativeLayout weatherActualContainerView;
-	private RelativeLayout weatherForecastContainerView;
+//	private RelativeLayout weatherForecastContainerView;
 	private GridView weatherForecastGridview;
 	private TextView meteoNDView;
-	private TextView forecastNDView;
+//	private TextView forecastNDView;
 	private ViewPager pager;
 
 	private TextView lastUpdateView;
@@ -64,7 +64,7 @@ public class FragmentWeather extends MySimpleFragment {
 		mActivity.setLoadingVisible(true, true);
 		
 		meteoNDView = (TextView) view.findViewById(R.id.meteo_non_disponibile);
-		forecastNDView = (TextView) view.findViewById(R.id.forecast_not_available);
+//		forecastNDView = (TextView) view.findViewById(R.id.forecast_not_available);
 		pager = (ViewPager) view.findViewById(R.id.meteo_pager);
 		lastUpdateView = (TextView) view.findViewById(R.id.last_update_time);
 		lastUpdateIconView = (ImageView) view.findViewById(R.id.last_update_icon);
@@ -75,7 +75,7 @@ public class FragmentWeather extends MySimpleFragment {
 		windView = (TextView) view.findViewById(R.id.weather_wind);
 		windDirView = (TextView) view.findViewById(R.id.weather_wind_dir);
 		weatherActualContainerView = (RelativeLayout) view.findViewById(R.id.weather_actual_container);
-		weatherForecastContainerView = (RelativeLayout) view.findViewById(R.id.weather_forecast_container);
+//		weatherForecastContainerView = (RelativeLayout) view.findViewById(R.id.weather_forecast_container);
 		weatherForecastGridview = (GridView) view.findViewById(R.id.weather_forecast_gridview);
 		
 		mDataManager = new SharedPrefDataManager(mActivity);
@@ -157,13 +157,13 @@ public class FragmentWeather extends MySimpleFragment {
 		}
 		if (newWeatherData == null && this.meteo == null) {
 			weatherActualContainerView.setVisibility(View.GONE);
-			weatherForecastContainerView.setVisibility(View.GONE);
+//			weatherForecastContainerView.setVisibility(View.GONE);
 			meteoNDView.setVisibility(View.VISIBLE);
 			mActivity.setLoadingVisible(false, false);
 			return;
 		}
 		weatherActualContainerView.setVisibility(View.VISIBLE);
-		weatherForecastContainerView.setVisibility(View.VISIBLE);
+//		weatherForecastContainerView.setVisibility(View.VISIBLE);
 		meteoNDView.setVisibility(View.GONE);
 		
 		if (newWeatherData != null) {
@@ -184,17 +184,18 @@ public class FragmentWeather extends MySimpleFragment {
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
-		pager.setCurrentItem(1);
+		pager.setCurrentItem(0); // Rettorato -> La webcam della stecca 9 non viene aggiornata da un mese! 
 		
 		ArrayList<DailyForecast> forecastList = this.meteo.getDailyForecastList();
 		DailyForecast lastForecast = forecastList.get(forecastList.size()-1);
 		
 		boolean isForecastPast = Utils.isBefore(lastForecast.getValidThroughDate());
 		if (isForecastPast) {
+			// Le previsioni sono vecchie...si sarà inceppato lo scraper?
 			weatherForecastGridview.setVisibility(View.GONE);
-			forecastNDView.setVisibility(View.VISIBLE);
+//			forecastNDView.setVisibility(View.VISIBLE);
 		} else {
-			forecastNDView.setVisibility(View.GONE);
+//			forecastNDView.setVisibility(View.GONE);
 			weatherForecastGridview.setVisibility(View.VISIBLE);
 			weatherForecastGridview.setAdapter(new WeatherForecastAdapter(mActivity, this.meteo.getDailyForecastList()));
 		}
@@ -216,7 +217,6 @@ public class FragmentWeather extends MySimpleFragment {
 			mActivity.setLoadingVisible(false, false);
 			Log.d(Utils.TAG, "saving weather data");
 			mDataManager.setWeather(newWeatherData);
-//			pref.saveData();
 		}
 		
 		FragmentWeatherActualCondition cItem = currentWeatherAdapter.getItem(1);
