@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.fdev.unisaconnect"
     android:installLocation="auto"
-    android:versionCode="45"
-    android:versionName="0.7.7" >
+    android:versionCode="47"
+    android:versionName="0.7.8 BETA 2" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="false"
@@ -83,6 +85,7 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+        <receiver android:name="it.fdev.backgroundSync.AlarmReceiver"/>
 
         <service
             android:name="it.fdev.unisaconnect.wifilogin.LoginManager"
@@ -104,6 +107,21 @@
             android:name="it.fdev.unisaconnect.WebRadioPlayerService"
             android:exported="false" >
         </service>
+        <service
+        	android:name="it.fdev.backgroundSync.AlarmService"
+        	android:exported="false"
+			android:enabled="true" >
+		</service>
+		
+        <receiver
+            android:name="it.fdev.backgroundSync.BootCompletedReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="StartMyServiceAtBootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <!-- Start of Crittercism.com Code -->
         <activity android:name="com.crittercism.NotificationActivity" />
