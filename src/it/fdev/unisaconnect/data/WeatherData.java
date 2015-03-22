@@ -19,10 +19,11 @@ import android.util.Log;
 public class WeatherData implements Serializable {
 	private static final long serialVersionUID = -5469551483116280662L;
 
-	private final String OPTIMIZED_WEBCAM_IMG_URL = "http://unisameteo.appspot.com/serve?id=";
-	private final String YOW_PATH = "Yow/";
-	private final String YOW_DEFAULT_ICON = "thermometer";
-	private static Map<String, String> yowIconsAssociations = new HashMap<String, String>();
+	private final static String YOW_DEFAULT_ICON = "temperature-icon";
+	private final static Map<String, String> yowIconsAssociations = new HashMap<String, String>();
+	private final static String YOW_PATH = "Yow/";
+	private final static String OPTIMIZED_WEBCAM_IMG_URL = "http://unisameteo.appspot.com/serve?id=";
+	
 	static {
 		yowIconsAssociations.put("chanceflurries", "11.png");
 		yowIconsAssociations.put("chancerain", "10.png");
@@ -69,7 +70,7 @@ public class WeatherData implements Serializable {
 		yowIconsAssociations.put("nt_cloudy", "1.png");
 		yowIconsAssociations.put("nt_partlycloudy", "2.png");
 		
-		yowIconsAssociations.put("thermometer", "23.png");
+		yowIconsAssociations.put(YOW_DEFAULT_ICON, "23.png");
 	}
 	
 	private Date fetchTime;
