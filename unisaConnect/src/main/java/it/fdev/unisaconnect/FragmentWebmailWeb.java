@@ -1,9 +1,7 @@
 package it.fdev.unisaconnect;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -35,7 +33,7 @@ import it.fdev.utils.Utils;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class FragmentWebmailWeb extends MySimpleFragment {
-	
+
 	private final String URL_CMD_IDENTIFIER = "UNISA_CONNECT-CMD-ID";
 	private final String URL_CMD_DELIMITER = "||^$||";
 	private static final String URL_STRING = "https://webmail.studenti.unisa.it/";
@@ -45,9 +43,11 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 	private MyWebView mWebView;
 	private Fragment thisFragment;
 	private CheckBox checkMailCheckbox;
-	
+
 	private JavascriptBridge jsBridge = new JavascriptBridge();
-	
+
+    private boolean isPaused = false;
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View mainView = (View) inflater.inflate(R.layout.fragment_webmail_web, container, false);
 		return mainView;
@@ -56,7 +56,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
+
 		checkMailCheckbox = (CheckBox) view.findViewById(R.id.check_mail_option);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress__bar);
 		mWebView = (MyWebView) view.findViewById(R.id.webview);
@@ -64,13 +64,13 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		mWebView.setFocusable(true);				// http://stackoverflow.com/questions/12325720/nullpointerexception-in-webview-java-android-webkit-webviewprivatehandler-hand
 		mWebView.requestFocus();					//
 		thisFragment = this;
-		
+
 		mDataManager = new SharedPrefDataManager(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;
 		}
-		
+
 		checkMailCheckbox.setChecked(mDataManager.getMailDoCheck());
 		checkMailCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -79,7 +79,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 				MailChecker.autoSetAlarm(mActivity);
 			}
 		});
-		
+
 		CookieSyncManager.createInstance(mActivity);
 		CookieManager cookieManager = CookieManager.getInstance();
 		cookieManager.removeAllCookie();
@@ -87,21 +87,21 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		startWebView();
 		return;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private void startWebView() {
 		if(!Utils.hasConnection(mActivity)) {
 			Utils.goToInternetError(mActivity, thisFragment);
 			return;
 		}
-		
+
 		mWebView.setBackgroundColor(resources.getColor(android.R.color.white));
 		WebSettings webSettings = mWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setSavePassword(false);
 		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-		
+
 		mWebView.addJavascriptInterface(jsBridge, "UnisaConnectInterface");
 
 //		mWebView.setDownloadListener(new DownloadListener() {
@@ -111,7 +111,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 //				startActivity(i);
 //			}
 //		});
-		
+
 		mWebView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {
 				// Activities and WebViews measure progress with different scales.
@@ -119,7 +119,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 				progressBar.setProgress(progress);
 			}
 		});
-		
+
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onFormResubmission(WebView view, Message dontResend, Message resend)
@@ -132,38 +132,12 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 			}
 
 			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url == null || url.length() == 0)
-					return false;
-
-				if (!(url.startsWith("https://") || url.startsWith("http://")))
-					return false;
-				int doubleslash = url.indexOf("//");
-				if (doubleslash == -1)
-					doubleslash = 0;
-				else
-					doubleslash += 2;
-				int end = url.indexOf('/', doubleslash);
-				end = end >= 0 ? end : url.length();
-				String domain = url.substring(doubleslash, end);
-				if (domain.contains("webmail") && domain.contains("unisa.it")) {
-					view.loadUrl(url);
-					return true;
-				} else {
-					Uri uri = Uri.parse(url);
-					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-					startActivity(intent);
-					return true;
-				}
-			}
-
-			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				progressBar.setVisibility(View.VISIBLE);
 				mActivity.setLoadingVisible(true, false);
 			}
-	     
+
 			// Quando il caricamento si completa rimuovi il dialog
 			@Override
 			public void onPageFinished(WebView view, String url) {
@@ -176,6 +150,9 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
+                    if (isPaused) {
+                        return;
+                    }
                 	if (!URL_STRING.equals(view.getUrl())) {
 						return;
 					}
@@ -196,13 +173,13 @@ public class FragmentWebmailWeb extends MySimpleFragment {
     	                		"} " +
         	    			"}; "
 	        	    	);
-        			}
-                	
+					}
+
                 }
             }
         });
 	}
-	
+
 	public class JavascriptBridge {
 		@JavascriptInterface
         public void dismissDialog(){
@@ -233,7 +210,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		    });
         }
     }
-	
+
 	@Override
 	public boolean goBack() {
 		if(mWebView.canGoBack()) {
@@ -242,14 +219,14 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		} else
 			return super.goBack();
 	}
-	
+
 	@Override
 	public Set<Integer> getActionsToShow() {
 		Set<Integer> actionsToShow = new HashSet<Integer>();
 		actionsToShow.add(R.id.action_refresh_button);
 		return actionsToShow;
 	}
-	
+
 	@Override
 	public void actionRefresh() {
 		if (!isAdded() || mWebView == null) {
@@ -259,12 +236,13 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 			Utils.goToInternetError(mActivity, thisFragment);
 			return;
 		}
-		mWebView.reload();
+//		mWebView.reload();
 	}
-	
+
 	@Override
 	public void onPause() {
 		try {
+            isPaused = true;
 			mWebView.setVisibility(View.GONE);	// Workaround for nullpointerexception
 			mWebView.stopLoading();
 		} catch (Exception e) {
@@ -273,17 +251,18 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		}
 		super.onPause();
 	}
-	
+
 	@Override
 	public void onResume() {
 		try {
+            isPaused = false;
 			mWebView.setVisibility(View.VISIBLE);
 			mWebView.reload();
 		} catch (Exception e) {
 		}
 		super.onResume();
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		try {
@@ -294,7 +273,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		}
 		super.onStop();
 	}
-	
+
 	@Override
 	public int getTitleResId() {
 		return R.string.webmail;
