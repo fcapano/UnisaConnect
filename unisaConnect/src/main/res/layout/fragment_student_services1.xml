@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:custom="http://schemas.android.com/apk/res/it.fdev.unisaconnect"
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/account_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            custom:img="@drawable/ic_icon_person"
+            custom:text="@string/account" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/web_page_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            custom:img="@drawable/ic_icon_link"
+            custom:text="@string/esse3_pagina_web" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/libretto_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            custom:img="@drawable/ic_icon_libretto"
+            custom:text="@string/libretto" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/appelli_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            custom:img="@drawable/ic_icon_calendar"
+            custom:text="@string/appelli" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/pagamenti_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            custom:img="@drawable/ic_icon_money"
+            custom:text="@string/pagamenti" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/webmail_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            custom:img="@drawable/ic_icon_mail"
+            custom:text="@string/webmail" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/presenze_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            custom:img="@drawable/ic_icon_presenze"
+            custom:text="@string/presenze" />
+
+        <it.fdev.utils.CustomButtonWithImg
+            android:id="@+id/autocertificazioni_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            custom:img="@drawable/transparent"
+            custom:text="@string/autocertificazioni" />
+    </LinearLayout>
+
+</ScrollView>

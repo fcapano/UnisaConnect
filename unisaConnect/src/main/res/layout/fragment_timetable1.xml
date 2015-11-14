@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/timetable_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/timetable_background" >
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/timetable_margin_top"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/timetable_header_background" />
+
+    <View
+        android:layout_width="@dimen/timetable_margin_left"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/timetable_header_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal" >
+
+        <View
+            android:id="@+id/sep"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="@dimen/timetable_margin_top" />
+
+        <View
+            android:id="@+id/sd0"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/timetable_margin_top"
+            android:background="@color/timetable_separator" />
+
+        <TextView
+            android:id="@+id/d1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/timetable_margin_top"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/monday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/sd1"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/timetable_margin_top"
+            android:background="@color/timetable_separator" />
+
+        <TextView
+            android:id="@+id/d2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/timetable_margin_top"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/thusday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/sd2"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/timetable_margin_top"
+            android:background="@color/timetable_separator" />
+
+        <TextView
+            android:id="@+id/d3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/timetable_margin_top"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/wensday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/sd3"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/timetable_margin_top"
+            android:background="@color/timetable_separator" />
+
+        <TextView
+            android:id="@+id/d4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/timetable_margin_top"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/thursday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/sd4"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/timetable_margin_top"
+            android:background="@color/timetable_separator"
+            android:textColor="@color/timetable_header_text_color" />
+
+        <TextView
+            android:id="@+id/d5"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/timetable_margin_top"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/friday"
+            android:textAllCaps="true"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/sep1"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="@dimen/timetable_margin_top" />
+
+        <TextView
+            android:id="@+id/h8"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_8"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h9"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_9"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h10"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_10"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h11"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_11"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h12"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_12"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h13"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_13"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h14"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_14"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h15"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_15"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h16"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_16"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h17"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_17"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h18"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|right"
+            android:paddingRight="2dp"
+            android:text="@string/_18"
+            android:textColor="@color/timetable_header_text_color"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/sep2"
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="@dimen/timetable_margin_top" />
+
+        <View
+            android:id="@+id/sh8"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh9"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh10"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh11"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh12"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh13"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh14"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh15"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh16"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh17"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh18"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+
+        <View
+            android:layout_width="@dimen/timetable_margin_left"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/sh19"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/timetable_margin_left"
+            android:background="@color/timetable_separator" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/lessons_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+    </RelativeLayout>
+
+</RelativeLayout>

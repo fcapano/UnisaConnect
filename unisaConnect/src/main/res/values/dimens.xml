@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="slidingmenu_width">240dp</dimen>
+    <dimen name="list_padding">10dp</dimen>
+    <dimen name="shadow_width">10dp</dimen>
+    <integer name="num_cols">1</integer>
+    
+    <!-- Timetable Dimensions -->
+	<dimen name="timetable_margin_top">20dp</dimen>
+	<dimen name="timetable_margin_top_half">20dp</dimen>
+	<dimen name="timetable_margin_top_half_neg">-20dp</dimen>
+	<dimen name="timetable_margin_left">20dp</dimen>
+	<dimen name="timetable_colopicker_square">35dp</dimen>
+	<!-- End of Timetable Dimensions -->
+	
+	<!-- Cards Animations -->
+	<integer name="durata_animazione_offset_card">1</integer>
+	<!-- End of Cards Animations -->
+
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomButtonWithImg">
+        <attr name="text" format="string" localization="suggested" />
+        <attr name="img" format="integer" />
+    </declare-styleable>
+    
+    <declare-styleable name="ExpandableTextView">
+        <attr name="maxLinesNum" format="integer" />
+    </declare-styleable>
+    
+    <declare-styleable name="RoundedImageView">
+        <attr name="corner_radius" format="dimension" />
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="round_background" format="boolean" />
+        <attr name="is_oval" format="boolean" />
+        <attr name="android:scaleType" />
+    </declare-styleable>
+    
+    <declare-styleable name="ExpandablePanel">
+       <attr name="handle" format="reference" />
+        <attr name="expandable_title" format="reference" />
+        <attr name="expandable_content1" format="reference" />
+        <attr name="expandable_content2" format="reference" />
+        <attr name="collapsedHeight" format="dimension"/>
+        <attr name="animationDuration" format="integer"/>
+    </declare-styleable>
+
+</resources>

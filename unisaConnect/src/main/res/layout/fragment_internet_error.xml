@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:ignore="ContentDescription" >
+
+    <ImageView
+        android:id="@+id/error_internet_image"
+        android:layout_width="wrap_content"
+        android:layout_height="110sp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="2sp"
+        android:layout_marginRight="10sp"
+        android:scaleType="fitEnd"
+        android:src="@drawable/robot_disconnected"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/error_internet_text"
+        style="@style/bigBackgroundTextStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
+        android:text="@string/controlla_connessione" />
+
+</FrameLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/searchStaffLayout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="7dp" >
+
+        <EditText
+            android:id="@+id/staff_name"
+            style="@style/MyEditTextWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:drawableLeft="@drawable/ic_action_search_black"
+            android:gravity="left|center_vertical"
+            android:hint="@string/cerca_staff_name"
+            android:inputType="textNoSuggestions|textVisiblePassword" />
+
+        <ImageView
+            android:id="@+id/staff_name_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/staff_name"
+            android:layout_alignRight="@+id/staff_name"
+            android:layout_alignTop="@+id/staff_name"
+            android:layout_gravity="right|center_vertical"
+            android:paddingBottom="0dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_small_cancel_dark" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1dp"
+        android:fastScrollAlwaysVisible="true"
+        android:fastScrollEnabled="true"
+        android:paddingLeft="@dimen/list_padding"
+        android:paddingRight="@dimen/list_padding" />
+
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/presenze_non_disponibili"
+        style="@style/bigBackgroundTextStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right|center_vertical"
+        android:text="@string/presenze_non_disponibili"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/presenze_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/last_update_container"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/presenze_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/last_update_container"
+        layout="@layout/update_text" />
+
+</RelativeLayout>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menu_items">
+        <item>@string/servizi_esse3</item>
+        <item>@string/menu_mensa</item>
+        <item>@string/rubrica</item>
+        <item>@string/meteo</item>
+        <item>@string/orari_lezioni</item>
+        <item>@string/news</item>
+        <item>@string/map</item>
+        <item>@string/unisound</item>
+        <item>@string/contattaci</item>
+        <item>Bus</item>
+    </string-array>
+    
+    <string-array name="menu_icons">
+        <item>@drawable/ic_drawer_graduate</item>
+        <item>@drawable/ic_drawer_fork_knife</item>
+        <item>@drawable/ic_drawer_notebook</item>
+        <item>@drawable/ic_drawer_weather</item>
+        <item>@drawable/ic_drawer_timetable</item>
+        <item>@drawable/ic_drawer_news</item>
+        <item>@drawable/ic_drawer_mapicon</item>
+        <item>@drawable/ic_drawer_music</item>
+        <item>@drawable/ic_drawer_comments</item>
+        <item>@drawable/ic_drawer_bus</item>
+    </string-array>
+    
+    <string-array name="timetable_lesson_colors">
+        <item>@color/lesson_color_1</item>
+        <item>@color/lesson_color_2</item>
+        <item>@color/lesson_color_3</item>
+        <item>@color/lesson_color_4</item>
+        <item>@color/lesson_color_5</item>
+        <item>@color/lesson_color_6</item>
+        <item>@color/lesson_color_7</item>
+        <item>@color/lesson_color_8</item>
+        <item>@color/lesson_color_9</item>
+    </string-array>
+    
+    <!-- BIBLIOTECA -->
+    <string-array name="biblio_search_campo">
+        <item>Tutti i campi</item>
+        <item>Parole del Titolo</item>
+        <item>Titolo proprio</item>
+        <item>Autore</item>
+        <item>Nuovo Soggettario</item>
+        <item>Soggetto</item>
+        <item>Classificazione Dewey</item>
+        <item>ISSN</item>
+        <item>ISBN</item>
+        <item>Numero di sistema</item>
+        <item>Collocazione</item>
+        <item>Editore</item>
+        <item>Barcode</item>
+        <item>Anno</item>
+        <item>Inventario</item>
+        <item>Disciplina Tesi</item>
+        <item>Biblioteche</item>
+    </string-array>
+    <string-array name="biblio_search_campo_VALUES">
+        <item>WRD</item>
+        <item>WTI</item>
+        <item>TIT</item>
+        <item>WAU</item>
+        <item>WSO</item>
+        <item>WSU</item>
+        <item>DDC</item>
+        <item>ISSN</item>
+        <item>ISBN</item>
+        <item>SYS</item>
+        <item>COL</item>
+        <item>PUB</item>
+        <item>BAR</item>
+        <item>WYR</item>
+        <item>INV</item>
+        <item>WTE</item>
+        <item>WSB</item>
+    </string-array>
+    
+    <string-array name="biblio_search_lingua">
+        <item>Tutte</item>
+        <item>Francese</item>
+        <item>Inglese</item>
+        <item>Italiano</item>
+        <item>Spagnolo</item>
+        <item>Tedesco</item>
+    </string-array>
+    <string-array name="biblio_search_lingua_VALUES">
+        <item></item>
+        <item>FRE</item>
+        <item>ENG</item>
+        <item>ITA</item>
+        <item>SPA</item>
+        <item>GER</item>
+    </string-array>
+    
+    <string-array name="biblio_search_formato">
+        <item>Tutti</item>
+        <item>Monografie</item>
+        <item>Periodici</item>
+        <item>Tesi</item>
+        <item>E-Book</item>
+        <item>Antico</item>
+        <item>Risorse elettroniche</item>
+    </string-array>
+    <string-array name="biblio_search_formato_VALUES">
+        <item></item>
+        <item>BK</item>
+        <item>SE</item>
+        <item>TH</item>
+        <item>EB</item>
+        <item>A</item>
+        <item>ER</item>
+    </string-array>
+    
+    <string-array name="biblio_search_area_disciplinare">
+        <item>Tutte</item>
+		<item>Area Economica</item>
+		<item>Area Farmaceutica</item>
+		<item>Area Giuridica</item>
+		<item>Area Tecnologica</item>
+		<item>Area Umanistica</item>
+		<item>Area Tecnologica</item>
+		<item>Area Scientifica</item>
+		<item>Area Medica</item>
+		<item>Fondo Cuomo</item>
+		<item>Scienze Economiche e Statistiche</item>
+		<item>Fondo Antico</item>
+		<item>Fondo Ventimiglia</item>
+		<item>Fondo Locale</item>
+		<item>Fondo Belga</item>
+		<item>Fondo Stabile</item>
+		<item>Fondo Paparelli</item>
+		<item>Fondo Grottanelli</item>
+		<item>Fondo Sodano</item>
+		<item>Fondo Cenzato</item>
+		<item>Fondo De Cecco</item>
+		<item>Fondo Ingrosso</item>
+		<item>Centro Documentazione Europea</item>
+		<item>DIPSUM-STUDI LING.E LETTERARI</item>
+		<item>SPSC-SOC. E SCIENZA POLITICA</item>
+		<item>DIPSUM-LETT. ARTE E SPETTACOLO</item>
+		<item>DIPSUM-SCIENZE DELL&amp;ANTICHITA&amp;</item>
+		<item>DIPARTIMENTO DI FISICA</item>
+		<item>DICIV-INGEGNERIA CIVILE</item>
+		<item>DIIN-INGEGNERIA MECCANICA</item>
+		<item>DISPAC-LATINITA&amp; E MEDIOEVO</item>
+		<item>DIRPE-RAPPORTI CIVILI ECONOMICI</item>
+		<item>DDPTSI-TEORIA STORIA ISTITUZ.</item>
+		<item>SIDEM-STUDI INTERNAZIONALI</item>
+		<item>DIP.TEORIA E STORIA DIRITTO</item>
+		<item>DISTRA-STUDI RICERCHE AZIENDALI</item>
+		<item>DIPSUM-SCIENZE STORICHE SOCIALI</item>
+		<item>DISPAC-BENI CULTURALI</item>
+		<item>DDPTSI-DIR. PUBBLICO GENERALE</item>
+		<item>BIBLIOTECA DI FILOSOFIA</item>
+		<item>Archivio Tesi</item>
+		<item>DIP. INGEGNERIA MECCANICA</item>
+		<item>Risorse Elettroniche</item>
+    </string-array>
+    <string-array name="biblio_search_area_disciplinare_VALUES">
+        <item></item>
+		<item>ECO</item>
+		<item>FAR</item>
+		<item>GIU</item>
+		<item>TEC</item>
+		<item>UMA</item>
+		<item>TEC</item>
+		<item>SCI</item>
+		<item>MED</item>
+		<item>CUOMO</item>
+		<item>DISES</item>
+		<item>ANT</item>
+		<item>VEN</item>
+		<item>LOCA</item>
+		<item>FF</item>
+		<item>FS</item>
+		<item>FPAP</item>
+		<item>FG</item>
+		<item>FSO</item>
+		<item>CEN</item>
+		<item>DEC</item>
+		<item>INGR</item>
+		<item>CDE</item>
+		<item>DSLL</item>
+		<item>DSSP</item>
+		<item>DLAS</item>
+		<item>DSA</item>
+		<item>DF</item>
+		<item>DIC</item>
+		<item>DIMEC</item>
+		<item>DILAM</item>
+		<item>DIRCE</item>
+		<item>DITES</item>
+		<item>DSIN</item>
+		<item>DTSD</item>
+		<item>DISTR</item>
+		<item>DSSS</item>
+		<item>DBC</item>
+		<item>DDPG</item>
+		<item>FIL</item>
+		<item>TESI</item>
+		<item>DIMEC</item>
+		<item>ER</item>
+    </string-array>
+    <!-- END BIBLIOTECA -->
+    
+	<!-- @TODO Usa gli strumenti Java per le date -->
+     <string-array name="giorni_settimana_array">
+        <item>Lunedì</item>
+        <item>Martedì</item>
+        <item>Mercoledì</item>
+        <item>Giovedì</item>
+        <item>Venerdì</item>
+    </string-array>
+</resources>
