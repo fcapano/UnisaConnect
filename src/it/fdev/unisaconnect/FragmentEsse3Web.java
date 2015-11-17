@@ -46,7 +46,8 @@ public class FragmentEsse3Web extends MySimpleFragment {
 	private SharedPrefDataManager mDataManager;
 	private boolean didSendLoginData = false;
 	private Fragment thisFragment;
-	
+    private boolean acceptedPrivacy = false;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View mainView = (View) inflater.inflate(R.layout.web_fragment, container, false);
@@ -112,7 +113,7 @@ public class FragmentEsse3Web extends MySimpleFragment {
 		webSettings.setLoadsImagesAutomatically(true);
 		webSettings.setBuiltInZoomControls(true);
 		webSettings.setSupportZoom(true);
-		webSettings.setJavaScriptEnabled(false);
+		webSettings.setJavaScriptEnabled(true);
 		
 		mWebView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {
@@ -168,6 +169,10 @@ public class FragmentEsse3Web extends MySimpleFragment {
 				progressBar.setVisibility(View.GONE);
 				mActivity.setLoadingVisible(false, false);
 				didSendLoginData = false;
+                if(!acceptedPrivacy) {
+                    view.loadUrl("javascript:cookies.set()");
+                    acceptedPrivacy = true;
+                }
 			}
 		});
 
