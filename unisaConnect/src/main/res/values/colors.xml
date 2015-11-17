@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="orange_actionbar">#F4842D</color>
+	<color name="orange_actionbar">#F4842D</color>
+    <!-- get white text in the recent's actionbar (>LOLLIPOP) -->
+	<color name="orange_actionbar_recents">#de7829</color>
     <color name="orange_light">#FFBD59</color>
-    <color name="orange_dark">#E38800</color>
+    <color name="orange_dark">#be631d</color>
     
     <color name="orange_actionbar_transparent_50">#80F4842D</color>
    	<color name="orange_actionbar_transparent_40">#66F4842D</color>
@@ -57,5 +59,12 @@
 	<color name="lesson_color_7">#FFBB6E</color>
 	<color name="lesson_color_8">#F21616</color>
 	<color name="lesson_color_9">#16F28F</color>
+	<color name="accent_material_light">#f46b00</color>
+	<color name="white">#2f2f2f</color>
+	<color name="primaryText">#000000</color>
+	<color name="primaryTextInverse">#ffffff</color>
+	<color name="secundaryText">#262626</color>
+	<color name="secundaryTextInverse">#c4c4c4</color>
+	<color name="colorPrimaryDark">#c06825</color>
 	<!-- End of Timetable Lessons Colors -->
 </resources>

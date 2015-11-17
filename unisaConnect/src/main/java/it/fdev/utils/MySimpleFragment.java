@@ -13,7 +13,7 @@ import it.fdev.unisaconnect.MainActivity;
 public abstract class MySimpleFragment extends Fragment implements MyFragmentInterface {
 	protected MainActivity mActivity;
 	protected Resources resources;
-	
+
 	private boolean firstRun = true;
 
 	@Override

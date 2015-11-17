@@ -10,7 +10,6 @@
         <item>@string/map</item>
         <item>@string/unisound</item>
         <item>@string/contattaci</item>
-        <item>Bus</item>
     </string-array>
     
     <string-array name="menu_icons">
@@ -23,7 +22,6 @@
         <item>@drawable/ic_drawer_mapicon</item>
         <item>@drawable/ic_drawer_music</item>
         <item>@drawable/ic_drawer_comments</item>
-        <item>@drawable/ic_drawer_bus</item>
     </string-array>
     
     <string-array name="timetable_lesson_colors">

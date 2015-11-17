@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res/it.fdev.unisaconnect"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -32,8 +32,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?android:textColorPrimary" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
                 android:id="@id/course_ingredients_it"
@@ -62,44 +61,5 @@
                 android:scaleType="fitEnd" />
         </RelativeLayout>
     </it.fdev.utils.ExpandablePanel>
-
-    <!-- <LinearLayout -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_margin="0dp" -->
-    <!-- android:background="@drawable/card_background" -->
-    <!-- android:orientation="vertical" -->
-    <!-- android:padding="7dp" -->
-    <!-- android:visibility="gone" > -->
-
-
-    <!-- <TextView -->
-    <!-- android:id="@+id/course_name" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:gravity="left" -->
-    <!-- android:paddingBottom="3dp" -->
-    <!-- android:textAppearance="?android:attr/textAppearanceLarge" -->
-    <!-- android:textColor="?android:textColorPrimary" /> -->
-
-
-    <!-- <TextView -->
-    <!-- android:id="@+id/course_ingredients_it" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:gravity="left" -->
-    <!-- android:textAppearance="@android:style/TextAppearance.Small" -->
-    <!-- android:textColor="?android:textColorSecondary" /> -->
-
-
-    <!-- <TextView -->
-    <!-- android:id="@+id/course_ingredients_en" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_marginTop="2dp" -->
-    <!-- android:gravity="left" -->
-    <!-- android:textAppearance="@android:style/TextAppearance.Small" -->
-    <!-- android:textColor="?android:textColorSecondary" /> -->
-    <!-- </LinearLayout> -->
 
 </LinearLayout>

@@ -37,7 +37,7 @@ public class FragmentStaffSearch extends MyListFragment {
 			return;
 		}
 		
-		adapter = new ListAdapterStaff(mActivity, R.layout.staff_search_row1, new ArrayList<StaffMemberSummary>());
+		adapter = new ListAdapterStaff(mActivity, R.layout.staff_search_row, new ArrayList<StaffMemberSummary>());
 		setListAdapter(adapter);
 	}
 

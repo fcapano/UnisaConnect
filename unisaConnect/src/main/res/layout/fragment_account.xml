@@ -33,7 +33,7 @@
             android:layout_marginTop="15dp"
             android:hint="@string/unisa_mail"
             android:inputType="textNoSuggestions|textVisiblePassword"
-            android:textColor="@color/darker_gray" />
+            android:textColor="?android:textColorSecondary" />
 
         <EditText
             android:id="@+id/pass"
@@ -42,7 +42,7 @@
             android:layout_marginTop="15dp"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:textColor="@color/darker_gray" />
+            android:textColor="?android:textColorSecondary" />
 
         <CheckBox
             android:id="@+id/loginAutomatica"
@@ -51,8 +51,7 @@
             android:layout_marginTop="15dp"
             android:checked="true"
             android:text="@string/login_automatica"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:textColorPrimary" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/buttonSave"

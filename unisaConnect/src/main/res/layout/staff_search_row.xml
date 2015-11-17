@@ -1,37 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:orientation="horizontal" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/activity_background"
+    android:clickable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="vertical"
+    android:paddingBottom="3dp"
+    android:paddingTop="3dp" >
 
-    <!-- <it.fdev.utils.RoundedImageView -->
-    <!-- android:id="@+id/row_icon" -->
-    <!-- android:layout_width="60dp" -->
-    <!-- android:layout_height="60dp" -->
-    <!-- android:layout_margin="0dp" -->
-    <!-- android:padding="5dp" -->
-    <!-- android:scaleType="centerCrop" -->
-    <!-- android:src="@drawable/transparent" -->
-    <!-- custom:is_oval="true" -->
-    <!-- custom:round_background="true" /> -->
-
-    <ImageView
-        android:id="@+id/row_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
         android:layout_margin="0dp"
-        android:padding="5dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/transparent" />
+        android:background="@drawable/card_background"
+        android:orientation="horizontal"
+        android:padding="0dp" >
 
-    <TextView
-        android:id="@+id/row_title"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:singleLine="true"
-        android:textAppearance="@android:style/TextAppearance.Medium" />
+        <!-- http://cypressnorth.com/mobile-application-development/setting-android-google-volley-imageloader-networkimageview/ -->
+        <!-- <com.android.volley.toolbox.NetworkImageView -->
+        <!-- android:id="@+id/row_icon_volley" -->
+        <!-- android:layout_width="70dp" -->
+        <!-- android:layout_height="70dp" -->
+        <!-- android:layout_margin="5dp" -->
+        <!-- android:maxHeight="70dp" -->
+        <!-- android:maxWidth="70dp" -->
+        <!-- android:scaleType="centerCrop" -->
+        <!-- android:src="@drawable/generic_profile_icon" -->
+        <!-- android:visibility="gone" /> -->
+
+        <ImageView
+            android:id="@+id/row_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/generic_profile_icon"
+            android:maxHeight="70dp"
+            android:maxWidth="70dp"
+            android:scaleType="centerCrop" />
+
+        <!-- <it.fdev.utils.RoundedImageView -->
+        <!-- android:id="@+id/row_icon" -->
+        <!-- android:layout_width="70dp" -->
+        <!-- android:layout_height="70dp" -->
+        <!-- android:layout_margin="5dp" -->
+        <!-- android:background="@drawable/generic_profile_icon" -->
+        <!-- android:maxHeight="70dp" -->
+        <!-- android:maxWidth="70dp" -->
+        <!-- android:scaleType="centerCrop" /> -->
+
+
+        <!-- <ImageView -->
+        <!-- android:id="@+id/row_icon_generic" -->
+        <!-- android:layout_width="70dp" -->
+        <!-- android:layout_height="70dp" -->
+        <!-- android:layout_gravity="center_vertical" -->
+        <!-- android:layout_margin="5dp" -->
+        <!-- android:maxHeight="70dp" -->
+        <!-- android:maxWidth="70dp" -->
+        <!-- android:scaleType="centerInside" -->
+        <!-- android:src="@drawable/generic_profile_icon" -->
+        <!-- android:visibility="gone" /> -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="3dp"
+            android:orientation="vertical"
+            android:padding="0dp" >
+
+            <TextView
+                android:id="@+id/row_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+            <TextView
+                android:id="@+id/row_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLines="2"
+                android:paddingLeft="1dp"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="?android:textColorSecondary"/>
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

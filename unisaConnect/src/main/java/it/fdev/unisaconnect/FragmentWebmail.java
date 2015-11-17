@@ -19,16 +19,16 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 
 import it.fdev.mailSync.MailChecker;
 import it.fdev.mailSync.MailIntentService;
 import it.fdev.unisaconnect.MainActivity.BootableFragmentsEnum;
+import it.fdev.unisaconnect.data.EmailMessage;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.MySimpleFragment;
 import it.fdev.utils.Utils;
@@ -61,9 +61,9 @@ public class FragmentWebmail extends MySimpleFragment {
 	public void onNewBroadcast(Context context, Intent intent) {
 		try {
 			if (MailIntentService.BROADCAST_STATE_MAIL_LIST.equals(intent.getAction())) {
-				if (intent.hasExtra("list")) {
-					Message[] mailList = (Message[]) intent.getParcelableArrayExtra("list");
-					if (mailList != null && mailList.length > 0) {
+				if (MailIntentService.messageList != null) {
+					List<EmailMessage> mailList = MailIntentService.messageList;
+					if (mailList != null && mailList.size() > 0) {
 						addMailList(mailList);
 					} else {
 						addMailList(null);
@@ -205,8 +205,8 @@ public class FragmentWebmail extends MySimpleFragment {
 		return R.string.webmail;
 	}
 
-	private void addMailList(Message[] messageList) {
-		if (messageList == null || messageList.length <= 0) {
+	private void addMailList(List<EmailMessage> messageList) {
+		if (messageList == null || messageList.size() <= 0) {
 			Log.d(Utils.TAG, "list null");
 			return;
 		}
@@ -214,7 +214,7 @@ public class FragmentWebmail extends MySimpleFragment {
 		
 		LayoutInflater layoutInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		for (Message message : messageList) {
+		for (EmailMessage message : messageList) {
 			try {
 				LinearLayout cMailView = inflateMail(message, layoutInflater);
 				mailListView.addView(cMailView);
@@ -225,23 +225,18 @@ public class FragmentWebmail extends MySimpleFragment {
 
 	}
 
-	private LinearLayout inflateMail(Message message, LayoutInflater layoutInflater) throws MessagingException {
+	private LinearLayout inflateMail(EmailMessage message, LayoutInflater layoutInflater) throws MessagingException {
 		LinearLayout mailView = (LinearLayout) layoutInflater.inflate(R.layout.mail_row, null);
 
 		TextView senderView = (TextView) mailView.findViewById(R.id.mail_sender);
-		senderView.setText(message.getFrom()[0].toString());
+		senderView.setText(message.getFrom());
 		
 		TextView subjectView = (TextView) mailView.findViewById(R.id.mail_subject);
 		subjectView.setText(message.getSubject());
 		
 		TextView contentView = (TextView) mailView.findViewById(R.id.mail_text);
-		try {
-			contentView.setText(message.getContent().toString().substring(0, 50));
-		} catch (IOException e) {
-			contentView.setVisibility(View.GONE);
-			e.printStackTrace();
-		}
-		
+        contentView.setText(message.getContent().substring(0, 50));
+
 		return mailView;
 	}
 

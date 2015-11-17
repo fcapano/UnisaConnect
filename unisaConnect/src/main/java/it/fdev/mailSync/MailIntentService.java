@@ -6,17 +6,21 @@ import android.content.Intent;
 
 import com.sun.mail.imap.IMAPFolder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Store;
 
 import it.fdev.scraper.esse3.Esse3BasicScraper.LoadStates;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.unisaconnect.R;
+import it.fdev.unisaconnect.data.EmailMessage;
 import it.fdev.unisaconnect.data.SharedPrefDataManager;
 import it.fdev.utils.Utils;
 
@@ -25,6 +29,7 @@ public class MailIntentService extends IntentService {
 	public final static String BROADCAST_STATE_MAIL_LIST = "it.fdev.mail.list";
 
 	public static boolean isRunning = false;
+    public static List<EmailMessage> messageList = null;
 
 	private Context mContext;
 	private SharedPrefDataManager mDataManager;
@@ -48,16 +53,17 @@ public class MailIntentService extends IntentService {
 
 		Utils.sendLoadingMessage(mContext, R.string.cerco_libro);
 
-		Message[] list = getMailList();
+        messageList = getMailList();
 
-		Utils.broadcastStatus(mContext, BROADCAST_STATE_MAIL_LIST, "list", list);
+		Utils.broadcastStatus(mContext, BROADCAST_STATE_MAIL_LIST, "list", null);
 		isRunning = false;
 		stopForeground(true);
-		stopSelf();
+        stopSelf();
 		return;
 	}
 
-	private Message[] getMailList() {
+	private List<EmailMessage> getMailList() {
+        List<EmailMessage> messages = new ArrayList<>();
 		IMAPFolder folder = null;
 		Store store = null;
 
@@ -81,8 +87,24 @@ public class MailIntentService extends IntentService {
 			int oldestMessageToGet = Math.max(0, numMsg - 20);
 
 			Message[] messageList = folder.getMessages(oldestMessageToGet, numMsg);
+            for (Message m : messageList) {
+                try {
+                    String a = m.getFrom()[0].toString();
+                    String b = m.getSubject();
+//                    Enumeration d = m.getAllHeaders();
+//                    while (d.hasMoreElements()) {
+//                        Header header = (Header) d.nextElement();
+//                        System.out.printf("%s: %s%n", header.getName(), header.getValue());
+//                    }
+                    Multipart c = (Multipart) m.getContent();
+
+                    messages.add(new EmailMessage(m.getFrom()[0].toString(), m.getSubject(), m.getContent().toString()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 			
-			return messageList;
+			return messages;
 
 		} catch (MessagingException e) {
 			e.printStackTrace();

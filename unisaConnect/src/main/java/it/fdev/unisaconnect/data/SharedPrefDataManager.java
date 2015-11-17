@@ -10,7 +10,6 @@ import com.securepreferences.SecurePreferences;
 import java.io.Serializable;
 import java.util.Date;
 
-import it.fdev.encryptionUtils.CryptoMan_2;
 import it.fdev.unisaconnect.MainActivity;
 import it.fdev.utils.MyFragmentInterface;
 import it.fdev.utils.ObjectSerializer;
@@ -62,60 +61,11 @@ public class SharedPrefDataManager {
 	
 	// Testing
 	private static final String PREF_TESTING_ENABLED = "testingEnabled";
-	// Crypto
-	private static final String PREF_ENCRYPTION_VERSION = "encryptionVersion";
-	private static final int CRYPTO_VERSION = 4;	// 2=0.5 3=0.6.2 4=0.6.9
-	
-	
+
+
 	public SharedPrefDataManager(Context context) {
 		mSecurePrefs = new SecurePreferences(context);
 		mPrefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-		
-		int cVersion = mPrefs.getInt(PREF_ENCRYPTION_VERSION, CRYPTO_VERSION);
-		if (cVersion < CRYPTO_VERSION) {
-			updateDataToCurrentVersion();
-		}
-		
-		mPrefs.edit().putInt(PREF_ENCRYPTION_VERSION, CRYPTO_VERSION).commit();
-	}
-	
-	public void updateDataToCurrentVersion() {
-		try {
-			if (CRYPTO_VERSION == 4) { //Intro to securepreferences
-				
-				if (mSecurePrefs.getString(PREF_USER, null)!=null && mSecurePrefs.getString(PREF_PASS, null)!=null) {
-					return;
-				}
-				
-				String username, password;
-				String userCod = mPrefs.getString(PREF_USER, null);
-				String passCod = mPrefs.getString(PREF_PASS, null);
-				if (userCod != null && passCod != null) {
-					username = CryptoMan_2.decrypt(userCod);
-					password = CryptoMan_2.decrypt(passCod);
-				} else {
-					username = null;
-					password = null;
-					removeData();
-				}
-				if (username==null || password==null) {
-					return;
-				}
-				
-				Editor editor = mPrefs.edit();
-				editor.remove(PREF_USER);
-				editor.remove(PREF_PASS);
-				editor.commit();
-				
-				com.securepreferences.SecurePreferences.Editor secureEditor = mSecurePrefs.edit();
-				secureEditor.putString(PREF_USER, username);
-				secureEditor.putString(PREF_PASS, password);
-				secureEditor.commit();
-			}
-		} catch(Exception e) {
-			Log.e(Utils.TAG, "Exception converting to secureEditor", e);
-			removeData();
-		}
 	}
 	
 	//Controlla che siano stati precedentemente salvati i dati di login

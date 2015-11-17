@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/libretto_vuoto"
@@ -11,15 +11,15 @@
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
         android:text="@string/libretto_vuoto"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <include
         android:id="@+id/last_update_container"
+        layout="@layout/update_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        layout="@layout/update_text" />
+        android:layout_alignParentRight="true"/>
 
     <LinearLayout
         android:id="@+id/riepilogo_libretto"
@@ -35,76 +35,70 @@
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp" >
+        android:paddingTop="5dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:text="@string/cfu_conseguiti"
-                android:textColor="?android:textColorPrimary" />
+                android:text="@string/cfu_conseguiti"/>
 
             <TextView
                 android:id="@+id/cfu_conseguiti"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
                 android:textStyle="bold"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"/>
 
             <TextView
                 android:id="@+id/cfu_totali"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorPrimary"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
-        
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
-            android:background="@color/lighter_gray" />
+            android:background="@color/lighter_gray"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:text="@string/media_aritmetica"
-                android:textColor="?android:textColorPrimary" />
+                android:text="@string/media_aritmetica"/>
 
             <TextView
                 android:id="@+id/avg_arithmetic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/su_30"
-                android:textColor="?android:textColorPrimary"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <View
@@ -112,34 +106,31 @@
             android:layout_height="1dp"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
-            android:background="@color/lighter_gray" />
+            android:background="@color/lighter_gray"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:text="@string/media_ponderata"
-                android:textColor="?android:textColorPrimary" />
+                android:text="@string/media_ponderata"/>
 
             <TextView
                 android:id="@+id/avg_weighted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/su_30"
-                android:textColor="?android:textColorPrimary"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <View
@@ -147,34 +138,31 @@
             android:layout_height="1dp"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
-            android:background="@color/lighter_gray" />
+            android:background="@color/lighter_gray"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:text="@string/parti_da"
-                android:textColor="?android:textColorPrimary" />
+                android:text="@string/parti_da"/>
 
             <TextView
                 android:id="@+id/base_mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/su_110"
-                android:textColor="?android:textColorPrimary"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -183,12 +171,12 @@
         android:layout_height="match_parent"
         android:layout_below="@id/riepilogo_libretto"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="3dp" >
+        android:layout_marginTop="3dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp" >
+            android:layout_marginTop="7dp">
 
             <RelativeLayout
                 android:id="@+id/libretto_line_graph_container"
@@ -197,7 +185,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/card_background"
-                android:paddingBottom="2dp" >
+                android:paddingBottom="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -205,12 +193,12 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:text="@string/andamenti_esami"
-                    android:textColor="?android:textColorSecondary" />
+                    android:textColor="?android:textColorSecondary"/>
 
                 <com.echo.holographlibrary.LineGraph
                     android:id="@+id/libretto_line_graph"
                     android:layout_width="fill_parent"
-                    android:layout_height="110dp" />
+                    android:layout_height="110dp"/>
 
                 <LinearLayout
                     android:id="@+id/libretto_graph_esame_container"
@@ -224,19 +212,19 @@
                     android:gravity="bottom|center_horizontal"
                     android:orientation="vertical"
                     android:padding="0dp"
-                    android:visibility="gone" >
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/libretto_graph_esame_nome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="?android:textColorSecondary" />
+                        android:textColor="?android:textColorSecondary"/>
 
                     <TextView
                         android:id="@+id/libretto_graph_esame_superato"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="?android:textColorSecondary" />
+                        android:textColor="?android:textColorSecondary"/>
                 </LinearLayout>
             </RelativeLayout>
 
@@ -256,7 +244,7 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp" >
+                android:paddingTop="10dp">
 
                 <ImageView
                     android:id="@+id/sorter_icon"
@@ -265,7 +253,7 @@
                     android:layout_marginRight="3dp"
                     android:padding="0dp"
                     android:scaleType="fitEnd"
-                    android:src="@drawable/ic_icon_sort" />
+                    android:src="@drawable/ic_icon_sort"/>
 
                 <ProgressBar
                     android:id="@+id/sorter_loading"
@@ -275,7 +263,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:indeterminate="true"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/sorter_text"
@@ -283,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:padding="0dp"
-                    android:text="@string/ordina_per_nome" />
+                    android:text="@string/ordina_per_nome"/>
             </LinearLayout>
 
             <LinearLayout
@@ -294,7 +282,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/sorter_button"
-                android:orientation="vertical" >
+                android:orientation="vertical">
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

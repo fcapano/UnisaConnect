@@ -1,5 +1,6 @@
 package it.fdev.unisaconnect;
 
+import android.app.ActivityManager;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +11,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,18 +20,21 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -58,7 +64,7 @@ import it.fdev.utils.Utils;
 
 //import com.google.analytics.tracking.android.EasyTracker;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
 	public static boolean isTestingAPK = false;
 	public static final String INTENT_LAUNCH_FRAGMENT = "it.fdev.launch_fragment";
@@ -77,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
 	static {
 		fragmentsIDs.put(BootableFragmentsEnum.ACCOUNT, FragmentAccount.class);
 		fragmentsIDs.put(BootableFragmentsEnum.MENSA, FragmentMensa.class);
-		fragmentsIDs.put(BootableFragmentsEnum.WEBMAIL, FragmentWebmail.class);
+		fragmentsIDs.put(BootableFragmentsEnum.WEBMAIL, FragmentWebmailWeb.class);
 		fragmentsIDs.put(BootableFragmentsEnum.STUDENT_SERVICES, FragmentStudentServices.class);
 		fragmentsIDs.put(BootableFragmentsEnum.STAFF_SEARCH, FragmentStaffSearch.class);
 		fragmentsIDs.put(BootableFragmentsEnum.TIMETABLE, FragmentTimetable.class);
@@ -170,6 +176,12 @@ public class MainActivity extends ActionBarActivity {
 		mAppName = getString(R.string.app_name);
 		mActionbarTitle = mAppName;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_logo);
+            ActivityManager.TaskDescription tDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getResources().getColor(R.color.orange_actionbar_recents));
+            setTaskDescription(tDesc);
+        }
+
 		// set the Above View
 		setContentView(R.layout.activity_main);
 		loadingAnimationContainer = findViewById(R.id.content_loading_container);
@@ -189,10 +201,12 @@ public class MainActivity extends ActionBarActivity {
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 		mActionBar.setHomeButtonEnabled(true);
 
-//		SystemBarTintManager tintManager = new SystemBarTintManager(this);
-//		tintManager.setStatusBarTintEnabled(true);
-//		tintManager.setStatusBarTintResource(R.color.orange_actionbar);
-		// tintManager.setNavigationBarTintEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.orange_dark));
+        }
 
 		// Initialize Drawer
 		initializeDrawer();

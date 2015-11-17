@@ -93,22 +93,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/informazioni"
                 android:textAllCaps="true"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/roleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/departmentText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -134,15 +131,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ufficio"
                     android:textAllCaps="true"
-                    android:textColor="?android:textColorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/mapText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:textColor="?android:textColorPrimary" />
+                    android:clickable="true" />
             </LinearLayout>
 
             <View
@@ -169,7 +164,7 @@
                     android:layout_alignParentBottom="true"
                     android:gravity="center"
                     android:text="Mappa"
-                    android:textColor="#f3791b"
+                    android:textColor="@color/orange_actionbar"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -198,15 +193,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/email"
                 android:textAllCaps="true"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/emailText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -225,15 +218,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ricevimento"
                 android:textAllCaps="true"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/ricevimentoText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -252,15 +243,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/website"
                 android:textAllCaps="true"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/websiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -279,37 +268,32 @@
                 android:layout_height="wrap_content"
                 android:text="@string/telefono"
                 android:textAllCaps="true"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/phone1Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/phone2Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/phone3Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/phone4Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:paddingBottom="10dp"
-                android:textColor="?android:textColorPrimary" />
+                android:paddingBottom="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -328,36 +312,31 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fax"
                 android:textAllCaps="true"
-                android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/fax1Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/fax2Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/fax3Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/fax4Text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textColor="?android:textColorPrimary" />
+                android:clickable="true" />
         </LinearLayout>
     </LinearLayout>
 

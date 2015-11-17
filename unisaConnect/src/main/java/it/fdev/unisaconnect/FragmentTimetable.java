@@ -47,7 +47,7 @@ public class FragmentTimetable extends MySimpleFragment {
 	private final int[] sepIDs = new int[] { R.id.sh8, R.id.sh9, R.id.sh10, R.id.sh11, R.id.sh12, R.id.sh13, R.id.sh14, R.id.sh15, R.id.sh16, R.id.sh17, R.id.sh18 };
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View mainView = (View) inflater.inflate(R.layout.fragment_timetable1, container, false);
+		View mainView = (View) inflater.inflate(R.layout.fragment_timetable, container, false);
 		ttDB = new TimetableDB(mActivity);
 		ttDB.open();
 		return mainView;

@@ -27,8 +27,7 @@
                 android:id="@+id/course_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textColor="?android:textColorSecondary" />
+                android:singleLine="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

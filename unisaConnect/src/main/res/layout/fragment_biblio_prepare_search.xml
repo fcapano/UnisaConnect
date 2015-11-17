@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/scroll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<ScrollView
+    android:id="@+id/scroll"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +13,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:paddingBottom="20dp" >
+        android:paddingBottom="20dp">
 
         <EditText
             android:id="@+id/testo"
@@ -23,15 +24,15 @@
             android:drawableLeft="@drawable/ic_action_search_black"
             android:gravity="left|center_vertical"
             android:hint="@string/cerca_libro"
-            android:paddingBottom="2dp" />
+            android:paddingBottom="2dp"/>
 
         <LinearLayout
             android:id="@+id/advanced_search_toggle_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
             android:gravity="right|center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:padding="3dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -39,14 +40,14 @@
                 android:layout_marginRight="3dp"
                 android:padding="0dp"
                 android:scaleType="fitEnd"
-                android:src="@drawable/ic_action_expand" />
+                android:src="@drawable/ic_action_expand"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ricerca_avanzata"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/dark_gray" />
+                android:textColor="@color/dark_gray"/>
         </LinearLayout>
 
         <LinearLayout
@@ -56,7 +57,7 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/card_background"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -64,19 +65,19 @@
                 android:layout_marginBottom="7dp"
                 android:gravity="left|center_vertical"
                 android:orientation="horizontal"
-                android:paddingBottom="2dp" >
+                android:paddingBottom="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
-                    android:text="@string/cerca_parole_adiacenti" />
+                    android:text="@string/cerca_parole_adiacenti"/>
 
                 <CheckBox
                     android:id="@+id/adjacent"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="" />
+                    android:text=""/>
             </LinearLayout>
 
             <LinearLayout
@@ -86,12 +87,12 @@
                 android:gravity="left|bottom"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
-                android:paddingTop="2dp" >
+                android:paddingTop="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/campo_da_ricercare" />
+                    android:text="@string/campo_da_ricercare"/>
 
                 <Spinner
                     android:id="@+id/campo"
@@ -100,7 +101,7 @@
                     android:layout_margin="0dp"
                     android:entries="@array/biblio_search_campo"
                     android:gravity="center"
-                    android:padding="0dp" />
+                    android:padding="0dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -110,19 +111,19 @@
                 android:gravity="left|bottom"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
-                android:paddingTop="2dp" >
+                android:paddingTop="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lingua" />
+                    android:text="@string/lingua"/>
 
                 <Spinner
                     android:id="@+id/lingua"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/biblio_search_lingua"
-                    android:gravity="center" />
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -132,20 +133,20 @@
                 android:gravity="left|bottom"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
-                android:paddingTop="2dp" >
+                android:paddingTop="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
-                    android:text="@string/formato" />
+                    android:text="@string/formato"/>
 
                 <Spinner
                     android:id="@+id/formato"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/biblio_search_formato"
-                    android:gravity="center" />
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -155,13 +156,13 @@
                 android:gravity="left|bottom"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
-                android:paddingTop="2dp" >
+                android:paddingTop="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
-                    android:text="@string/area_disciplinare" />
+                    android:text="@string/area_disciplinare"/>
 
                 <Spinner
                     android:id="@+id/area_disciplinare"
@@ -169,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:entries="@array/biblio_search_area_disciplinare"
-                    android:gravity="center" />
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -180,12 +181,12 @@
                 android:orientation="horizontal"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp"
-                android:weightSum="1" >
+                android:weightSum="1">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/da_anno" />
+                    android:text="@string/da_anno"/>
 
                 <EditText
                     android:id="@+id/anno_da"
@@ -195,12 +196,12 @@
                     android:layout_weight=".5"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:maxWidth="300dp" />
+                    android:maxWidth="300dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/a_anno" />
+                    android:text="@string/a_anno"/>
 
                 <EditText
                     android:id="@+id/anno_a"
@@ -210,7 +211,7 @@
                     android:layout_weight=".5"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:maxWidth="300dp" />
+                    android:maxWidth="300dp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -224,7 +225,7 @@
             android:text="@string/cerca"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="?android:textColorPrimaryInverse"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </ScrollView>

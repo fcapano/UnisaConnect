@@ -33,7 +33,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/il"
-                    android:textColor="@color/medium_gray" />
+                    android:textColor="?android:textColorSecondary" />
 
                 <Spinner
                     android:id="@+id/week_days_spinner"
@@ -51,7 +51,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/in"
-                    android:textColor="@color/medium_gray" />
+                    android:textColor="?android:textColorSecondary" />
 
                 <AutoCompleteTextView
                     android:id="@+id/aula"
@@ -78,7 +78,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/dalle"
-                    android:textColor="@color/medium_gray" />
+                    android:textColor="?android:textColorSecondary" />
 
                 <TextView
                     android:id="@+id/start_time"
@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/alle"
-                    android:textColor="@color/medium_gray" />
+                    android:textColor="?android:textColorSecondary" />
 
                 <TextView
                     android:id="@+id/end_time"

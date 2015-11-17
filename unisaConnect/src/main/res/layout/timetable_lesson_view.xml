@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/orange_dark"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingLeft="1dp"
-    android:paddingRight="1dp" >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@color/orange_dark"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingLeft="1dp"
+              android:paddingRight="1dp">
 
     <TextView
         android:id="@+id/title"
@@ -16,8 +16,8 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:textSize="15dp" />
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="15dp"/>
 
     <TextView
         android:id="@+id/description"
@@ -27,7 +27,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:textSize="12dp" />
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="12dp"/>
 
 </LinearLayout>

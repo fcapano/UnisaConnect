@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:gravity="top|center_horizontal"
-    android:orientation="vertical"
-    android:weightSum="1" >
+              android:layout_width="fill_parent"
+              android:layout_height="match_parent"
+              android:gravity="top|center_horizontal"
+              android:orientation="vertical"
+              android:weightSum="1">
 
     <ImageView
         android:id="@+id/unisound_logo_big"
@@ -14,7 +14,7 @@
         android:adjustViewBounds="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/unisound_logo" />
+        android:src="@drawable/unisound_logo"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -22,7 +22,7 @@
         android:layout_weight="0.4"
         android:background="@drawable/card_background_simmetric"
         android:orientation="horizontal"
-        android:weightSum="1" >
+        android:weightSum="1">
 
         <ImageView
             android:id="@+id/song_album_art"
@@ -33,16 +33,7 @@
             android:adjustViewBounds="true"
             android:maxWidth="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/music_note_dark" />
-
-        <!-- <RelativeLayout -->
-        <!-- android:layout_width="0dp" -->
-        <!-- android:layout_height="match_parent" -->
-        <!-- android:layout_marginLeft="10dp" -->
-        <!-- android:layout_weight="0.6" -->
-        <!-- android:gravity="left|center_vertical" -->
-        <!-- android:orientation="vertical" > -->
-        <!-- </RelativeLayout> -->
+            android:src="@drawable/music_note_dark"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -51,7 +42,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="0.6"
             android:gravity="left|center_vertical"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/song_name"
@@ -65,8 +56,8 @@
                 android:singleLine="true"
                 android:text="@string/unisound"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/dark_gray"
-                android:textStyle="bold" />
+                android:textColor="?android:textColorSecondary"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/song_artist"
@@ -80,55 +71,23 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/dark_gray" />
+                android:textColor="?android:textColorSecondary"/>
         </LinearLayout>
 
-        <!-- <LinearLayout -->
-        <!-- android:visibility="gone" -->
-        <!-- android:layout_width="wrap_content" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:padding="0dp" -->
-        <!-- android:layout_margin="0dp" -->
-        <!-- android:layout_gravity="right|bottom" -->
-        <!-- android:background="@color/transparent_white_50" -->
-        <!-- android:gravity="right|bottom" -->
-        <!-- android:orientation="horizontal" > -->
-
-
-        <!-- <TextView -->
-        <!-- android:layout_width="wrap_content" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_marginLeft="2dp" -->
-        <!-- android:layout_marginRight="1dp" -->
-        <!-- android:padding="0dp" -->
-        <!-- android:text="HD" -->
-        <!-- android:textColor="@android:color/white" -->
-        <!-- android:textStyle="bold" /> -->
-
-
-        <!-- <TextView -->
-        <!-- android:layout_width="wrap_content" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_marginLeft="1dp" -->
-        <!-- android:layout_marginRight="2dp" -->
-        <!-- android:padding="0dp" -->
-        <!-- android:text="LD" -->
-        <!-- android:textColor="@color/lighter_gray" /> -->
-        <!-- </LinearLayout> -->
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
-        android:gravity="center" >
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/button_play"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_play"/>
 
         <ImageView
             android:id="@+id/button_stop"
@@ -136,13 +95,13 @@
             android:layout_height="55dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_pause"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <ProgressBar
             android:id="@+id/buffering_spinner"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:indeterminate="true" />
+            android:indeterminate="true"/>
     </RelativeLayout>
 
 </LinearLayout>

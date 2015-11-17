@@ -28,7 +28,7 @@ public class QustomDialogBuilder extends AlertDialog.Builder {
 	public QustomDialogBuilder(Context context) {
 		super(context);
 
-		mDialogView = View.inflate(context, R.layout.qustom_dialog_layout, null);
+		mDialogView = View.inflate(context, R.layout.custom_dialog_layout, null);
 		setView(mDialogView);
 
 		mTitle = (TextView) mDialogView.findViewById(R.id.alertTitle);
