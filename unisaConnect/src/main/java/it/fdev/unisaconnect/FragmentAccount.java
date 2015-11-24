@@ -54,20 +54,17 @@ public class FragmentAccount extends MySimpleFragment {
 		bottoneSalva = (TextView) view.findViewById(R.id.buttonSave);
 		
     	InputFilter filter = new InputFilter() {
-			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if(source == null || source.length() == 0)
-                    return "";
-				if(source.length() == 1) {
-					if(source.charAt(0) == '@')
+			public CharSequence filter(CharSequence source, int start, int end,
+					Spanned dest, int dstart, int dend) {
+				for (int i = start; i < end; i++) {
+					if((source.charAt(i)+"").equals("@")) {
+						Toast.makeText(mActivity, getString(R.string.non_inserire_at), Toast.LENGTH_SHORT).show();
 						return "";
-					return source;
+					}
+					if((source.charAt(i)+"").equals(" "))
+						return "";
 				}
-				String sourceString = source.toString();
-				if (sourceString.contains("@")) {
-					Toast.makeText(mActivity, getString(R.string.non_inserire_at), Toast.LENGTH_SHORT).show();
-					return sourceString.substring(0, sourceString.indexOf("@"));
-				}
-				return source;
+				return null;
 			}
 		};
 		editTextUser.setFilters(new InputFilter[]{filter});
