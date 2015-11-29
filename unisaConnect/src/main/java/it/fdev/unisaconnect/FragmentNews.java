@@ -25,7 +25,7 @@ import it.fdev.utils.Utils;
 
 public class FragmentNews extends MyListFragment {
 
-	private final String NEWS_URL_NEW = "http://unisafeed.appspot.com/readFeed";
+	private final String NEWS_URL_NEW = "http://unisanews-aleric.appspot.com/read";
 	
 	private CardsAdapter adapter;
 	private boolean alreadyStarted = false;
