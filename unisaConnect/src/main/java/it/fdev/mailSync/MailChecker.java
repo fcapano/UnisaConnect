@@ -41,7 +41,7 @@ public class MailChecker {
 
 		Log.v(Utils.TAG, "Checking webmail...");
 
-		SharedPrefDataManager mDM = new SharedPrefDataManager(context);
+		SharedPrefDataManager mDM = SharedPrefDataManager.getInstance(context);
 		if (!mDM.loginDataExists()) {
 			return;
 		}
@@ -124,7 +124,7 @@ public class MailChecker {
 	 * @param context
 	 */
 	public static void autoSetAlarm(Context context) {
-		SharedPrefDataManager mDM = new SharedPrefDataManager(context);
+		SharedPrefDataManager mDM = SharedPrefDataManager.getInstance(context);
 		if (!mDM.loginDataExists()) {
 			cancelAlarm(context);
 			return;

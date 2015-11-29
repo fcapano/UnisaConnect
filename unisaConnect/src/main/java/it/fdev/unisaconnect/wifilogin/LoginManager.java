@@ -115,7 +115,7 @@ public class LoginManager extends IntentService {
 	 * @return status result/problem
 	 */
 	protected static int login(Context context) {
-		SharedPrefDataManager mDataManager = new SharedPrefDataManager(context);
+		SharedPrefDataManager mDataManager = SharedPrefDataManager.getInstance(context);
 		if (!mDataManager.loginDataExists()) // Non sono memorizzati i dati utente
 			return 3;
 		

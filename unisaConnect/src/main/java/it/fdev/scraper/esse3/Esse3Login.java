@@ -27,7 +27,7 @@ public class Esse3Login extends Esse3BasicScraper {
 	public Esse3Login(Context context, SharedPrefDataManager dataManager, String base64login, String broadcastID, boolean chooseCareer) {
 		super(context, dataManager, base64login, broadcastID);
 		this.chooseCareer = chooseCareer;
-		mDataManager = new SharedPrefDataManager(context);
+		mDataManager = SharedPrefDataManager.getInstance(context);
 	}
 
 	@Override

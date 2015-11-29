@@ -71,7 +71,7 @@ public class FragmentBiblioPrepareSearch extends MySimpleFragment {
 		formatoValuesArray = resources.getTextArray(R.array.biblio_search_formato_VALUES);
 		areaDisciplinareValuesArray = resources.getTextArray(R.array.biblio_search_area_disciplinare_VALUES);
 		
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		testoView.setText(mDataManager.getBiblioLastSearch());
 		
 	}

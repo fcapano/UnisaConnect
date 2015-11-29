@@ -18,7 +18,7 @@ public class FragmentStudentServices extends MySimpleFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mDataManager = new SharedPrefDataManager(mActivity.getApplicationContext());
+		mDataManager = SharedPrefDataManager.getInstance(mActivity.getApplicationContext());
 		if (!mDataManager.loginDataExists()) {
 			mActivity.switchContent(BootableFragmentsEnum.ACCOUNT, true);
 			return null;

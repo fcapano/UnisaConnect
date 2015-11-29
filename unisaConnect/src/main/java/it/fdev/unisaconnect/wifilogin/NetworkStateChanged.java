@@ -15,7 +15,7 @@ public class NetworkStateChanged extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
-		SharedPrefDataManager mDataManager = new SharedPrefDataManager(context);
+		SharedPrefDataManager mDataManager = SharedPrefDataManager.getInstance(context);
 		
 		// Check preference
 		if (!mDataManager.isLoginAutomatica()) {

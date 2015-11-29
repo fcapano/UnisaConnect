@@ -42,7 +42,7 @@ public class MailIntentService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		
 		Context context = getApplicationContext();
-		mDataManager = new SharedPrefDataManager(context);
+		mDataManager = SharedPrefDataManager.getInstance(context);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			broadcastStatus(mContext, MainActivity.BROADCAST_ERROR, LoadStates.NO_DATA, null);
 			return;

@@ -70,7 +70,7 @@ public class PresenzeScraper extends AsyncTask<MainActivity, PresenzeScraper.loa
 			activity = activities[0];
 			publishProgress(loadStates.START);
 			
-			mDataManager = new SharedPrefDataManager(activity);
+			mDataManager = SharedPrefDataManager.getInstance(activity);
 
 			if (!mDataManager.loginDataExists()) {
 				publishProgress(loadStates.NO_DATA);

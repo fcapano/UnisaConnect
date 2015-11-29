@@ -22,6 +22,8 @@ import it.fdev.utils.Utils;
  *
  */
 public class SharedPrefDataManager {
+
+	private static SharedPrefDataManager mSharedPref;
 	
 	public static final String SSID_STUDENTI = "Studenti";
 	
@@ -57,22 +59,33 @@ public class SharedPrefDataManager {
 	private static final String PREF_MAIL_DO_CHECK = "webmail_do_check";
 	private static final String PREF_MAIL_LAST_READ = "webmail_last_read";
 
-	
-	
 	// Testing
 	private static final String PREF_TESTING_ENABLED = "testingEnabled";
 
+	// SecurePreferences is slow
+	private String username;
+	private String password;
 
-	public SharedPrefDataManager(Context context) {
+
+	private SharedPrefDataManager(Context context) {
 		mSecurePrefs = new SecurePreferences(context);
 		mPrefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+		username = mSecurePrefs.getString(PREF_USER, null);
+		password = mSecurePrefs.getString(PREF_PASS, null);
+	}
+
+	public synchronized static SharedPrefDataManager getInstance(Context context) {
+		Log.d(Utils.TAG, "DataManager getInstance!");
+		if (mSharedPref == null) {
+			mSharedPref = new SharedPrefDataManager(context);
+		}
+		return mSharedPref;
 	}
 	
 	//Controlla che siano stati precedentemente salvati i dati di login
 	public boolean loginDataExists() {
-		return (mSecurePrefs.contains(PREF_USER) && getUser()!=null &&
-				mSecurePrefs.contains(PREF_PASS) && getPass()!=null &&
-				mPrefs.contains(PREF_AUTOLOGIN));
+		Log.d(Utils.TAG, "DataManager loginDataExists!");
+		return (username!=null && password!=null && mPrefs.contains(PREF_AUTOLOGIN));
 	}
 	
 	private void removeData() {
@@ -82,7 +95,8 @@ public class SharedPrefDataManager {
 	}
 	
 	public String getUser() {
-		return mSecurePrefs.getString(PREF_USER, null);
+		Log.d(Utils.TAG, "DataManager getUser!");
+		return username;
 	}
 
 	public void setUser(String user) {
@@ -90,16 +104,19 @@ public class SharedPrefDataManager {
 		com.securepreferences.SecurePreferences.Editor secureEditor = mSecurePrefs.edit();
 		secureEditor.putString(PREF_USER, user);
 		secureEditor.commit();
+		username = user;
 	}
 
 	public String getPass() {
-		return mSecurePrefs.getString(PREF_PASS, null);
+		Log.d(Utils.TAG, "DataManager getPass!");
+		return password;
 	}
 
 	public void setPass(String pass) {
 		com.securepreferences.SecurePreferences.Editor secureEditor = mSecurePrefs.edit();
 		secureEditor.putString(PREF_PASS, pass);
 		secureEditor.commit();
+		password = pass;
 	}
 	
 	public int getTipoCorso() {

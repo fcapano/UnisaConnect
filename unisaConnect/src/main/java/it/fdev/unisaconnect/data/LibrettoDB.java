@@ -49,7 +49,7 @@ public class LibrettoDB {
 	//Class Constructor
 	public LibrettoDB(Context mContext) {
 		this.mContext = mContext; //Initialize the context with passed in context
-		mDataManager = new SharedPrefDataManager(mContext);
+		mDataManager = SharedPrefDataManager.getInstance(mContext);
 	}
 	
 	//Open method

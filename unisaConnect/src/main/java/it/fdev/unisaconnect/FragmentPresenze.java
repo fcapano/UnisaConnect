@@ -47,7 +47,7 @@ public class FragmentPresenze extends MySimpleFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		// Se non sono stati salvati i dati utente rimando al fragment dei dati
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;

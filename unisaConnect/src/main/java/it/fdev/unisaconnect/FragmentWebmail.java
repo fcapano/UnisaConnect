@@ -93,7 +93,7 @@ public class FragmentWebmail extends MySimpleFragment {
 		checkMailCheckbox = (CheckBox) view.findViewById(R.id.check_mail_option);
 		thisFragment = this;
 
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;

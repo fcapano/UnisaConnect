@@ -65,7 +65,7 @@ public class FragmentWebmailWeb extends MySimpleFragment {
 		mWebView.requestFocus();					//
 		thisFragment = this;
 
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		if (!mDataManager.loginDataExists()) { // Non sono memorizzati i dati utente
 			Utils.createAlert(mActivity, getString(R.string.dati_errati), BootableFragmentsEnum.ACCOUNT, false);
 			return;

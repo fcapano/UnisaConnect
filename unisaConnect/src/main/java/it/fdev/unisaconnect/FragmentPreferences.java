@@ -15,7 +15,7 @@ public class FragmentPreferences extends MySimpleFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		
 	}
 	

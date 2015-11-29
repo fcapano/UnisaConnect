@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 		mIntentFilter.addAction(BROADCAST_LOADING_MESSAGE);
 		mIntentFilter.addAction(BROADCAST_ERROR);
 
-		mDataManager = new SharedPrefDataManager(this);
+		mDataManager = SharedPrefDataManager.getInstance(this);
 
 		mAppName = getString(R.string.app_name);
 		mActionbarTitle = mAppName;

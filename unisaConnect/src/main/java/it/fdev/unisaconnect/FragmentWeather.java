@@ -77,7 +77,7 @@ public class FragmentWeather extends MySimpleFragment {
 //		weatherForecastContainerView = (RelativeLayout) view.findViewById(R.id.weather_forecast_container);
 		weatherForecastGridview = (GridView) view.findViewById(R.id.weather_forecast_gridview);
 		
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		meteo = mDataManager.getWeather();
 		if (meteo != null) {
 			Log.d(Utils.TAG, "Meteo salvato!");

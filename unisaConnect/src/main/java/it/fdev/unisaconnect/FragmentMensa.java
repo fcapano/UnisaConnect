@@ -51,7 +51,7 @@ public class FragmentMensa extends MySimpleFragment {
 		lastUpdateIconView =  view.findViewById(R.id.last_update_icon);
 		menuContainerView = view.findViewById(R.id.menu_list_container);
 		menuNDView = (TextView) view.findViewById(R.id.menu_non_disponibile);
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		
 		mActivity.setLoadingVisible(true, true);
 		

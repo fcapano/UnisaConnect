@@ -38,7 +38,7 @@ public class Esse3ScraperService extends IntentService {
 			isRunning = true;
 			mContext = getApplicationContext();
 
-			dataManager = new SharedPrefDataManager(mContext);
+			dataManager = SharedPrefDataManager.getInstance(mContext);
 			if (!dataManager.loginDataExists()) {
 				broadcastStatus(mContext, MainActivity.BROADCAST_ERROR, LoadStates.NO_DATA);
 				isRunning = false;

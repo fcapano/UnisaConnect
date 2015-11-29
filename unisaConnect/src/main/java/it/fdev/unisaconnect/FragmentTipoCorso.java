@@ -106,7 +106,7 @@ public class FragmentTipoCorso extends MyListFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		mIntentFilter.addAction(Esse3ScraperService.BROADCAST_STATE_E3_TIPO_CORSO);
-		mDataManager = new SharedPrefDataManager(mActivity);
+		mDataManager = SharedPrefDataManager.getInstance(mActivity);
 		
 		listEmptyView = (TextView) view.findViewById(R.id.card_list_empty);
 		listCardsView = (ListView) view.findViewById(android.R.id.list);
