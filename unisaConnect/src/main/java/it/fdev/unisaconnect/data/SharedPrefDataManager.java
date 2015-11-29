@@ -75,7 +75,6 @@ public class SharedPrefDataManager {
 	}
 
 	public synchronized static SharedPrefDataManager getInstance(Context context) {
-		Log.d(Utils.TAG, "DataManager getInstance!");
 		if (mSharedPref == null) {
 			mSharedPref = new SharedPrefDataManager(context);
 		}
@@ -84,18 +83,10 @@ public class SharedPrefDataManager {
 	
 	//Controlla che siano stati precedentemente salvati i dati di login
 	public boolean loginDataExists() {
-		Log.d(Utils.TAG, "DataManager loginDataExists!");
 		return (username!=null && password!=null && mPrefs.contains(PREF_AUTOLOGIN));
 	}
 	
-	private void removeData() {
-		Log.d(Utils.TAG, "DataManager vacuum preferences");
-		Editor editor = mPrefs.edit();
-		editor.clear().commit();
-	}
-	
 	public String getUser() {
-		Log.d(Utils.TAG, "DataManager getUser!");
 		return username;
 	}
 
@@ -108,7 +99,6 @@ public class SharedPrefDataManager {
 	}
 
 	public String getPass() {
-		Log.d(Utils.TAG, "DataManager getPass!");
 		return password;
 	}
 
