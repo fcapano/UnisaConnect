@@ -74,7 +74,8 @@ public class MailChecker {
 			}
 
 			int unreadNumMsg = folder.getUnreadMessageCount();
-			createNofitication(context, unreadNumMsg);
+			if (unreadNumMsg > 0)
+				createNofitication(context, unreadNumMsg);
 
 			mDM.setMailLastRead(lastReceivedDate);
 		} catch (MessagingException e) {
