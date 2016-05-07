@@ -164,7 +164,7 @@
     <!-- News -->
     <string name="sync_news">Carico le news&#8230;</string>
     <!-- end of News -->
-    
+
     <!-- Map -->
     <!-- end of Map -->
 
@@ -172,12 +172,12 @@
     <!-- WebRadio -->
     <string name="unisound">Unis@und Radio</string>
     <!-- end of WebRadio -->
-    
+
     <!-- Webmail -->
     <string name="mail_non_lette">Hai %1$d mail non lette</string>
     <string name="controlla_nuove_mail">Controlla nuove mail ogni due ore</string>
     <!-- end of Webmail -->
-    
+
     <!-- Biblioteca -->
     <string name="cerca_testo_non_vuoto">Il testo da cercare non può essere vuoto</string>
     <string name="libro_non_trovato">Impossibile ottenere i dettagli del libro</string>
@@ -205,7 +205,7 @@
     <string name="serie">Serie</string>
     <string name="soggetto">Soggetto</string>
     <!-- end of Biblioteca -->
-    
+
     <!-- TipoCorso -->
     <string name="tipo_corso">Seleziona corso di laurea</string>
     <string name="tipo_corso_title">Corso di laurea</string>
@@ -221,6 +221,7 @@
     <string name="modifica">Modifica</string>
     <string name="accetta">Accetta</string>
     <string name="twitter">Twitter</string>
+    <string name="feed">Feed RSS</string>
     <!-- end of ActionBar -->
 
 

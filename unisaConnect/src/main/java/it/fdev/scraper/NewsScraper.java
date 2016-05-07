@@ -25,8 +25,8 @@ import it.fdev.utils.CardsAdapter.CardItem;
 import it.fdev.utils.Utils;
 
 /**
- * Frammento che si occupa dell'accesso al menu della mensa
- * 
+ * Scraper per il feed RSS delle notizie dal sito UniSA
+ *
  * @author francesco
  * 
  */
@@ -39,9 +39,9 @@ public class NewsScraper extends AsyncTask<MainActivity, NewsScraper.loadStates,
 	private String urlToFetch = null;
 	private ArrayList<CardsAdapter.CardItem> itemsList = null;
 
-	public static enum loadStates {
+	public enum loadStates {
 		START, ANALYZING, NO_INTERNET, NO_URL_DEFINED, UNKNOWN_PROBLEM, FINISHED
-	};
+	}
 	
 	public NewsScraper(String url) {
 		this.urlToFetch = url;
@@ -66,7 +66,7 @@ public class NewsScraper extends AsyncTask<MainActivity, NewsScraper.loadStates,
 
             NodeList nodes = doc.getElementsByTagName("item");
             
-            itemsList = new ArrayList<CardsAdapter.CardItem>();
+            itemsList = new ArrayList<>();
 			Log.d(Utils.TAG, "there are cards #" + nodes.getLength());
             
             for (int i = 0; i < nodes.getLength(); i++) {
@@ -78,7 +78,7 @@ public class NewsScraper extends AsyncTask<MainActivity, NewsScraper.loadStates,
 	                
 	                String formattedDate;
 	                try {
-	                	String dateString = element.getElementsByTagName("published").item(0).getTextContent().trim();
+	                	String dateString = element.getElementsByTagName("pubDate").item(0).getTextContent().trim();
 	                	// http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
 		                SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ", Locale.ITALY);
 		                SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM", Locale.ITALY);
@@ -92,7 +92,6 @@ public class NewsScraper extends AsyncTask<MainActivity, NewsScraper.loadStates,
 	                itemsList.add(cCard);
             	} catch (Exception e) {
             		Log.w(Utils.TAG, e);
-                    continue;
                 }
             }
             publishProgress(loadStates.FINISHED);

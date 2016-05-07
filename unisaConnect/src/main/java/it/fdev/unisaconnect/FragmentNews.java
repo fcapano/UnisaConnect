@@ -25,8 +25,8 @@ import it.fdev.utils.Utils;
 
 public class FragmentNews extends MyListFragment {
 
-	private final String NEWS_URL_NEW = "http://unisanews-aleric.appspot.com/read";
-	
+	private final String NEWS_URL_NEW = "http://unisanews-aleric.rhcloud.com/unisa_feed.rss";
+
 	private CardsAdapter adapter;
 	private boolean alreadyStarted = false;
 	private NewsScraper rssScraper;
@@ -40,28 +40,28 @@ public class FragmentNews extends MyListFragment {
 		adapter = new CardsAdapter(mActivity, R.layout.card_news, new ArrayList<CardItem>());
 		setListAdapter(adapter);
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.list_cards_ui, container, false);
 		return view;
 	}
-	
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
+
 		listEmptyView = (TextView) view.findViewById(R.id.card_list_empty);
 		listCardsView = (ListView) view.findViewById(android.R.id.list);
-		
+
 		/* Metto animazione */
 		LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_layout_controller);
 		/* Indico che la listView di questo ListFragment deve avere il mio controller per l'animazione */
 		getListView().setLayoutAnimation(controller);
-		
+
 		getNews(false);
 	}
-	
+
 	@Override
 	public void onStop() {
 		if (rssScraper != null && rssScraper.isRunning) {
@@ -69,7 +69,7 @@ public class FragmentNews extends MyListFragment {
 		}
 		super.onStop();
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
@@ -82,34 +82,45 @@ public class FragmentNews extends MyListFragment {
 			Log.w(Utils.TAG, e);
 		}
 	}
-	
+
 	@Override
 	public Set<Integer> getActionsToShow() {
-		Set<Integer> actionsToShow = new HashSet<Integer>();
+		Set<Integer> actionsToShow = new HashSet<>();
 		actionsToShow.add(R.id.action_twitter_button);
+		actionsToShow.add(R.id.action_feed_button);
 		actionsToShow.add(R.id.action_refresh_button);
 		if (!alreadyStarted) {
 			actionsToShow.add(R.id.action_loading_animation);
 		}
 		return actionsToShow;
 	}
-	
-	@Override
+
+    @Override
+    public void actionTwitter() {
+        try {
+            String url = "https://twitter.com/UniSA_news";
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(webIntent);
+        } catch(Exception e) {
+            Log.e(Utils.TAG, "Error opening twitter link", e);
+        }
+    }
+
+    @Override
+    public void actionFeed() {
+        try {
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(NEWS_URL_NEW));
+            startActivity(webIntent);
+        } catch(Exception e) {
+            Log.e(Utils.TAG, "Error opening feed link", e);
+        }
+    }
+
+    @Override
 	public void actionRefresh() {
 		getNews(true);
 	}
-	
-	@Override
-	public void actionTwitter() {	
-		try {
-			String url = "https://twitter.com/UniSA_news";
-			Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-	        startActivity(webIntent);
-		} catch(Exception e) {
-			Log.e(Utils.TAG, "Error opening twitter link", e);
-		}
-	}
-	
+
 	@Override
 	public int getTitleResId() {
 		return R.string.news;
@@ -120,7 +131,7 @@ public class FragmentNews extends MyListFragment {
 			return;
 		}
 		mActivity.setLoadingVisible(true, true);
-		
+
 		listCardsView.setSelectionAfterHeaderView();
 		if (!force && cardsList != null) {
 			showCards(null);
@@ -131,7 +142,7 @@ public class FragmentNews extends MyListFragment {
 			Utils.goToInternetError(mActivity, this);
 			return;
 		}
-		
+
 		alreadyStarted = true;
 		if (rssScraper != null && rssScraper.isRunning) {
 			mActivity.setLoadingVisible(true);
@@ -142,24 +153,23 @@ public class FragmentNews extends MyListFragment {
 //		rssScraper.setMaxTextLength(MAX_TEXT_LENGTH);
 		rssScraper.setCallerFragment(this);
 		rssScraper.execute(mActivity);
-		return;
 	}
-	
+
 	public void showCards(ArrayList<CardItem> cardsList) {
 		if (!isAdded()) {
-			return;			
+			return;
 		}
-		
+
 		if (listEmptyView == null || listCardsView == null) { 			// Dai report di crash sembra succedere a volte, non ho idea del perchè
 			mActivity.setDrawerOpen(true);							   	// Quindi mostro lo slidingmenu per apparare
 			mActivity.setLoadingVisible(false, false);
 			return;
 		}
-		
+
 		if (cardsList != null) {
 			this.cardsList = cardsList;
 		}
-		
+
 		if (this.cardsList == null) {				// Non ho un menu da mostrare
 			listEmptyView.setVisibility(View.GONE);
 			listCardsView.setVisibility(View.GONE);
@@ -174,11 +184,11 @@ public class FragmentNews extends MyListFragment {
 			listEmptyView.setVisibility(View.GONE);
 			listCardsView.setVisibility(View.VISIBLE);
 		}
-		
+
 		adapter.clear();
 		adapter.addAll(cardsList);
 		adapter.notifyDataSetChanged();
-		
+
 		mActivity.setLoadingVisible(false, false);
 	}
 

@@ -65,9 +65,13 @@ public abstract class MySimpleFragment extends Fragment implements MyFragmentInt
 	@Override
 	public void actionCancel() {
 	}
-	
+
 	@Override
 	public void actionTwitter() {
+	}
+
+	@Override
+	public void actionFeed() {
 	}
 
 	@Override

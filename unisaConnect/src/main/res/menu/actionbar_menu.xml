@@ -44,6 +44,13 @@
         android:visible="true"
         unisaconnect:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/action_feed_button"
+        android:icon="@drawable/ic_action_feed"
+        android:showAsAction="ifRoom"
+        android:title="@string/feed"
+        android:visible="true"
+        unisaconnect:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/action_refresh_button"
         android:icon="@drawable/ic_action_refresh"
         android:showAsAction="always"

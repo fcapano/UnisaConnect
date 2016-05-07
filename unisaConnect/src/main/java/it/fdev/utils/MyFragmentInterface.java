@@ -12,6 +12,7 @@ public interface MyFragmentInterface {
 	public void actionAccept();
 	public void actionCancel();
 	public void actionTwitter();
+	public void actionFeed();
 	public Set<Integer> getActionsToShow();
 	public int getTitleResId();
 	public boolean executeSearch(String query);

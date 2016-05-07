@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
 		actions.add(R.id.action_add_button);
 		actions.add(R.id.action_cancel_button);
 		actions.add(R.id.action_refresh_button);
-		actions.add(R.id.action_twitter_button);
+        actions.add(R.id.action_twitter_button);
+        actions.add(R.id.action_feed_button);
 	}
 
 	private String mAppName;
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 			// }
 			switchContent(BootableFragmentsEnum.STUDENT_SERVICES, true);
 		}
-		
+
 		// setupUpxAppBanner();
 		new UpdateChecker(this).start();
 
@@ -347,27 +348,30 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			}
 			switch (item.getItemId()) {
-			case android.R.id.home:
-				toggleDrawer();
-				return true;
-			case R.id.action_add_button:
-				fragment.actionAdd();
-				return true;
-			case R.id.action_edit_button:
-				fragment.actionEdit();
-				return true;
-			case R.id.action_accept_button:
-				fragment.actionAccept();
-				return true;
-			case R.id.action_refresh_button:
-				fragment.actionRefresh();
-				return true;
-			case R.id.action_cancel_button:
-				fragment.actionCancel();
-				return true;
-			case R.id.action_twitter_button:
-				fragment.actionTwitter();
-				return true;
+				case android.R.id.home:
+					toggleDrawer();
+					return true;
+				case R.id.action_add_button:
+					fragment.actionAdd();
+					return true;
+				case R.id.action_edit_button:
+					fragment.actionEdit();
+					return true;
+				case R.id.action_accept_button:
+					fragment.actionAccept();
+					return true;
+				case R.id.action_refresh_button:
+					fragment.actionRefresh();
+					return true;
+				case R.id.action_cancel_button:
+					fragment.actionCancel();
+					return true;
+				case R.id.action_twitter_button:
+					fragment.actionTwitter();
+					return true;
+	            case R.id.action_feed_button:
+                    fragment.actionFeed();
+                    return true;
 			}
 		} catch (ClassCastException e) {
 			Log.e(Utils.TAG, e.getMessage());
@@ -407,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
 
 	/**
 	 * Changes the fragment shown. Using Enum to avoid creation of duplicate fragments which would be deferenced if similar fragment already exists as switchsContent(Fragment newFragment) does
-	 * 
+	 *
 	 * @param newFragmentEnum
 	 *            fragment enum to show
 	 * @param emptyBackStack
@@ -451,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
 
 	/**
 	 * Changes the fragment shown
-	 * 
+	 *
 	 * @param newFragment
 	 *            fragment frame to show
 	 */

@@ -72,6 +72,10 @@ public abstract class MyMapFragment extends SupportMapFragment implements MyFrag
 	}
 
 	@Override
+	public void actionFeed() {
+	}
+
+	@Override
 	public Set<Integer> getActionsToShow() {
 		return null;
 	}
